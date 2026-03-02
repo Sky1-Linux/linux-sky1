@@ -1,0 +1,99 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Stuart Shelton <stuart@shelton.me>
+Date: Fri, 27 Feb 2026 00:00:00 +0000
+Subject: [PATCH 140/140] arm64/cix: fix Kconfig deps and module reachability
+
+Fix CIX option wiring that can produce invalid build combinations in
+defconfig/allmodconfig/randconfig, and fix built-in/module reachability
+for CIX helper calls used by thermal and SOF code.
+
+Attribution: AIA EAI Hin R GPT-5.3-Codex v1.0 - see https://aiattribution.github.io
+
+---
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1598,7 +1598,6 @@
+ 
+ config ARCH_CIX
+ 	bool "Cix Technology Group SoC Support"
+-	def_bool y
+ 
+ config ARCH_SUPPORTS_CRASH_DUMP
+ 	def_bool y
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -416,7 +416,8 @@
+ config SKY1_PDC
+ 	bool
+ 	depends on ARM_GIC
+-	default y
++	depends on ARCH_CIX || COMPILE_TEST
++	default ARCH_CIX
+ 	select IRQ_DOMAIN
+ 	help
+ 	  Enables the wakeup IRQs for SKY1 platforms with PDC block
+--- a/drivers/mailbox/Kconfig
++++ b/drivers/mailbox/Kconfig
+@@ -360,7 +360,8 @@
+ 	  things.
+ 
+ config CIX_MBOX
+-        bool "CIX Mailbox"
++        tristate "CIX Mailbox"
++        depends on MAILBOX
+         depends on ARCH_CIX || COMPILE_TEST
+         depends on OF || ACPI
+         help
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -253,7 +253,7 @@
+ 
+ 	cpufreq_cdev->last_load = total_load;
+ 
+-	if (IS_ENABLED(CONFIG_CIX_CPU_IPA)) {
++	if (IS_REACHABLE(CONFIG_CIX_CPU_IPA)) {
+ 		/* Use real measured power from CIX IPA hardware */
+ 		*power = cix_get_static_power_cpus(policy->cpus) +
+ 			 cix_get_dynamic_power_cpus(policy->cpus);
+@@ -301,7 +301,7 @@
+ 
+ 	*power = cpu_freq_to_power(cpufreq_cdev, freq) * num_cpus;
+ 
+-	if (IS_ENABLED(CONFIG_CIX_CPU_IPA))
++	if (IS_REACHABLE(CONFIG_CIX_CPU_IPA))
+ 		*power += cix_get_static_power_cpus(cpufreq_cdev->policy->cpus);
+ 
+ 	return 0;
+@@ -334,7 +334,7 @@
+ 	 * When using real IPA power, subtract static power from the budget
+ 	 * since only dynamic power can be controlled via frequency scaling.
+ 	 */
+-	if (IS_ENABLED(CONFIG_CIX_CPU_IPA)) {
++	if (IS_REACHABLE(CONFIG_CIX_CPU_IPA)) {
+ 		u32 static_power = cix_get_static_power_cpus(policy->cpus);
+ 
+ 		dynamic_power = (power > static_power) ? power - static_power : 0;
+--- a/include/linux/cix/cix_cpu_ipa.h
++++ b/include/linux/cix/cix_cpu_ipa.h
+@@ -10,7 +10,7 @@
+ 
+ #include <linux/cpumask.h>
+ 
+-#if IS_ENABLED(CONFIG_CIX_CPU_IPA)
++#if IS_REACHABLE(CONFIG_CIX_CPU_IPA)
+ 
+ int cix_get_static_power_cpus(const struct cpumask *cpus);
+ int cix_get_dynamic_power_cpus(const struct cpumask *cpus);
+--- a/include/linux/firmware/cix/dsp.h
++++ b/include/linux/firmware/cix/dsp.h
+@@ -60,7 +60,7 @@
+ 	return dsp_ipc->private_data;
+ }
+ 
+-#if IS_ENABLED(CONFIG_CIX_DSP)
++#if IS_REACHABLE(CONFIG_CIX_DSP)
+ 
+ int cix_dsp_ipc_send(struct cix_dsp_ipc *ipc, unsigned int idx, u32 op);
+ int cix_dsp_request_mbox(struct cix_dsp_ipc *dsp_ipc);
+-- 
+2.39.5
