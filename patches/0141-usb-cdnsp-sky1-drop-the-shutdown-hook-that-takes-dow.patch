@@ -1,0 +1,63 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Fri, 2 Oct 2026 01:58:00 +0800
+Subject: [PATCH] usb: cdnsp-sky1: drop the shutdown hook that takes down the
+ PCIe x1 links
+
+On the Minisforum MS-R1, asserting the cdnsp-sky1 controller resets (and
+gating its SCMI clocks) from ->shutdown() drops both PCIe x1 links: the
+x1 root ports report an LTSSM transition to DETECT_QUIET and PHY errors
+right after the USB controllers enter reset. device_shutdown() then reaches
+r8169, whose shutdown reads the RTL8127 behind the dead link. The read
+either completes with an error, giving an asynchronous SError and a panic,
+or never completes, leaving the CPU stalled on the bus (no response even to
+a pseudo-NMI) until someone power-cycles the board. Every reboot of the
+board ended one of those two ways; keeping the clocks on and only asserting
+the resets did not change that.
+
+The xHCI shutdown has already halted the controller and its DMA by the time
+the glue's hook would run, and firmware resets the SoC on reboot, so the
+hook does nothing a reboot needs. Remove it. With it gone, two consecutive
+reboots reach "reboot: Restarting system" with both links up to the end.
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/usb/cdns3/cdnsp-sky1.c | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdnsp-sky1.c b/drivers/usb/cdns3/cdnsp-sky1.c
+index 2c42db17f..49ab3976a 100644
+--- a/drivers/usb/cdns3/cdnsp-sky1.c
++++ b/drivers/usb/cdns3/cdnsp-sky1.c
+@@ -875,19 +875,6 @@ static const struct acpi_device_id cdnsp_sky1_acpi_match[] = {
+ };
+ MODULE_DEVICE_TABLE(acpi, cdnsp_sky1_acpi_match);
+ 
+-static void cdnsp_sky1_shutdown(struct platform_device *pdev)
+-{
+-	struct device *dev = &pdev->dev;
+-	struct cdnsp_sky1 *data = dev_get_drvdata(dev);
+-
+-	if (!device_may_wakeup(dev)) {
+-		dev_dbg(dev, "at %s, reset controller\n", __func__);
+-		reset_control_assert(data->reset);
+-		reset_control_assert(data->preset);
+-		sky1_usb_clk_disable_all(dev);
+-	}
+-}
+-
+ static struct platform_driver cdnsp_sky1_driver = {
+ 	.probe		= cdnsp_sky1_probe,
+ 	.remove		= cdnsp_sky1_remove,
+@@ -897,7 +884,6 @@ static struct platform_driver cdnsp_sky1_driver = {
+ 		.acpi_match_table = ACPI_PTR(cdnsp_sky1_acpi_match),
+ 		.pm	= &cdnsp_sky1_pm_ops,
+ 	},
+-	.shutdown = cdnsp_sky1_shutdown,
+ };
+ 
+ module_platform_driver(cdnsp_sky1_driver);
+-- 
+2.39.5
+
