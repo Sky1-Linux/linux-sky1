@@ -1,0 +1,85 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Thu, 1 Oct 2026 08:37:31 +0800
+Subject: [PATCH] misc: armchina-npu: limit cache maintenance to the requested
+ buffer
+
+aipu_mm_cache_flush() and aipu_mm_cache_invalid() ignore the buffer in the
+request and clean or invalidate the whole memory region that contains it,
+one cache line at a time. libnoe issues both around every job, and for
+ResNet-50 each call took ~21 ms: 42 of the 47 ms per inference, while the
+NPU itself finished in ~3 ms.
+
+Translate buf->pa/buf->bytes into the VA range inside the region and
+maintain only that; an empty or out-of-range request still covers the
+region.
+
+ResNet-50 (1 core), 200 inferences: 9.9 s -> 1.18 s at 1.2 GHz (CIX's
+vendor kernel: 1.10 s). All outputs equal to the golden data.
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/misc/armchina-npu/aipu_mm.c | 30 +++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/misc/armchina-npu/aipu_mm.c b/drivers/misc/armchina-npu/aipu_mm.c
+index 03d34a500..1c40f45db 100755
+--- a/drivers/misc/armchina-npu/aipu_mm.c
++++ b/drivers/misc/armchina-npu/aipu_mm.c
+@@ -1664,6 +1664,26 @@ static void tensor_flush_dcache_range(void *start, void *end) {
+ 
+ }
+ 
++/*
++ * VA range of the buffer @buf names inside @reg. The cache ioctls used to
++ * clean or invalidate the whole region on every call (~21 ms per call for
++ * the ResNet-50 regions); an empty or out-of-range request still does.
++ */
++static void aipu_mm_buf_va_range(struct aipu_mem_region *reg, struct aipu_buf_desc *buf,
++				 void **start, void **end)
++{
++	u64 reg_end = reg->base_iova + reg->bytes;
++	u64 lo = buf->pa;
++	u64 hi = buf->pa + buf->bytes;
++
++	if (!buf->bytes || hi < lo || lo < reg->base_iova || hi > reg_end) {
++		lo = reg->base_iova;
++		hi = reg_end;
++	}
++	*start = reg->base_va + (lo - reg->base_iova);
++	*end = reg->base_va + (hi - reg->base_iova);
++}
++
+ /**
+  * @aipu_mm_cache_flush() - invald buffer allocated by aipu_mm_alloc()
+  * @mm:   pointer to memory manager struct initialized in aipu_init_mm()
+@@ -1687,8 +1707,11 @@ int aipu_mm_cache_flush(struct aipu_memory_manager *mm, struct aipu_buf_desc *bu
+ 	}
+ 
+ 	if(mm->has_iommu) {
++		void *start, *end;
++
++		aipu_mm_buf_va_range(reg, buf, &start, &end);
+ 		mutex_lock(&mm->lock);
+-		tensor_flush_dcache_range(reg->base_va, (void *)reg->base_va + reg->bytes);
++		tensor_flush_dcache_range(start, end);
+ 		mutex_unlock(&mm->lock);
+ 	}
+ 
+@@ -1718,8 +1741,11 @@ int aipu_mm_cache_invalid(struct aipu_memory_manager *mm, struct aipu_buf_desc *
+ 	}
+ 
+ 	if(mm->has_iommu) {
++		void *start, *end;
++
++		aipu_mm_buf_va_range(reg, buf, &start, &end);
+ 		mutex_lock(&mm->lock);
+-		tensor_dcache_inval_poc(reg->base_va, (void *)reg->base_va + reg->bytes);
++		tensor_dcache_inval_poc(start, end);
+ 		mutex_unlock(&mm->lock);
+ 	}
+ 
+-- 
+2.39.5
+

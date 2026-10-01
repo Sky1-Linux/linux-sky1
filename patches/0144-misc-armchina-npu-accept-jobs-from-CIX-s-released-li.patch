@@ -1,0 +1,80 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Thu, 1 Oct 2026 08:37:30 +0800
+Subject: [PATCH] misc: armchina-npu: accept jobs from CIX's released libnoe
+ 0.5
+
+CIX's released NPU user space (cix-noe-umd 0.5, libnoe) cannot run a
+second inference on this driver:
+
+1. struct aipu_job_desc gained is_coredump_en at its end (128 -> 136
+   bytes), so AIPU_IOCTL_SCHEDULE_JOB changed number. libnoe 0.5 still
+   issues _IOC(_IOC_WRITE, 'A', 6, 0x80) and gets -ENOTTY ("This API call
+   here is invalid"). Accept that size too: the old descriptor is a prefix
+   of the new one, the missing tail is zero.
+
+2. With jobs accepted, the first job on a command pool runs and the next
+   never starts: schedule_v3_job_no_lock() drops the init TCB of
+   single-group jobs (AIPU_JOB_EXEC_FLAG_SINGLE_GROUP) to run them in
+   parallel, and libnoe 0.5's task TCBs depend on their init TCB. Clear
+   SINGLE_GROUP for jobs that arrive through the old ioctl; the flag has no
+   other user.
+
+Tested on a Minisforum MS-R1 (CP8180) with CIX's unchanged libnoe 0.5 and
+its test models: ResNet-50 (1 core, and 3 cores batch 3), AlexNet and an
+ONNX ResNet-50, 200 inferences each, all equal to the golden output.
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/misc/armchina-npu/aipu.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/armchina-npu/aipu.c b/drivers/misc/armchina-npu/aipu.c
+index bc1ce2ff5..3c96b37c6 100644
+--- a/drivers/misc/armchina-npu/aipu.c
++++ b/drivers/misc/armchina-npu/aipu.c
+@@ -57,6 +57,14 @@ static int aipu_release(struct inode *inode, struct file *filp)
+ 	return 0;
+ }
+ 
++/*
++ * AIPU_IOCTL_SCHEDULE_JOB before struct aipu_job_desc gained is_coredump_en.
++ * The field was appended, so the older descriptor is a prefix of the current
++ * one; CIX's released UMD (libnoe 0.5) still issues this size.
++ */
++#define AIPU_IOCTL_SCHEDULE_JOB_NO_COREDUMP \
++	_IOC(_IOC_WRITE, AIPU_IOCTL_MAGIC, 6, offsetof(struct aipu_job_desc, is_coredump_en))
++
+ static long aipu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ {
+ 	int ret = 0;
+@@ -126,11 +134,21 @@ static long aipu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 		ret = aipu_mm_enable_sram_allocation(&aipu->mm, filp);
+ 		break;
+ 	case AIPU_IOCTL_SCHEDULE_JOB:
+-		if (!copy_from_user(&user_job, (struct user_job_desc __user *)arg,
+-				    sizeof(user_job)))
+-			ret = aipu_job_manager_scheduler(manager, &user_job, filp);
+-		else
++	case AIPU_IOCTL_SCHEDULE_JOB_NO_COREDUMP:
++		memset(&user_job, 0, sizeof(user_job));
++		if (copy_from_user(&user_job, (struct user_job_desc __user *)arg,
++				   _IOC_SIZE(cmd))) {
+ 			ret = -EINVAL;
++			break;
++		}
++		/*
++		 * That UMD's task TCBs depend on the job's init TCB: when the
++		 * scheduler drops it to run single-group jobs in parallel, the
++		 * second job on a command pool never starts.
++		 */
++		if (cmd == AIPU_IOCTL_SCHEDULE_JOB_NO_COREDUMP)
++			user_job.exec_flag &= ~AIPU_JOB_EXEC_FLAG_SINGLE_GROUP;
++		ret = aipu_job_manager_scheduler(manager, &user_job, filp);
+ 		break;
+ 	case AIPU_IOCTL_QUERY_STATUS:
+ 		if (!copy_from_user(&status, (struct job_status_query __user *)arg,
+-- 
+2.39.5
+
