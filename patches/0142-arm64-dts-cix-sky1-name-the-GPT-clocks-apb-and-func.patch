@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Fri, 2 Oct 2026 03:11:10 +0800
+Subject: [PATCH] arm64: dts: cix: sky1: name the GPT clocks "apb" and "func"
+
+timer-sky1-gpt asks for the clocks "apb" and "func" and tries the ACPI
+names (fch_timer_apb_clk, fch_timer_func_clk) only on an ACPI system. The
+gpt_timer nodes use the ACPI names, so on a device-tree boot the probe of
+gpt_timer3 fails:
+
+  sky1_timer 4116000.gpt_timer: error -ENOENT: failed to get func clock
+
+and tick broadcast falls back to bc_hrtimer. Both CPU idle states below
+WFI are local-timer-stop, and the CPU that holds the broadcast hrtimer may
+enter neither, so one CPU is always in WFI and the cluster never reaches
+cluster-sleep.
+
+Use the names the driver asks for.
+
+Tested on a Minisforum MS-R1 (device tree based on sky1-orion-o6.dts) with
+the same clock-names set on gpt_timer3: "Sky1 GPT timer initialized at
+25000000 Hz", broadcast device sky1_timer, and at an idle login screen
+all twelve CPUs are in cluster-sleep together 90% of the time (0% before).
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ arch/arm64/boot/dts/cix/sky1.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
+index a170057fd..2bd3ad8bf 100644
+--- a/arch/arm64/boot/dts/cix/sky1.dtsi
++++ b/arch/arm64/boot/dts/cix/sky1.dtsi
+@@ -3121,7 +3121,7 @@ gpt_timer0: gpt_timer@04110000 {
+ 			interrupts = <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH 0>;
+ 			clocks = <&scmi_clk CLK_TREE_FCH_TIMER_APB>,
+ 						<&scmi_clk CLK_TREE_FCH_TIMER_FUN>;
+-			clock-names = "fch_timer_apb_clk", "fch_timer_func_clk";
++			clock-names = "apb", "func";
+ 			resets = <&src_fch SW_TIMER_RST_FUNC_N>;
+ 			reset-names = "func_reset";
+ 			status = "disabled";
+@@ -3133,7 +3133,7 @@ gpt_timer1: gpt_timer@04112000 {
+ 			interrupts = <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH 0>;
+ 			clocks = <&scmi_clk CLK_TREE_FCH_TIMER_APB>,
+ 						<&scmi_clk CLK_TREE_FCH_TIMER_FUN>;
+-			clock-names = "fch_timer_apb_clk", "fch_timer_func_clk";
++			clock-names = "apb", "func";
+ 			resets = <&src_fch SW_TIMER_RST_FUNC_N>;
+ 			reset-names = "func_reset";
+ 			status = "disabled";
+@@ -3145,7 +3145,7 @@ gpt_timer2: gpt_timer@04114000 {
+ 			interrupts = <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH 0>;
+ 			clocks = <&scmi_clk CLK_TREE_FCH_TIMER_APB>,
+ 						<&scmi_clk CLK_TREE_FCH_TIMER_FUN>;
+-			clock-names = "fch_timer_apb_clk", "fch_timer_func_clk";
++			clock-names = "apb", "func";
+ 			resets = <&src_fch SW_TIMER_RST_FUNC_N>;
+ 			reset-names = "func_reset";
+ 			status = "disabled";
+@@ -3157,7 +3157,7 @@ gpt_timer3: gpt_timer@04116000 {
+ 			interrupts = <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH 0>;
+ 			clocks = <&scmi_clk CLK_TREE_FCH_TIMER_APB>,
+ 						<&scmi_clk CLK_TREE_FCH_TIMER_FUN>;
+-			clock-names = "fch_timer_apb_clk", "fch_timer_func_clk";
++			clock-names = "apb", "func";
+ 			resets = <&src_fch SW_TIMER_RST_FUNC_N>;
+ 			reset-names = "func_reset";
+ 			status = "okay";
+-- 
+2.39.5
+
