@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Thu, 1 Oct 2026 08:37:31 +0800
+Subject: [PATCH] drm/panthor: don't poll the SCMI core clock for devfreq
+ status
+
+With SCMI perf-domain DVFS (Sky1), the core clock is an SCMI clock
+without a rate cache, so clk_get_rate() in panthor_devfreq_get_dev_status()
+is a mailbox round trip on every devfreq poll (50 ms), on the channel the
+rate-limited perf requests share. Report ptdev->current_frequency, which
+the SCMI path keeps up to date; other platforms still read the clock.
+
+Tested on a Minisforum MS-R1: no SCMI CLOCK_RATE_GET requests at idle
+(with the matching amvx change; ~34/s before).
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/gpu/drm/panthor/panthor_devfreq.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
+index 0e7bba30b..cf0278fce 100644
+--- a/drivers/gpu/drm/panthor/panthor_devfreq.c
++++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
+@@ -239,7 +239,13 @@ static int panthor_devfreq_get_dev_status(struct device *dev,
+ 	struct panthor_devfreq *pdevfreq = ptdev->devfreq;
+ 	unsigned long irqflags;
+ 
+-	status->current_frequency = clk_get_rate(ptdev->clks.core);
++	/*
++	 * With SCMI DVFS the core clock is an SCMI clock without a rate cache:
++	 * clk_get_rate() is a mailbox round trip on every devfreq poll, on the
++	 * channel the perf requests share. Report the frequency we set.
++	 */
++	status->current_frequency = pdevfreq->opp_dev ? ptdev->current_frequency :
++				    clk_get_rate(ptdev->clks.core);
+ 
+ 	spin_lock_irqsave(&pdevfreq->lock, irqflags);
+ 
+-- 
+2.39.5
+
