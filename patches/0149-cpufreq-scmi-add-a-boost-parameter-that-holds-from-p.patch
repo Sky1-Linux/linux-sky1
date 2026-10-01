@@ -1,0 +1,68 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Thu, 1 Oct 2026 09:08:54 +0800
+Subject: [PATCH] cpufreq: scmi: add a boost parameter that holds from policy
+ creation
+
+With boost OPPs present (Sky1: 2.0-2.6 GHz on the A720s), scmi-cpufreq
+starts with boost off, and cpuinfo.max_freq excludes them when
+CPUFREQ_CREATE_POLICY sets the CPU capacities. Turning boost on later
+(sysfs) raises the frequencies but leaves the capacities as they were: on a
+CIX CP8180 the A520s keep 381 (403 DMIPS/MHz x 1.8 GHz against 1.9 GHz)
+where 279 is right with the A720s at 2.6 GHz (the ACPI CPPC kernel reports
+279), so EAS places tasks on the little cores that do not fit them.
+
+Add scmi_cpufreq.boost=1 to start with boost enabled, and mirror the global
+boost state into the policy from ->init(), before cpuinfo is computed, so the
+capacities are derived from the boost frequencies.
+
+Tested on a Minisforum MS-R1 with scmi_cpufreq.boost=1: capacities
+1024/984/905/866 (A720) and 278 (A520), matching the 1024/984/906/867/279
+that the vendor ACPI (CPPC) kernel reports.
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index c450cf9c8..074e64549 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -290,6 +290,13 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	policy->driver_data = priv;
+ 	policy->freq_table = freq_table;
+ 
++	/*
++	 * Mirror the global boost state now, not at the end of
++	 * cpufreq_online(): cpuinfo.max_freq is computed before then, and
++	 * CPUFREQ_CREATE_POLICY sets the CPU capacities from it.
++	 */
++	policy->boost_enabled = cpufreq_boost_enabled();
++
+ 	/* SCMI allows DVFS request for any domain from any CPU */
+ 	policy->dvfs_possible_from_any_cpu = true;
+ 
+@@ -380,6 +387,10 @@ static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
+ 				    em_power_scale);
+ }
+ 
++static bool boost;
++module_param(boost, bool, 0444);
++MODULE_PARM_DESC(boost, "Start with the boost OPPs enabled, so CPU capacities are computed from the boost frequencies");
++
+ static struct cpufreq_driver scmi_cpufreq_driver = {
+ 	.name	= "scmi",
+ 	.flags	= CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
+@@ -464,6 +475,7 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+ 	}
+ #endif
+ 
++	scmi_cpufreq_driver.boost_enabled = boost;
+ 	ret = cpufreq_register_driver(&scmi_cpufreq_driver);
+ 	if (ret) {
+ 		dev_err(dev, "%s: registering cpufreq failed, err: %d\n",
+-- 
+2.39.5
+
