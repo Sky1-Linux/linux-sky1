@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: kennytech73 <contact@bookworm-mon0.org>
+Date: Tue, 13 Oct 2026 10:45:00 +0200
+Subject: [PATCH] usb: cdns3: do not dereference an unpopulated role in cdns_role_stop()
+
+The role switch is registered in cdns_init() before cdns_core_init_role()
+fills cdns->roles[]. On CIX Sky1 boards the rts5453 USB-PD controller can
+call usb_role_switch_set_role() in that window, and cdns_role_stop() then
+dereferences cdns->roles[role], which is still NULL (oops at offset 0x28,
+the ->state member).
+
+Return early when the role driver is not registered yet.
+
+Tested on an Orange Pi 6 Plus (CIX CD8180) with 6.18.14 and the Sky1
+series.
+
+Signed-off-by: kennytech73 <contact@bookworm-mon0.org>
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+---
+ drivers/usb/cdns3/core.c | 4 ++++
+ 1 file changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -59,6 +59,10 @@ static void cdns_role_stop(struct cdns *cdns)
+ 	if (WARN_ON(role > USB_ROLE_DEVICE))
+ 		return;
+ 
++	/* roles[] is populated after the role switch is registered */
++	if (!cdns->roles[role])
++		return;
++
+ 	if (cdns->roles[role]->state == CDNS_ROLE_STATE_INACTIVE)
+ 		return;
+ 
+-- 
+2.39.5
+

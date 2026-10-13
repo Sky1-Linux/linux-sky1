@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: kennytech73 <contact@bookworm-mon0.org>
+Date: Tue, 13 Oct 2026 10:45:00 +0200
+Subject: [PATCH] usb: cdns3: guard against an unset host_dev or hcd in cdns_host_resume()
+
+cdns_host_resume() reads the drvdata of cdns->host_dev unconditionally.
+A runtime resume can run during probe, before the host role is started and
+before xhci-plat has set its drvdata, so cdns->host_dev or the hcd can
+still be NULL at that point. There is nothing to update yet in that case:
+return early instead of dereferencing it.
+
+Tested on an Orange Pi 6 Plus (CIX CD8180) with 6.18.14 and the Sky1
+series.
+
+Signed-off-by: kennytech73 <contact@bookworm-mon0.org>
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+---
+ drivers/usb/cdns3/host.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
+--- a/drivers/usb/cdns3/host.c
++++ b/drivers/usb/cdns3/host.c
+@@ -140,9 +140,21 @@
+ 
+ static int cdns_host_resume(struct cdns *cdns, bool power_lost)
+ {
+-	struct usb_hcd *hcd = platform_get_drvdata(cdns->host_dev);
+-	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
++	struct usb_hcd *hcd;
++	struct xhci_plat_priv *priv;
+ 
++	/*
++	 * Runtime resume can run during probe, before the host role is started
++	 * and xhci-plat has set its drvdata: nothing to update yet.
++	 */
++	if (!cdns->host_dev)
++		return 0;
++
++	hcd = platform_get_drvdata(cdns->host_dev);
++	if (!hcd)
++		return 0;
++
++	priv = hcd_to_xhci_priv(hcd);
+ 	priv->power_lost = power_lost;
+ 
+ 	return 0;
+-- 
+2.39.5
+
