@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: kennytech73 <contact@bookworm-mon0.org>
+Date: Tue, 13 Oct 2026 18:10:00 +0200
+Subject: [PATCH] media: cix: mvx: set the vb2 queue lock to the session mutex
+
+setup_vb2_queue() does not set vb2_queue.lock. Point it at the session
+mutex so that the vb2 ioctl helpers and file operations are serialised with
+the driver's own session locking.
+
+Tested on an Orange Pi 6 Plus (CIX CD8180) with 6.18.14 and the Sky1
+series, together with the previous patch: a 2h44 HEVC encode with
+hevc_v4l2m2m completes at the same speed (about 313 fps) with no vb2
+warning in dmesg.
+
+Signed-off-by: kennytech73 <contact@bookworm-mon0.org>
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+---
+ drivers/media/platform/cix/if/v4l2/mvx_v4l2_vidioc.c | 1 +
+ 1 file changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/media/platform/cix/if/v4l2/mvx_v4l2_vidioc.c b/drivers/media/platform/cix/if/v4l2/mvx_v4l2_vidioc.c
+--- a/drivers/media/platform/cix/if/v4l2/mvx_v4l2_vidioc.c
++++ b/drivers/media/platform/cix/if/v4l2/mvx_v4l2_vidioc.c
+@@ -706,6 +706,7 @@ static int setup_vb2_queue(struct mvx_v4l2_port *vport)
+     q->ops = &mvx_vb2_ops;
+     q->mem_ops = &vb2_dma_sg_memops;
+     q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++    q->lock = &vport->vsession->mutex;
+     q->allow_zero_bytesused = true;
+     if (vport->dir == MVX_DIR_OUTPUT && mvx_is_frame(vport->port->format))
+         q->MVX_VB2_MIN_BUFFERS_NEEDED = 8;
+-- 
+2.39.5
+

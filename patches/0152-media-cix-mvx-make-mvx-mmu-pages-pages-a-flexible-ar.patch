@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: kennytech73 <contact@bookworm-mon0.org>
+Date: Tue, 13 Oct 2026 18:10:00 +0200
+Subject: [PATCH] media: cix: mvx: make mvx_mmu_pages.pages a flexible array member
+
+struct mvx_mmu_pages ends with a zero-length array (phys_addr_t pages[0]).
+Indexing it triggers CONFIG_UBSAN_BOUNDS reports, "array-index-out-of-bounds
+in drivers/media/platform/cix/if/mvx_mmu.c", whenever a V4L2 session
+allocates, resizes or frees its pages, for example when Firefox opens a
+decoder or when running an HEVC encode with hevc_v4l2m2m.
+
+Use a C99 flexible array member instead. No functional change.
+
+Tested on an Orange Pi 6 Plus (CIX CD8180) with 6.18.14 and the Sky1
+series: a 2h44 HEVC encode with hevc_v4l2m2m (about 313 fps) no longer logs
+any UBSAN report. Without the patch the same encode logs them at
+mvx_mmu.c:359 (remap_pages) and :1017 (mvx_mmu_free_pages).
+
+Signed-off-by: kennytech73 <contact@bookworm-mon0.org>
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+---
+ drivers/media/platform/cix/if/mvx_mmu.h | 2 +-
+ 1 file changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/media/platform/cix/if/mvx_mmu.h b/drivers/media/platform/cix/if/mvx_mmu.h
+--- a/drivers/media/platform/cix/if/mvx_mmu.h
++++ b/drivers/media/platform/cix/if/mvx_mmu.h
+@@ -126,7 +126,7 @@ struct mvx_mmu_pages {
+     size_t count;
+     bool is_external;
+     struct list_head dmabuf;
+-    phys_addr_t pages[0];
++    phys_addr_t pages[];
+ };
+ 
+ /**
+-- 
+2.39.5
+
