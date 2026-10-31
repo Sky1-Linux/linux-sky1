@@ -1,0 +1,437 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Fri, 2 Oct 2026 03:12:16 +0800
+Subject: [PATCH] arm64: dts: cix: add the Minisforum MS-R1
+
+The MS-R1 (CIX CP8180) follows the reference design of the Orion O6, so
+its device tree includes sky1-orion-o6.dts and overrides the differences,
+each read from the MS-R1's own ACPI tables (DSDT, SSDT1):
+
+- PCIe: x1_0/x1_1 reset lines swapped against the O6; Wi-Fi and NIC rails
+  on s5_gpio0 31/30/29; rails the tables do not describe stay on without
+  touching a pin (several O6 pins are wake inputs or NIC rails here).
+- HDMI: dptx3 drives the HDMI converter through USB/DP PHY 2 as 4-lane DP
+  (the O6 muxes that PHY for USB-C, which held HDMI at 2 lanes).
+- USB-C: two RTS5453 PD controllers on i2c7 (0x30 port 0, 0x31 port 1);
+  port 1 is USB3 + DP alt mode.
+- RTC: Epson RX8900 on i2c3 at 0x32 instead of the O6's HYM8563.
+- SBSA watchdog enabled: the firmware arms it before boot and the board
+  resets 60 s later if nothing feeds it.
+- O6-only parts disabled: EC, cameras, touch panel, I2C HID, LEDs, rfkill.
+- PCIe domains numbered per controller (linux,pci-domain), so the domain
+  numbers, and the interface names built from them, do not depend on
+  probe order.
+
+Tested with this tree (6.18.14) on an MS-R1: boot from NVMe, both RTL8127
+NICs (10 Gb/s and 1 Gb/s), MT7922 Wi-Fi/Bluetooth bound, HDMI link trained
+at 4 lanes with audio, RTC readable, typec port0/port1 registered,
+panthor, VPU and NPU working.
+
+Not tested: the x8 slot (disabled until tested with a card), the Wi-Fi
+rfkill line (s5_gpio0 10 in SSDT1; no node yet), the RTC alarm interrupt,
+and USB-C with real devices or DP alt mode.
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ arch/arm64/boot/dts/cix/Makefile              |   1 +
+ .../boot/dts/cix/sky1-minisforum-ms-r1.dts    | 378 ++++++++++++++++++
+ 2 files changed, 379 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/cix/sky1-minisforum-ms-r1.dts
+
+diff --git a/arch/arm64/boot/dts/cix/Makefile b/arch/arm64/boot/dts/cix/Makefile
+index a6af900ae..1712c7f93 100644
+--- a/arch/arm64/boot/dts/cix/Makefile
++++ b/arch/arm64/boot/dts/cix/Makefile
+@@ -2,3 +2,4 @@
+ dtb-$(CONFIG_ARCH_CIX) += sky1-orion-o6.dtb
+ dtb-$(CONFIG_ARCH_CIX) += sky1-orion-o6n.dtb
+ dtb-$(CONFIG_ARCH_CIX) += sky1-orangepi-6-plus.dtb
++dtb-$(CONFIG_ARCH_CIX) += sky1-minisforum-ms-r1.dtb
+diff --git a/arch/arm64/boot/dts/cix/sky1-minisforum-ms-r1.dts b/arch/arm64/boot/dts/cix/sky1-minisforum-ms-r1.dts
+new file mode 100644
+index 000000000..260d18857
+--- /dev/null
++++ b/arch/arm64/boot/dts/cix/sky1-minisforum-ms-r1.dts
+@@ -0,0 +1,378 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Minisforum MS-R1 (CIX CP8180 "Sky1", board P1WSB).
++ *
++ * The MS-R1 follows the CIX reference design the Radxa Orion O6 also uses:
++ * the same PCIe controllers (x8 slot, x4 M.2 NVMe, x2 M.2 Wi-Fi, two x1
++ * 10GbE NICs), the same display enables (fch_gpio3 15/16) and the same HDA
++ * pdb line (fch_gpio3 5). It differs in its power rails, in which reset line
++ * each x1 controller uses, and in the O6-only peripherals it does not have.
++ *
++ * Every override below was read from the MS-R1's own firmware tables
++ * (DSDT and SSDT1, booted in ACPI mode) and from the GPIO lines the vendor
++ * kernel claims there. Anything the O6 drives that the MS-R1 tables do not
++ * describe is left alone: its regulator loses its GPIO and pinmux (the
++ * firmware already has the rail on) or its node is disabled.
++ */
++
++#include "sky1-orion-o6.dts"
++
++/ {
++	model = "Minisforum MS-R1";
++	compatible = "minisforum,ms-r1", "cix,sky1";
++
++	/*
++	 * The O6 LEDs sit on s5_gpio1 0/1 and s5_gpio0 7. On the MS-R1
++	 * s5_gpio1 0 is a wake input (SSDT1 WAK1) and s5_gpio0 7 an interrupt.
++	 */
++	/delete-node/ gpio-leds;
++
++	/* The MS-R1's Wi-Fi rfkill is s5_gpio0 10 (SSDT1 RFKL), not 19. */
++	/delete-node/ wlan-rfkill;
++};
++
++/*
++ * Rails described by SSDT1 as PRP0001 regulator-fixed devices, and the root
++ * ports that name them as vcc-pcie-supply (DSDT):
++ *   PVC2 s5_gpio0 31 -> PRC2 (bus 0x60, pcie_x2, M.2 Wi-Fi)
++ *   PVC3 s5_gpio0 30 -> PRC3 (bus 0x30, pcie_x1_1, 10GbE)
++ *   PVC4 s5_gpio0 29 -> PRC4 (bus 0x00, pcie_x1_0, 10GbE)
++ * The firmware's regulator names for PVC3/PVC4 and their pin groups are
++ * crossed; the root-port wiring above is what matters.
++ */
++&vdd_3v3_wlan {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++	gpio = <&s5_gpio0 31 GPIO_ACTIVE_HIGH>;
++};
++
++&gbe1_power_3v3 {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++	gpio = <&s5_gpio0 29 GPIO_ACTIVE_HIGH>;
++};
++
++&gbe2_power_3v3 {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++	gpio = <&s5_gpio0 30 GPIO_ACTIVE_HIGH>;
++};
++
++/*
++ * No MS-R1 table describes these rails, so they become plain always-on
++ * supplies that touch no pin. vgfx_power in particular sits on s5_gpio1 2,
++ * which is a wake input on the MS-R1 (SSDT1 WAK0).
++ */
++&vdd_3v3_nvme {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++	/delete-property/ gpio;
++	/delete-property/ enable-active-high;
++	/delete-property/ regulator-pull-down;
++	regulator-always-on;
++	regulator-boot-on;
++};
++
++&vgfx_power {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++	/delete-property/ gpio;
++	/delete-property/ enable-active-high;
++	/delete-property/ regulator-pull-down;
++	regulator-always-on;
++	regulator-boot-on;
++};
++
++&usb20f_5v {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++	/delete-property/ gpio;
++	/delete-property/ enable-active-high;
++};
++
++&cam_power_en {
++	/delete-property/ gpio;
++	/delete-property/ enable-active-high;
++};
++
++/*
++ * PCIe resets from the DSDT root ports (reset-gpios on s5_gpio0):
++ *   PRC0 x8 line 1, PRC1 x4 line 3, PRC2 x2 line 4 -- as on the O6;
++ *   PRC3 x1_1 line 5 and PRC4 x1_0 line 2 -- the O6 has these two swapped.
++ * Lanes and link speeds in the DSDT match sky1.dtsi.
++ */
++&pcie_x1_0_rc {
++	reset-gpios = <&s5_gpio0 2 GPIO_ACTIVE_HIGH>;
++};
++
++&pcie_x1_1_rc {
++	reset-gpios = <&s5_gpio0 5 GPIO_ACTIVE_HIGH>;
++};
++
++/* The MS-R1 tables describe no wake line or radio pin for these slots. */
++&pcie_x4_rc {
++	pinctrl-0 = <&pinctrl_pcie_x4_rc>;
++	/delete-property/ wake-gpios;
++};
++
++&pcie_x2_rc {
++	pinctrl-0 = <&pinctrl_pcie_x2_rc>;
++};
++
++/*
++ * USB over-current inputs and the usbhs pin assert are O6 wiring: on the
++ * MS-R1 s5_gpio0 29 is a NIC rail (PVC4), and 25/27 are undescribed.
++ */
++&sky1_usbss_0 {
++	/delete-property/ oc-gpio;
++};
++
++&sky1_usbss_2 {
++	/delete-property/ oc-gpio;
++};
++
++&sky1_usbhs_0 {
++	/delete-property/ pinctrl-assert-gpios;
++};
++
++/* O6-only peripherals: MIPI cameras, the Radxa touch panel, I2C HID. */
++&imgsensor00 {
++	status = "disabled";
++};
++
++&isp_motor {
++	status = "disabled";
++};
++
++&radxa_touch {
++	status = "disabled";
++};
++
++&i2c2 {
++	i2c-hid-dev@15 {
++		status = "disabled";
++	};
++};
++
++/*
++ * The O6 has a CIX EC at i2c6 0x76 (interrupt s5_gpio0 6). The MS-R1 has
++ * none there; its i2c6 carries two CIXH200D devices at 0x30/0x31 instead.
++ */
++&cros_ec {
++	status = "disabled";
++};
++
++/*
++ * HDMI. On the MS-R1, dptx3 drives the HDMI converter through USB/DP PHY 2
++ * as pure 4-lane DP (DSDT: DP03 dp_phy ^UCP2.UDPP, UCP2 default_conf 0x02).
++ * The O6 has that role on PHY 1 and a USB-C port with a PD controller on
++ * PHY 2 (default_conf 0x03: DP+USB, 2 DP lanes), which held the MS-R1's HDMI
++ * at 5.4 Gbps x2 and 4K30. The O6's PD controllers sit on i2c1, where the
++ * MS-R1 has none (its two, CIXH200D at I2C7 0x30/0x31, serve USB-C ports 0
++ * and 1), so the port-2 PD node never probed and usbss_2 never left OTG
++ * limbo. Drop both; USB-C ports 0 and 1 are set up below.
++ */
++/delete-node/ &rts5453_pd1_port1;
++
++&usbc_phy2 {
++	default_conf = /bits/ 8 <0x02>;
++	/delete-property/ orientation-switch;
++	/delete-property/ mode-switch;
++	/delete-property/ svid;
++	/delete-node/ port;
++};
++
++&usb3_phy2 {
++	status = "disabled";
++};
++
++&sky1_usbss_2 {
++	status = "disabled";
++};
++
++&usbss_2 {
++	status = "disabled";
++	/delete-property/ usb-role-switch;
++	/delete-node/ port;
++};
++
++/*
++ * USB-C. The MS-R1's two RTS5453 PD controllers (SSDT1 CIXH200D, which the
++ * vendor kernel binds to rts5453h) sit on I2C7 (0x04080000) at 0x30 (id 0:
++ * SUB0/UCP0, USB-C port 0) and 0x31 (id 1: SUB1/UCP1, USB-C port 1), both
++ * interrupting on GPI4 pin 7 = s5_gpio0 7, at 100 kHz. The O6 puts its PD
++ * controllers on i2c1 and drives ports 0 and 2, leaving i2c7 off, so on
++ * the MS-R1 nothing negotiated USB-C power, data role or DP alt mode.
++ * Port 1 is a full USB-C port here (UCP1 default_conf 0x03), not the O6's
++ * HDMI path.
++ */
++/delete-node/ &rts5453_pd1_port0;
++
++&i2c7 {
++	status = "okay";
++	clock-frequency = <100000>;
++
++	rts5453@30 {
++		compatible = "realtek,rts5453h";
++		reg = <0x30>;
++		interrupt-parent = <&s5_gpio0>;
++		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
++		id = <0>;
++
++		usbc_con0 {
++			data-role = "host";
++			power-role = "source";
++			try-power-role = "source";
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				usbc0_role_sw: endpoint {
++					remote-endpoint = <&cdnsp_0_role_switch>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				usbc0_phy_sw: endpoint {
++					remote-endpoint = <&usbdpphy0_lane_switch>;
++				};
++			};
++		};
++	};
++
++	rts5453@31 {
++		compatible = "realtek,rts5453h";
++		reg = <0x31>;
++		interrupt-parent = <&s5_gpio0>;
++		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
++		id = <1>;
++
++		usbc_con1 {
++			data-role = "host";
++			power-role = "source";
++			try-power-role = "source";
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				usbc1_role_sw: endpoint {
++					remote-endpoint = <&cdnsp_1_role_switch>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				usbc1_phy_sw: endpoint {
++					remote-endpoint = <&usbdpphy1_lane_switch>;
++				};
++			};
++		};
++	};
++};
++
++&usbc_phy1 {
++	default_conf = /bits/ 8 <0x03>;
++	orientation-switch;
++	svid = <0xff01>;
++	mode-switch;
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		usbdpphy1_lane_switch: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&usbc1_phy_sw>;
++		};
++	};
++};
++
++&usb3_phy1 {
++	status = "okay";
++};
++
++&sky1_usbss_1 {
++	/delete-property/ u3-port-disable;
++};
++
++&usbss_1 {
++	dr_mode = "otg";
++	usb-role-switch;
++	phys = <&usb3_phy1>;
++	phy-names = "cdnsp,usb3-phy";
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cdnsp_1_role_switch: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&usbc1_role_sw>;
++		};
++	};
++};
++
++/*
++ * RTC. The MS-R1 has an Epson RX8900 at I2C3 0x32 (SSDT1 RTC0, RX008900;
++ * answers on i2c-3 at 0x32), not the O6's HYM8563 at 0x51 (nothing
++ * there). Without it there is no rtc0 and the clock is wrong until NTP.
++ * SSDT1 gives it GpioInt GPI4 pin 10, the pin its RFKL device also claims
++ * as an output, so the alarm interrupt is left out until that is resolved.
++ */
++&hym8563 {
++	status = "disabled";
++};
++
++&i2c3 {
++	rtc@32 {
++		compatible = "epson,rx8900";
++		reg = <0x32>;
++	};
++};
++
++/* The x8 slot (DSDT PRC0) has not been tested with a card; off until it is. */
++&pcie_x8_rc {
++	status = "disabled";
++};
++
++/*
++ * The firmware arms the SBSA generic watchdog before boot ("Glocal Watchdog
++ * 60(s)"): GTDT refresh frame 0x16008000, control frame 0x16003000, GSIV 408
++ * (SPI 376) -- the frames sky1.dtsi names. In ACPI mode the vendor kernel
++ * keeps it fed with sbsa-gwdt; with no driver bound the board resets 60 s
++ * after the kernel starts. sbsa-gwdt sees the enable bit and feeds it from
++ * probe (WATCHDOG_HANDLE_BOOT_ENABLED).
++ */
++&watchdog {
++	compatible = "arm,sbsa-gwdt";
++	status = "okay";
++};
++
++/*
++ * Without linux,pci-domain each host bridge takes the next free domain
++ * number in probe order, which changes from boot to boot, and the NIC and
++ * Wi-Fi names (enP<domain>p...) change with it. Number the domains after
++ * the controllers, as the pcie_rc aliases do.
++ */
++&pcie_x8_rc {
++	linux,pci-domain = <0>;
++};
++
++&pcie_x4_rc {
++	linux,pci-domain = <1>;
++};
++
++&pcie_x2_rc {
++	linux,pci-domain = <2>;
++};
++
++&pcie_x1_1_rc {
++	linux,pci-domain = <3>;
++};
++
++&pcie_x1_0_rc {
++	linux,pci-domain = <4>;
++};
+-- 
+2.39.5
+
