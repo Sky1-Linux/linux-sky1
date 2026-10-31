@@ -137,3 +137,4 @@
 0137-drm-cix-dptx-properly-disable-audio-hardware-on-shut.patch
 0138-drm-cix-dptx-suppress-spurious-ELD-warnings-at-boot.patch
 0139-cix-remove-pre-silicon-EMU-FPGA-dead-code-from-vendo.patch
+0154-misc-armchina-npu-sky1-use-the-ACPI-device-for-_ADR-.patch

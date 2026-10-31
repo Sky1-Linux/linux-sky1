@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: hotschmoe <isaac@mass-engineering.com>
+Date: Sat, 31 Oct 2026 14:00:00 +0800
+Subject: [PATCH] misc: armchina-npu: sky1: use the ACPI device for _ADR-only
+ NPU cores
+
+Under ACPI, sky1_npu_probe() looks up each CRE* child of the NPU with
+bus_find_device_by_fwnode(&platform_bus_type, ...) and passes the result
+to pm_runtime_enable(). The Minisforum MS-R1 firmware declares CRE0-CRE2
+with _ADR only, so ACPI creates no platform device for them, the lookup
+returns NULL, and the probe oopses; with CONFIG_PANIC_ON_OOPS the board
+resets as soon as udev loads the module. On ACPI boots this was the only
+driver that kept the MS-R1 from coming up.
+
+When a core has no platform device, bind its ACPI device to itself and
+use that device, as deepin's kernel and Arm China's Compass driver do.
+The binding is kept across module reloads. Also disable the cores'
+runtime PM in remove(), as the probe error path already does, so a
+reload does not warn about an unbalanced pm_runtime_enable().
+
+Tested on an MS-R1 with acpi=force: the driver probes with 3 cores,
+each core powers up (D0) and back down (D3cold) through its power
+resource, devfreq registers, and three unload/reload cycles are clean.
+DT boots do not take this path.
+
+Signed-off-by: hotschmoe <isaac@mass-engineering.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ drivers/misc/armchina-npu/sky1/sky1.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/drivers/misc/armchina-npu/sky1/sky1.c b/drivers/misc/armchina-npu/sky1/sky1.c
+index 80daab0..879a543 100644
+--- a/drivers/misc/armchina-npu/sky1/sky1.c
++++ b/drivers/misc/armchina-npu/sky1/sky1.c
+@@ -380,6 +380,23 @@ static int sky1_npu_probe(struct platform_device *p_dev)
+ 				break;
+ 
+ 			cix_aipu_priv->pd_core[i] = bus_find_device_by_fwnode(&platform_bus_type, child);
++			if (!cix_aipu_priv->pd_core[i]) {
++				/*
++				 * A core declared with _ADR only (no _HID) has no
++				 * platform device: use its ACPI device instead. The
++				 * binding is kept across a module reload.
++				 */
++				struct acpi_device *adev = to_acpi_device_node(child);
++
++				if (!ACPI_COMPANION(&adev->dev)) {
++					ret = acpi_bind_one(&adev->dev, adev);
++					if (ret) {
++						fwnode_handle_put(child);
++						return ret;
++					}
++				}
++				cix_aipu_priv->pd_core[i] = &adev->dev;
++			}
+                 	pm_runtime_enable(cix_aipu_priv->pd_core[i]);
+ 			dev_pm_domain_attach(cix_aipu_priv->pd_core[i], true);
+ 			dev_pm_set_driver_flags(cix_aipu_priv->pd_core[i], DPM_FLAG_NO_DIRECT_COMPLETE);
+@@ -464,6 +481,11 @@ static void sky1_npu_remove(struct platform_device *p_dev)
+ 
+ 	armchina_aipu_remove(p_dev);
+ 
++	if (has_acpi_companion(&p_dev->dev)) {
++		for (int i = 0; i < CIX_NPU_PD_NUM; i++)
++			pm_runtime_disable(cix_aipu_priv->pd_core[i]);
++	}
++
+ 	sky1_npu_detach_pd(&p_dev->dev, &sky1);
+ 
+ #ifdef CONFIG_PM
+-- 
+2.39.5
+
