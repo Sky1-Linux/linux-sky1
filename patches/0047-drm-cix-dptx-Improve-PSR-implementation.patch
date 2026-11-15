@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b844ce56f0149fcb0c9049ed2d1261fed81975b9 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 22:38:06 +1100
-Subject: [PATCH] drm: cix: dptx: Improve PSR implementation
+Subject: [PATCH 047/140] drm: cix: dptx: Improve PSR implementation
 
 Port PSR improvements from CIX 6.6.89:
 
@@ -24,7 +24,7 @@ These changes improve PSR reliability and power savings for eDP panels.
  3 files changed, 74 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index 6093fe19a7da2..93d0cf511749e 100644
+index 6093fe19a..93d0cf511 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -1194,6 +1194,7 @@ static void trilin_dp_psr_init_dpcd(struct trilin_dp *dp)
@@ -201,7 +201,7 @@ index 6093fe19a7da2..93d0cf511749e 100644
  	dp->fasttrain_default_on =
  			device_property_read_bool(dev, "cix,dp-fasttrain-default-on");
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.h b/drivers/gpu/drm/cix/dptx/trilin_dptx.h
-index 9531232a42583..398b6d8bd8d73 100644
+index 9531232a4..398b6d8bd 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.h
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.h
 @@ -393,6 +393,7 @@ struct trilin_dp_psr {
@@ -221,7 +221,7 @@ index 9531232a42583..398b6d8bd8d73 100644
  	bool mst_default_on;
  	u32 cfg_adapter_port;
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
-index 2b9e4a939eaa1..ba40774524ce3 100644
+index 2b9e4a939..ba4077452 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_drm.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -170,7 +170,7 @@ static int trilin_dp_connector_atomic_check(struct drm_connector *conn,
@@ -254,3 +254,6 @@ index 2b9e4a939eaa1..ba40774524ce3 100644
  }
  
  static const struct drm_encoder_helper_funcs trilin_dp_encoder_helper_funcs = {
+-- 
+2.56.1
+

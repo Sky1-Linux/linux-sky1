@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 00dc1d00ca973d6c5b80c4174746e729dfd9e168 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 17:48:35 +1100
-Subject: [PATCH] firmware: arm_scmi: mailbox: Add ACPI channel validation
+Subject: [PATCH 073/140] firmware: arm_scmi: mailbox: Add ACPI channel
+ validation
 
 mailbox_chan_available() and mailbox_chan_validate() use DT-only APIs
 (of_count_phandle_with_args, of_parse_phandle) that fail when booting
@@ -22,7 +23,7 @@ which map directly to the same channel layout used by Device Tree.
  1 file changed, 43 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/transports/mailbox.c b/drivers/firmware/arm_scmi/transports/mailbox.c
-index ae98644069bdf..9c3f6f28cc6bd 100644
+index 562145ff5..ba294beb6 100644
 --- a/drivers/firmware/arm_scmi/transports/mailbox.c
 +++ b/drivers/firmware/arm_scmi/transports/mailbox.c
 @@ -12,6 +12,7 @@
@@ -118,3 +119,6 @@ index ae98644069bdf..9c3f6f28cc6bd 100644
  			ret = -EINVAL;
  		}
  	}
+-- 
+2.56.1
+

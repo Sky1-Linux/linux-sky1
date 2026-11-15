@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 13543945d2c861686ee8c446025c1ba8780d83b0 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 10 Feb 2026 21:18:47 +1100
-Subject: [PATCH] xhci: plat: auto-detect USB3 LPM support for ACPI platform
- controllers
+Subject: [PATCH 104/140] xhci: plat: auto-detect USB3 LPM support for ACPI
+ platform controllers
 
 Under DT, USB3 LPM (Link Power Management) is enabled by the
 usb3-lpm-capable property.  ACPI platform controllers lack this
@@ -17,7 +17,7 @@ properties.
  1 file changed, 13 insertions(+)
 
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 0baa3be7618c8..c6be3321cac75 100644
+index 0baa3be76..c6be3321c 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
 @@ -90,6 +90,19 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
@@ -40,3 +40,6 @@ index 0baa3be7618c8..c6be3321cac75 100644
  }
  
  /* called during probe() after chip reset completes */
+-- 
+2.56.1
+

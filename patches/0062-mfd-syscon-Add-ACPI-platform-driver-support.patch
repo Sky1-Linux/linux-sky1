@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From ba59adc09eb41888cb1abf61ef350209e5a07554 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 02:06:23 +1100
-Subject: [PATCH] mfd: syscon: Add ACPI platform driver support
+Subject: [PATCH 062/140] mfd: syscon: Add ACPI platform driver support
 
 Add a platform driver to syscon that probes via ACPI device IDs. This
 allows syscon regmap regions to be enumerated on ACPI-booted systems.
@@ -16,7 +16,7 @@ pointer directly.
  1 file changed, 66 insertions(+)
 
 diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-index ae71a2710bed8..ae20f94e13d7f 100644
+index ae71a2710..ae20f94e1 100644
 --- a/drivers/mfd/syscon.c
 +++ b/drivers/mfd/syscon.c
 @@ -8,6 +8,7 @@
@@ -103,3 +103,6 @@ index ae71a2710bed8..ae20f94e13d7f 100644
 +}
 +postcore_initcall(syscon_init);
 +#endif
+-- 
+2.56.1
+

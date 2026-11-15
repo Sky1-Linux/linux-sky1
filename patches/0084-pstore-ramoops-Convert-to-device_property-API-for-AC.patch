@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 4754a4a1ec95fbeb1a16b6d70798c35669164590 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 21:33:02 +1100
-Subject: [PATCH] pstore: ramoops: Convert to device_property API for ACPI
- support
+Subject: [PATCH 084/140] pstore: ramoops: Convert to device_property API for
+ ACPI support
 
 Replace DT-specific of_property_read_u32/bool with the generic
 device_property_read_u32/bool API, allowing ramoops to probe from
@@ -14,7 +14,7 @@ with dev_of_node() since it only applies to DT topology.
  1 file changed, 28 insertions(+), 25 deletions(-)
 
 diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index cab46fb95ad6b..1577d9a44edc6 100644
+index cab46fb95..1577d9a44 100644
 --- a/fs/pstore/ram.c
 +++ b/fs/pstore/ram.c
 @@ -20,6 +20,7 @@
@@ -137,3 +137,6 @@ index cab46fb95ad6b..1577d9a44edc6 100644
  		if (err < 0)
  			goto fail_out;
  	}
+-- 
+2.56.1
+

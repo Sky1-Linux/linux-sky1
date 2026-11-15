@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 75e1b7fda90c992af066c56289fa2df1866a03c7 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:57:33 +1100
-Subject: [PATCH] gpio: cadence: Add edge IRQ, PM, wake, and ACPI support
+Subject: [PATCH 058/140] gpio: cadence: Add edge IRQ, PM, wake, and ACPI
+ support
 
 Extend the Cadence GPIO driver with features needed for Sky1 platform:
 
@@ -23,7 +24,7 @@ detection via match data.
  1 file changed, 219 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/gpio/gpio-cadence.c b/drivers/gpio/gpio-cadence.c
-index b75734ca22dd7..e2ca7b20fa776 100644
+index b75734ca2..e2ca7b20f 100644
 --- a/drivers/gpio/gpio-cadence.c
 +++ b/drivers/gpio/gpio-cadence.c
 @@ -8,14 +8,19 @@
@@ -425,3 +426,6 @@ index b75734ca22dd7..e2ca7b20fa776 100644
  };
  module_platform_driver(cdns_gpio_driver);
  
+-- 
+2.56.1
+

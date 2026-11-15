@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From efacf01f16e99133f11018f77aa2e599f4cf2493 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Wed, 4 Feb 2026 19:40:29 +1100
-Subject: [PATCH] iommu/arm-smmu-v3: Add SMMUv3.2 event definitions
+Subject: [PATCH 033/140] iommu/arm-smmu-v3: Add SMMUv3.2 event definitions
 
 Add missing event IDs from the ARM SMMUv3.2 specification:
 
@@ -21,7 +21,7 @@ The CIX Sky1 SoC uses ARM MMU-700 implementing SMMUv3.2+ features
  2 files changed, 5 insertions(+)
 
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 73ac157b481dd..c2d8adc3bc68f 100644
+index 4fa975d5c..2114847d9 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 @@ -88,7 +88,9 @@ static const char * const event_str[] = {
@@ -34,7 +34,7 @@ index 73ac157b481dd..c2d8adc3bc68f 100644
  	[EVT_ID_BAD_SUBSTREAMID_CONFIG] = "C_BAD_SUBSTREAMID",
  	[EVT_ID_CD_FETCH_FAULT] = "F_CD_FETCH",
  	[EVT_ID_BAD_CD_CONFIG] = "C_BAD_CD",
-@@ -1825,6 +1827,7 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu, u64 *evt,
+@@ -1893,6 +1895,7 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu, u64 *evt,
  	switch (event->id) {
  	case EVT_ID_BAD_STE_CONFIG:
  	case EVT_ID_STREAM_DISABLED_FAULT:
@@ -43,10 +43,10 @@ index 73ac157b481dd..c2d8adc3bc68f 100644
  	case EVT_ID_BAD_CD_CONFIG:
  	case EVT_ID_TRANSLATION_FAULT:
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index ae23aacc38402..42bca64aab331 100644
+index d65bbda8a..d1afbc123 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -458,7 +458,9 @@ static inline unsigned int arm_smmu_cdtab_l2_idx(unsigned int ssid)
+@@ -460,7 +460,9 @@ static inline unsigned int arm_smmu_cdtab_l2_idx(unsigned int ssid)
  #define EVT_ID_BAD_STREAMID_CONFIG	0x02
  #define EVT_ID_STE_FETCH_FAULT		0x03
  #define EVT_ID_BAD_STE_CONFIG		0x04
@@ -56,3 +56,6 @@ index ae23aacc38402..42bca64aab331 100644
  #define EVT_ID_BAD_SUBSTREAMID_CONFIG	0x08
  #define EVT_ID_CD_FETCH_FAULT		0x09
  #define EVT_ID_BAD_CD_CONFIG		0x0a
+-- 
+2.56.1
+

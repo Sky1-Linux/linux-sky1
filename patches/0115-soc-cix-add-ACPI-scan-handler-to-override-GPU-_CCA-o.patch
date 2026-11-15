@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 01bdd24c58504fdd48432a3f3ea8ea3e6b8fa6bc Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 13 Feb 2026 16:38:33 +1100
-Subject: [PATCH] soc: cix: add ACPI scan handler to override GPU _CCA on Sky1
+Subject: [PATCH 115/140] soc: cix: add ACPI scan handler to override GPU _CCA
+ on Sky1
 
 The Sky1 DSDT declares the GPU (CIXH5000) with _CCA=1 (coherent), but
 the SoC was designed for non-coherent GPU operation. The GPU shares
@@ -22,7 +23,7 @@ OEM ID CIXTEK / table ID SKY1EDK2.
  create mode 100644 drivers/soc/cix/cix-acpi-gpu-scan.c
 
 diff --git a/drivers/soc/cix/Kconfig b/drivers/soc/cix/Kconfig
-index 831b909787cc6..01acdfdebd33d 100644
+index 831b90978..01acdfdeb 100644
 --- a/drivers/soc/cix/Kconfig
 +++ b/drivers/soc/cix/Kconfig
 @@ -56,6 +56,20 @@ config CIX_ACPI_USB_SCAN
@@ -47,7 +48,7 @@ index 831b909787cc6..01acdfdebd33d 100644
  	tristate "CIX Bus Performance State Control driver"
  	depends on ARCH_CIX || COMPILE_TEST
 diff --git a/drivers/soc/cix/Makefile b/drivers/soc/cix/Makefile
-index 13db813918183..c7e56f72ce087 100644
+index 13db81391..c7e56f72c 100644
 --- a/drivers/soc/cix/Makefile
 +++ b/drivers/soc/cix/Makefile
 @@ -4,3 +4,4 @@ obj-$(CONFIG_CIX_DDR_LP)	+= cix-ddr-lp.o
@@ -57,7 +58,7 @@ index 13db813918183..c7e56f72ce087 100644
 +obj-$(CONFIG_CIX_ACPI_GPU_SCAN)		+= cix-acpi-gpu-scan.o
 diff --git a/drivers/soc/cix/cix-acpi-gpu-scan.c b/drivers/soc/cix/cix-acpi-gpu-scan.c
 new file mode 100644
-index 0000000000000..b971828d18410
+index 000000000..b971828d1
 --- /dev/null
 +++ b/drivers/soc/cix/cix-acpi-gpu-scan.c
 @@ -0,0 +1,78 @@
@@ -139,3 +140,6 @@ index 0000000000000..b971828d18410
 +arch_initcall(sky1_gpu_acpi_init);
 +
 +#endif /* CONFIG_ACPI */
+-- 
+2.56.1
+

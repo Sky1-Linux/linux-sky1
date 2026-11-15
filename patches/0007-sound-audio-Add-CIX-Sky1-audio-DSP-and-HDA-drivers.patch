@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From c93786a0385ca259052ac8262930266b2bdcbfe4 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:37 +1100
-Subject: [PATCH] sound: audio: Add CIX Sky1 audio, DSP, and HDA drivers
+Subject: [PATCH 007/140] sound: audio: Add CIX Sky1 audio, DSP, and HDA
+ drivers
 
 ---
  drivers/dma-buf/heaps/Kconfig            |    9 +
@@ -62,7 +63,7 @@ Subject: [PATCH] sound: audio: Add CIX Sky1 audio, DSP, and HDA drivers
  create mode 100644 sound/soc/sof/cix/cix-sky1.c
 
 diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-index bb369b38b001a..c7c1cf41cafb8 100644
+index bb369b38b..c7c1cf41c 100644
 --- a/drivers/dma-buf/heaps/Kconfig
 +++ b/drivers/dma-buf/heaps/Kconfig
 @@ -13,6 +13,15 @@ config DMABUF_HEAPS_CMA
@@ -82,7 +83,7 @@ index bb369b38b001a..c7c1cf41cafb8 100644
  	bool "Legacy DMA-BUF CMA Heap"
  	default y
 diff --git a/drivers/dma-buf/heaps/Makefile b/drivers/dma-buf/heaps/Makefile
-index 974467791032f..169c5de454540 100644
+index 974467791..169c5de45 100644
 --- a/drivers/dma-buf/heaps/Makefile
 +++ b/drivers/dma-buf/heaps/Makefile
 @@ -1,3 +1,4 @@
@@ -92,7 +93,7 @@ index 974467791032f..169c5de454540 100644
 +obj-$(CONFIG_DMABUF_HEAPS_DSP)		+= dsp_heap.o
 diff --git a/drivers/dma-buf/heaps/dsp_heap.c b/drivers/dma-buf/heaps/dsp_heap.c
 new file mode 100644
-index 0000000000000..e3bb0bc4c750f
+index 000000000..e3bb0bc4c
 --- /dev/null
 +++ b/drivers/dma-buf/heaps/dsp_heap.c
 @@ -0,0 +1,174 @@
@@ -271,7 +272,7 @@ index 0000000000000..e3bb0bc4c750f
 +MODULE_DESCRIPTION("DMABUF DSP heap exporter");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/dma/arm-dma350.c b/drivers/dma/arm-dma350.c
-index 9efe2ca7d5ec9..1e7948c58c437 100644
+index 9efe2ca7d..1e7948c58 100644
 --- a/drivers/dma/arm-dma350.c
 +++ b/drivers/dma/arm-dma350.c
 @@ -3,12 +3,21 @@
@@ -1444,7 +1445,7 @@ index 9efe2ca7d5ec9..1e7948c58c437 100644
  	.probe = d350_probe,
  	.remove = d350_remove,
 diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index bbd2155d84838..97058977baff4 100644
+index bbd2155d8..97058977b 100644
 --- a/drivers/firmware/Kconfig
 +++ b/drivers/firmware/Kconfig
 @@ -298,5 +298,6 @@ source "drivers/firmware/samsung/Kconfig"
@@ -1455,7 +1456,7 @@ index bbd2155d84838..97058977baff4 100644
  
  endmenu
 diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
-index 4ddec2820c96f..3309f2f1f9c56 100644
+index 4ddec2820..3309f2f1f 100644
 --- a/drivers/firmware/Makefile
 +++ b/drivers/firmware/Makefile
 @@ -38,3 +38,4 @@ obj-y				+= samsung/
@@ -1465,7 +1466,7 @@ index 4ddec2820c96f..3309f2f1f9c56 100644
 +obj-y				+= cix/
 diff --git a/drivers/firmware/cix/Kconfig b/drivers/firmware/cix/Kconfig
 new file mode 100644
-index 0000000000000..9c8304a494f28
+index 000000000..9c8304a49
 --- /dev/null
 +++ b/drivers/firmware/cix/Kconfig
 @@ -0,0 +1,12 @@
@@ -1483,7 +1484,7 @@ index 0000000000000..9c8304a494f28
 +	  If unsure, say N.
 diff --git a/drivers/firmware/cix/Makefile b/drivers/firmware/cix/Makefile
 new file mode 100644
-index 0000000000000..c1dc5bcdd9556
+index 000000000..c1dc5bcdd
 --- /dev/null
 +++ b/drivers/firmware/cix/Makefile
 @@ -0,0 +1,3 @@
@@ -1492,7 +1493,7 @@ index 0000000000000..c1dc5bcdd9556
 +obj-$(CONFIG_CIX_DSP)		+= cix-dsp.o
 diff --git a/drivers/firmware/cix/cix-dsp.c b/drivers/firmware/cix/cix-dsp.c
 new file mode 100644
-index 0000000000000..bc474d398e5ad
+index 000000000..bc474d398
 --- /dev/null
 +++ b/drivers/firmware/cix/cix-dsp.c
 @@ -0,0 +1,175 @@
@@ -1672,7 +1673,7 @@ index 0000000000000..bc474d398e5ad
 +MODULE_DESCRIPTION("CIX DSP IPC Driver");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 48a0d3a69ed08..c3aa7d0128580 100644
+index 48a0d3a69..c3aa7d012 100644
 --- a/drivers/remoteproc/Kconfig
 +++ b/drivers/remoteproc/Kconfig
 @@ -45,6 +45,17 @@ config IMX_DSP_REMOTEPROC
@@ -1694,7 +1695,7 @@ index 48a0d3a69ed08..c3aa7d0128580 100644
  	tristate "Ingenic JZ47xx VPU remoteproc support"
  	depends on MIPS || COMPILE_TEST
 diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index 1c7598b8475d6..6a13c9c408f1a 100644
+index 1c7598b84..6a13c9c40 100644
 --- a/drivers/remoteproc/Makefile
 +++ b/drivers/remoteproc/Makefile
 @@ -38,5 +38,6 @@ obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
@@ -1707,7 +1708,7 @@ index 1c7598b8475d6..6a13c9c408f1a 100644
  obj-$(CONFIG_XLNX_R5_REMOTEPROC)	+= xlnx_r5_remoteproc.o
 diff --git a/drivers/remoteproc/cix_dsp_rproc.c b/drivers/remoteproc/cix_dsp_rproc.c
 new file mode 100644
-index 0000000000000..5c96a65c6c5da
+index 000000000..5c96a65c6
 --- /dev/null
 +++ b/drivers/remoteproc/cix_dsp_rproc.c
 @@ -0,0 +1,1106 @@
@@ -2818,7 +2819,7 @@ index 0000000000000..5c96a65c6c5da
 +MODULE_DESCRIPTION("CIX Audio DSP Remote Processor Control Driver");
 +MODULE_AUTHOR("Lihua Liu <Lihua.Liu@cixcomputing.com>");
 diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index 0cd09e67ac145..e90bcfd935790 100644
+index 0cd09e67a..e90bcfd93 100644
 --- a/drivers/remoteproc/remoteproc_internal.h
 +++ b/drivers/remoteproc/remoteproc_internal.h
 @@ -61,6 +61,7 @@ int rproc_of_parse_firmware(struct device *dev, int index,
@@ -2830,7 +2831,7 @@ index 0cd09e67ac145..e90bcfd935790 100644
  /* from remoteproc_debugfs.c */
  void rproc_remove_trace_file(struct dentry *tfile);
 diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
-index c5d46a8781490..2dfbd40d572b7 100644
+index c5d46a878..2dfbd40d5 100644
 --- a/drivers/remoteproc/remoteproc_virtio.c
 +++ b/drivers/remoteproc/remoteproc_virtio.c
 @@ -100,6 +100,33 @@ irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int notifyid)
@@ -2886,10 +2887,10 @@ index c5d46a8781490..2dfbd40d572b7 100644
  	dev_dbg(dev, "vring%d: va %p qsz %d notifyid %d\n",
  		id, addr, num, rvring->notifyid);
 diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 96fcdd2d7093c..19b731514d6d6 100644
+index 3edc95f48..229b5c059 100644
 --- a/drivers/rpmsg/rpmsg_char.c
 +++ b/drivers/rpmsg/rpmsg_char.c
-@@ -523,6 +523,8 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+@@ -539,6 +539,8 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
  static struct rpmsg_device_id rpmsg_chrdev_id_table[] = {
  	{ .name	= "rpmsg-raw" },
  	{ .name	= "rpmsg_chrdev" },
@@ -2899,7 +2900,7 @@ index 96fcdd2d7093c..19b731514d6d6 100644
  };
  MODULE_DEVICE_TABLE(rpmsg, rpmsg_chrdev_id_table);
 diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 484890b4a6a74..7c6b25565abaa 100644
+index d4fce3ac1..d57b77d9e 100644
 --- a/drivers/rpmsg/virtio_rpmsg_bus.c
 +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
 @@ -15,17 +15,22 @@
@@ -2987,7 +2988,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  }
  
  /**
-@@ -619,19 +653,19 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
+@@ -618,19 +652,19 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
  			 msg, sizeof(*msg) + len, true);
  #endif
  
@@ -3011,7 +3012,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  		goto out;
  	}
  
-@@ -684,14 +718,21 @@ static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+@@ -683,14 +717,21 @@ static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
  	return vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
  }
  
@@ -3037,7 +3038,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  
  	dev_dbg(dev, "From: 0x%x, To: 0x%x, Len: %d, Flags: %d, Reserved: %d\n",
  		__rpmsg32_to_cpu(little_endian, msg->src),
-@@ -736,14 +777,28 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
+@@ -735,14 +776,28 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
  
  		/* farewell, ept, we don't need you anymore */
  		kref_put(&ept->refcount, __ept_release);
@@ -3070,7 +3071,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  	if (err < 0) {
  		dev_err(dev, "failed to add a virtqueue buffer: %d\n", err);
  		return err;
-@@ -752,6 +807,143 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
+@@ -751,6 +806,143 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
  	return 0;
  }
  
@@ -3214,7 +3215,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  /* called when an rx buffer is used, and it's time to digest a message */
  static void rpmsg_recv_done(struct virtqueue *rvq)
  {
-@@ -761,13 +953,11 @@ static void rpmsg_recv_done(struct virtqueue *rvq)
+@@ -760,13 +952,11 @@ static void rpmsg_recv_done(struct virtqueue *rvq)
  	unsigned int len, msgs_received = 0;
  	int err;
  
@@ -3230,7 +3231,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  		err = rpmsg_recv_single(vrp, dev, msg, len);
  		if (err)
  			break;
-@@ -777,11 +967,80 @@ static void rpmsg_recv_done(struct virtqueue *rvq)
+@@ -776,11 +966,80 @@ static void rpmsg_recv_done(struct virtqueue *rvq)
  		msg = virtqueue_get_buf(rvq, &len);
  	}
  
@@ -3314,7 +3315,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  }
  
  /*
-@@ -797,6 +1056,10 @@ static void rpmsg_xmit_done(struct virtqueue *svq)
+@@ -796,6 +1055,10 @@ static void rpmsg_xmit_done(struct virtqueue *svq)
  
  	dev_dbg(&svq->vdev->dev, "%s\n", __func__);
  
@@ -3325,7 +3326,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  	/* wake up potential senders that are waiting for a tx buffer */
  	wake_up_interruptible(&vrp->sendq);
  }
-@@ -865,6 +1128,24 @@ static int rpmsg_probe(struct virtio_device *vdev)
+@@ -864,6 +1127,24 @@ static int rpmsg_probe(struct virtio_device *vdev)
  
  	vrp->vdev = vdev;
  
@@ -3350,7 +3351,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  	idr_init(&vrp->endpoints);
  	mutex_init(&vrp->endpoints_lock);
  	mutex_init(&vrp->tx_lock);
-@@ -901,8 +1182,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
+@@ -900,8 +1181,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
  		goto vqs_del;
  	}
  
@@ -3360,7 +3361,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  
  	/* half of the buffers is dedicated for RX */
  	vrp->rbufs = bufs_va;
-@@ -910,20 +1190,27 @@ static int rpmsg_probe(struct virtio_device *vdev)
+@@ -909,20 +1189,27 @@ static int rpmsg_probe(struct virtio_device *vdev)
  	/* and half is dedicated for TX */
  	vrp->sbufs = bufs_va + total_buf_space / 2;
  
@@ -3394,7 +3395,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  
  	vdev->priv = vrp;
  
-@@ -975,6 +1262,14 @@ static int rpmsg_probe(struct virtio_device *vdev)
+@@ -974,6 +1261,14 @@ static int rpmsg_probe(struct virtio_device *vdev)
  	if (notify)
  		virtqueue_notify(vrp->rvq);
  
@@ -3411,7 +3412,7 @@ index 484890b4a6a74..7c6b25565abaa 100644
  	return 0;
 diff --git a/include/linux/firmware/cix/dsp.h b/include/linux/firmware/cix/dsp.h
 new file mode 100644
-index 0000000000000..a4f8d5d4a52f9
+index 000000000..a4f8d5d4a
 --- /dev/null
 +++ b/include/linux/firmware/cix/dsp.h
 @@ -0,0 +1,86 @@
@@ -3502,7 +3503,7 @@ index 0000000000000..a4f8d5d4a52f9
 +
 +#endif /* _CIX_DSP_IPC_H */
 diff --git a/sound/hda/controllers/Kconfig b/sound/hda/controllers/Kconfig
-index 34721f50b055a..e196164d72130 100644
+index 39b934365..ac7423a41 100644
 --- a/sound/hda/controllers/Kconfig
 +++ b/sound/hda/controllers/Kconfig
 @@ -40,3 +40,19 @@ config SND_HDA_ACPI
@@ -3526,7 +3527,7 @@ index 34721f50b055a..e196164d72130 100644
 +	  To compile this driver as a module, choose M here: the module
 +	  will be called snd-hda-cix-ipbloq.
 diff --git a/sound/hda/controllers/Makefile b/sound/hda/controllers/Makefile
-index a4bcd055e9aef..b8f17d4853745 100644
+index a4bcd055e..b8f17d485 100644
 --- a/sound/hda/controllers/Makefile
 +++ b/sound/hda/controllers/Makefile
 @@ -2,6 +2,7 @@
@@ -3544,7 +3545,7 @@ index a4bcd055e9aef..b8f17d4853745 100644
 +obj-$(CONFIG_SND_HDA_CIX_IPBLOQ) += snd-hda-cix-ipbloq.o
 diff --git a/sound/hda/controllers/hda_cix_ipbloq.c b/sound/hda/controllers/hda_cix_ipbloq.c
 new file mode 100644
-index 0000000000000..df1facafc75a3
+index 000000000..df1facafc
 --- /dev/null
 +++ b/sound/hda/controllers/hda_cix_ipbloq.c
 @@ -0,0 +1,889 @@
@@ -4438,7 +4439,7 @@ index 0000000000000..df1facafc75a3
 +MODULE_DESCRIPTION("CIX IPBLOQ HDA bus driver");
 +MODULE_AUTHOR("Joakim Zhang <joakim.zhang@cixtech.com>");
 diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
-index ce74818bd7152..41826885c3eae 100644
+index ce74818bd..41826885c 100644
 --- a/sound/soc/Kconfig
 +++ b/sound/soc/Kconfig
 @@ -108,6 +108,7 @@ source "sound/soc/apple/Kconfig"
@@ -4450,7 +4451,7 @@ index ce74818bd7152..41826885c3eae 100644
  source "sound/soc/dwc/Kconfig"
  source "sound/soc/fsl/Kconfig"
 diff --git a/sound/soc/Makefile b/sound/soc/Makefile
-index 462322c38aa42..a2f915f45428a 100644
+index 462322c38..a2f915f45 100644
 --- a/sound/soc/Makefile
 +++ b/sound/soc/Makefile
 @@ -50,6 +50,7 @@ obj-$(CONFIG_SND_SOC)	+= amd/
@@ -4463,7 +4464,7 @@ index 462322c38aa42..a2f915f45428a 100644
  obj-$(CONFIG_SND_SOC)	+= fsl/
 diff --git a/sound/soc/cix/Kconfig b/sound/soc/cix/Kconfig
 new file mode 100644
-index 0000000000000..8789e016eb53a
+index 000000000..8789e016e
 --- /dev/null
 +++ b/sound/soc/cix/Kconfig
 @@ -0,0 +1,37 @@
@@ -4506,7 +4507,7 @@ index 0000000000000..8789e016eb53a
 +	  to the Sky1 SoC.
 diff --git a/sound/soc/cix/Makefile b/sound/soc/cix/Makefile
 new file mode 100644
-index 0000000000000..93b2055dfa508
+index 000000000..93b2055df
 --- /dev/null
 +++ b/sound/soc/cix/Makefile
 @@ -0,0 +1,10 @@
@@ -4522,7 +4523,7 @@ index 0000000000000..93b2055dfa508
 +snd-soc-sky1-card-y := sky1-card.o card-utils.o
 diff --git a/sound/soc/cix/card-utils.c b/sound/soc/cix/card-utils.c
 new file mode 100644
-index 0000000000000..f349edad35d83
+index 000000000..f349edad3
 --- /dev/null
 +++ b/sound/soc/cix/card-utils.c
 @@ -0,0 +1,636 @@
@@ -5164,7 +5165,7 @@ index 0000000000000..f349edad35d83
 +MODULE_LICENSE("GPL v2");
 diff --git a/sound/soc/cix/card-utils.h b/sound/soc/cix/card-utils.h
 new file mode 100644
-index 0000000000000..2d0be35d24f98
+index 000000000..2d0be35d2
 --- /dev/null
 +++ b/sound/soc/cix/card-utils.h
 @@ -0,0 +1,72 @@
@@ -5242,7 +5243,7 @@ index 0000000000000..2d0be35d24f98
 +#endif
 diff --git a/sound/soc/cix/cdns_i2s_mc.c b/sound/soc/cix/cdns_i2s_mc.c
 new file mode 100644
-index 0000000000000..37f79cbb2a373
+index 000000000..37f79cbb2
 --- /dev/null
 +++ b/sound/soc/cix/cdns_i2s_mc.c
 @@ -0,0 +1,1146 @@
@@ -6394,7 +6395,7 @@ index 0000000000000..37f79cbb2a373
 +MODULE_DESCRIPTION("Cadence I2S-MC Controller Driver");
 diff --git a/sound/soc/cix/cdns_i2s_sc.c b/sound/soc/cix/cdns_i2s_sc.c
 new file mode 100644
-index 0000000000000..d117c14c83157
+index 000000000..d117c14c8
 --- /dev/null
 +++ b/sound/soc/cix/cdns_i2s_sc.c
 @@ -0,0 +1,1196 @@
@@ -7596,7 +7597,7 @@ index 0000000000000..d117c14c83157
 +MODULE_DESCRIPTION("Cadence I2S-SC Controller Driver");
 diff --git a/sound/soc/cix/sky1-card.c b/sound/soc/cix/sky1-card.c
 new file mode 100644
-index 0000000000000..b5eead0d44d72
+index 000000000..b5eead0d4
 --- /dev/null
 +++ b/sound/soc/cix/sky1-card.c
 @@ -0,0 +1,61 @@
@@ -7662,7 +7663,7 @@ index 0000000000000..b5eead0d44d72
 +MODULE_AUTHOR("Xing.Wang <xing.wang@cixtech.com>");
 +MODULE_LICENSE("GPL v2");
 diff --git a/sound/soc/sof/Kconfig b/sound/soc/sof/Kconfig
-index a487ab0b51c7e..340cf4a56077c 100644
+index a487ab0b5..340cf4a56 100644
 --- a/sound/soc/sof/Kconfig
 +++ b/sound/soc/sof/Kconfig
 @@ -298,6 +298,7 @@ config SND_SOC_SOF_IPC4
@@ -7674,7 +7675,7 @@ index a487ab0b51c7e..340cf4a56077c 100644
  source "sound/soc/sof/intel/Kconfig"
  source "sound/soc/sof/mediatek/Kconfig"
 diff --git a/sound/soc/sof/Makefile b/sound/soc/sof/Makefile
-index b0b22e6ebc03f..2270aa2a542cc 100644
+index b0b22e6eb..2270aa2a5 100644
 --- a/sound/soc/sof/Makefile
 +++ b/sound/soc/sof/Makefile
 @@ -57,5 +57,6 @@ obj-$(CONFIG_SND_SOC_SOF_DEBUG_PROBES) += snd-sof-probes.o
@@ -7686,7 +7687,7 @@ index b0b22e6ebc03f..2270aa2a542cc 100644
  obj-$(CONFIG_SND_SOC_SOF_MTK_TOPLEVEL) += mediatek/
 diff --git a/sound/soc/sof/cix/Kconfig b/sound/soc/sof/cix/Kconfig
 new file mode 100644
-index 0000000000000..c9269df48f6cf
+index 000000000..c9269df48
 --- /dev/null
 +++ b/sound/soc/sof/cix/Kconfig
 @@ -0,0 +1,34 @@
@@ -7726,7 +7727,7 @@ index 0000000000000..c9269df48f6cf
 +endif ## SND_SOC_SOF_CIX_TOPLEVEL
 diff --git a/sound/soc/sof/cix/Makefile b/sound/soc/sof/cix/Makefile
 new file mode 100644
-index 0000000000000..269f780f7c4e7
+index 000000000..269f780f7
 --- /dev/null
 +++ b/sound/soc/sof/cix/Makefile
 @@ -0,0 +1,7 @@
@@ -7739,7 +7740,7 @@ index 0000000000000..269f780f7c4e7
 +obj-$(CONFIG_SND_SOC_SOF_CIX_SKY1) += snd-sof-cix-sky1.o
 diff --git a/sound/soc/sof/cix/cix-common.c b/sound/soc/sof/cix/cix-common.c
 new file mode 100644
-index 0000000000000..5a1706f264d20
+index 000000000..5a1706f26
 --- /dev/null
 +++ b/sound/soc/sof/cix/cix-common.c
 @@ -0,0 +1,108 @@
@@ -7853,7 +7854,7 @@ index 0000000000000..5a1706f264d20
 +MODULE_LICENSE("Dual BSD/GPL");
 diff --git a/sound/soc/sof/cix/cix-common.h b/sound/soc/sof/cix/cix-common.h
 new file mode 100644
-index 0000000000000..ea81cf3edb79a
+index 000000000..ea81cf3ed
 --- /dev/null
 +++ b/sound/soc/sof/cix/cix-common.h
 @@ -0,0 +1,34 @@
@@ -7893,7 +7894,7 @@ index 0000000000000..ea81cf3edb79a
 +#endif
 diff --git a/sound/soc/sof/cix/cix-sky1.c b/sound/soc/sof/cix/cix-sky1.c
 new file mode 100644
-index 0000000000000..a2e226cccf749
+index 000000000..a2e226ccc
 --- /dev/null
 +++ b/sound/soc/sof/cix/cix-sky1.c
 @@ -0,0 +1,578 @@
@@ -8475,3 +8476,6 @@ index 0000000000000..a2e226cccf749
 +MODULE_IMPORT_NS("SND_SOC_SOF_XTENSA");
 +MODULE_AUTHOR("Joakim Zhang <joakim.zhang@cixtech.com>");
 +MODULE_LICENSE("Dual BSD/GPL");
+-- 
+2.56.1
+

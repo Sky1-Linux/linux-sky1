@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From c68713e78e1efc55bfef6c773c752f7e7f658b91 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 12 Feb 2026 13:08:38 +1100
-Subject: [PATCH] scripts: move Sky1 dev tools to sky1-linux-build repo
+Subject: [PATCH 113/140] scripts: move Sky1 dev tools to sky1-linux-build repo
 
 Move build-install.py, build-test.py, kernel-track-status.py,
 update-dev-boot.py, reconcile-configs.py, and sky1_lib.py to the
@@ -25,7 +25,7 @@ Symlinks in scripts/ provide transparent access from the kernel tree.
 
 diff --git a/scripts/build-install.py b/scripts/build-install.py
 deleted file mode 100755
-index a53ace80304d1..0000000000000
+index a53ace803..000000000
 --- a/scripts/build-install.py
 +++ /dev/null
 @@ -1,205 +0,0 @@
@@ -236,7 +236,7 @@ index a53ace80304d1..0000000000000
 -    main()
 diff --git a/scripts/build-test.py b/scripts/build-test.py
 deleted file mode 100755
-index dfcd92800d016..0000000000000
+index dfcd92800..000000000
 --- a/scripts/build-test.py
 +++ /dev/null
 @@ -1,189 +0,0 @@
@@ -431,7 +431,7 @@ index dfcd92800d016..0000000000000
 -    main()
 diff --git a/scripts/kernel-track-status.py b/scripts/kernel-track-status.py
 deleted file mode 100755
-index 979d0146cfe35..0000000000000
+index 979d0146c..000000000
 --- a/scripts/kernel-track-status.py
 +++ /dev/null
 @@ -1,226 +0,0 @@
@@ -663,7 +663,7 @@ index 979d0146cfe35..0000000000000
 -    main()
 diff --git a/scripts/reconcile-configs.py b/scripts/reconcile-configs.py
 deleted file mode 100755
-index eb0b035fecd1f..0000000000000
+index eb0b035fe..000000000
 --- a/scripts/reconcile-configs.py
 +++ /dev/null
 @@ -1,331 +0,0 @@
@@ -1000,7 +1000,7 @@ index eb0b035fecd1f..0000000000000
 -    main()
 diff --git a/scripts/sky1_lib.py b/scripts/sky1_lib.py
 deleted file mode 100755
-index a082cdfb2acc6..0000000000000
+index a082cdfb2..000000000
 --- a/scripts/sky1_lib.py
 +++ /dev/null
 @@ -1,170 +0,0 @@
@@ -1176,7 +1176,7 @@ index a082cdfb2acc6..0000000000000
 -    return result.returncode == 0
 diff --git a/scripts/update-dev-boot.py b/scripts/update-dev-boot.py
 deleted file mode 100755
-index 6aa71d19e93a3..0000000000000
+index 6aa71d19e..000000000
 --- a/scripts/update-dev-boot.py
 +++ /dev/null
 @@ -1,340 +0,0 @@
@@ -1520,3 +1520,6 @@ index 6aa71d19e93a3..0000000000000
 -
 -if __name__ == "__main__":
 -    main()
+-- 
+2.56.1
+

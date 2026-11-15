@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 88969ef449acc96df8c51e99b8e9de8dc84f572d Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 16:02:20 +1100
-Subject: [PATCH] phy: cix: usbdp: guard syscon regmap access for ACPI boot
+Subject: [PATCH 100/140] phy: cix: usbdp: guard syscon regmap access for ACPI
+ boot
 
 Under ACPI boot, syscon_regmap_lookup_by_phandle() returns an error
 because the device has no of_node. The resulting NULL usbphy_syscon
@@ -16,7 +17,7 @@ write is correct behavior.
  1 file changed, 14 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/phy/cix/phy-cix-usbdp.c b/drivers/phy/cix/phy-cix-usbdp.c
-index 700696ed018a9..b9887d3e4e7f7 100644
+index 700696ed0..b9887d3e4 100644
 --- a/drivers/phy/cix/phy-cix-usbdp.c
 +++ b/drivers/phy/cix/phy-cix-usbdp.c
 @@ -682,14 +682,20 @@ static int sky1_udphy_init(struct cix_udphy *udphy)
@@ -48,3 +49,6 @@ index 700696ed018a9..b9887d3e4e7f7 100644
  
  	//usb rcsu reset is default deassert
  	reset_control_assert(udphy->reset);
+-- 
+2.56.1
+

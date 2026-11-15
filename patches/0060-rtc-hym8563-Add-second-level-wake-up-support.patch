@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 5aba3e20e3d58ee795838f022d1b6263b40696f7 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 00:14:10 +1100
-Subject: [PATCH] rtc: hym8563: Add second-level wake-up support
+Subject: [PATCH 060/140] rtc: hym8563: Add second-level wake-up support
 
 The HYM8563 RTC has two wake mechanisms:
 - Alarm Function (AF): minute-level precision, for delays >= 256s
@@ -22,7 +22,7 @@ sleep entry.
  1 file changed, 105 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
-index 7a170c0f97109..dfb01448c67ed 100644
+index 7a170c0f9..dfb01448c 100644
 --- a/drivers/rtc/rtc-hym8563.c
 +++ b/drivers/rtc/rtc-hym8563.c
 @@ -162,19 +162,28 @@ static int hym8563_rtc_alarm_irq_enable(struct device *dev,
@@ -239,3 +239,6 @@ index 7a170c0f97109..dfb01448c67ed 100644
  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, hym8563->rtc->features);
  
  #ifdef CONFIG_COMMON_CLK
+-- 
+2.56.1
+

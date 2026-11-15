@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 763b9c1f0b2abbceed7f301a6ae1157d8d6058e0 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:35 +1100
-Subject: [PATCH] pci: cadence: Add CIX Sky1 PCIe host controller driver
+Subject: [PATCH 002/140] pci: cadence: Add CIX Sky1 PCIe host controller
+ driver
 
 ---
  drivers/pci/controller/cadence/Kconfig        |   11 +
@@ -21,7 +22,7 @@ Subject: [PATCH] pci: cadence: Add CIX Sky1 PCIe host controller driver
  create mode 100644 drivers/pci/controller/cadence/pci-sky1.h
 
 diff --git a/drivers/pci/controller/cadence/Kconfig b/drivers/pci/controller/cadence/Kconfig
-index 02a639e55fd8c..ad5ad2d534f94 100644
+index 02a639e55..ad5ad2d53 100644
 --- a/drivers/pci/controller/cadence/Kconfig
 +++ b/drivers/pci/controller/cadence/Kconfig
 @@ -77,4 +77,15 @@ config PCI_J721E_EP
@@ -41,7 +42,7 @@ index 02a639e55fd8c..ad5ad2d534f94 100644
 +
  endmenu
 diff --git a/drivers/pci/controller/cadence/Makefile b/drivers/pci/controller/cadence/Makefile
-index 5e23f8539ecc1..d582dfb8ff5a9 100644
+index 5e23f8539..d582dfb8f 100644
 --- a/drivers/pci/controller/cadence/Makefile
 +++ b/drivers/pci/controller/cadence/Makefile
 @@ -5,3 +5,5 @@ obj-$(CONFIG_PCIE_CADENCE_EP) += pcie-cadence-ep.o
@@ -52,7 +53,7 @@ index 5e23f8539ecc1..d582dfb8ff5a9 100644
 +obj-$(CONFIG_PCI_SKY1) += pcie-sky1.o
 diff --git a/drivers/pci/controller/cadence/pci-sky1-debugfs.c b/drivers/pci/controller/cadence/pci-sky1-debugfs.c
 new file mode 100644
-index 0000000000000..38d62dad637a2
+index 000000000..38d62dad6
 --- /dev/null
 +++ b/drivers/pci/controller/cadence/pci-sky1-debugfs.c
 @@ -0,0 +1,1340 @@
@@ -1398,7 +1399,7 @@ index 0000000000000..38d62dad637a2
 +#endif
 diff --git a/drivers/pci/controller/cadence/pci-sky1-debugfs.h b/drivers/pci/controller/cadence/pci-sky1-debugfs.h
 new file mode 100644
-index 0000000000000..f8b53056102f1
+index 000000000..f8b530561
 --- /dev/null
 +++ b/drivers/pci/controller/cadence/pci-sky1-debugfs.h
 @@ -0,0 +1,17 @@
@@ -1421,7 +1422,7 @@ index 0000000000000..f8b53056102f1
 +#endif // _PCI_SKY1_DEBUGFS_H
 diff --git a/drivers/pci/controller/cadence/pci-sky1.c b/drivers/pci/controller/cadence/pci-sky1.c
 new file mode 100644
-index 0000000000000..7512a7b923549
+index 000000000..7512a7b92
 --- /dev/null
 +++ b/drivers/pci/controller/cadence/pci-sky1.c
 @@ -0,0 +1,2811 @@
@@ -4238,7 +4239,7 @@ index 0000000000000..7512a7b923549
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/pci/controller/cadence/pci-sky1.h b/drivers/pci/controller/cadence/pci-sky1.h
 new file mode 100644
-index 0000000000000..bfa1052b43812
+index 000000000..bfa1052b4
 --- /dev/null
 +++ b/drivers/pci/controller/cadence/pci-sky1.h
 @@ -0,0 +1,196 @@
@@ -4439,7 +4440,7 @@ index 0000000000000..bfa1052b43812
 +
 +#endif // _PCIE_SKY1_H
 diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index fffd63d6665e8..438c0bc882dc6 100644
+index fffd63d66..438c0bc88 100644
 --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
 +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
 @@ -33,7 +33,7 @@ void __iomem *cdns_pci_map_bus(struct pci_bus *bus, unsigned int devfn,
@@ -4699,7 +4700,7 @@ index fffd63d6665e8..438c0bc882dc6 100644
  	ret = cdns_pcie_host_link_setup(rc);
  	if (ret)
 diff --git a/drivers/pci/controller/cadence/pcie-cadence.c b/drivers/pci/controller/cadence/pcie-cadence.c
-index bd683d0fecb22..c5f35808de16c 100644
+index d61445286..6fd3c89f1 100644
 --- a/drivers/pci/controller/cadence/pcie-cadence.c
 +++ b/drivers/pci/controller/cadence/pcie-cadence.c
 @@ -23,6 +23,17 @@ u16 cdns_pcie_find_ext_capability(struct cdns_pcie *pcie, u8 cap)
@@ -4845,7 +4846,7 @@ index bd683d0fecb22..c5f35808de16c 100644
  EXPORT_SYMBOL_GPL(cdns_pcie_reset_outbound_region);
  
 diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-index e2a853d2c0ab0..5da4c36b25aa3 100644
+index 23ccad0a3..94438bf0b 100644
 --- a/drivers/pci/controller/cadence/pcie-cadence.h
 +++ b/drivers/pci/controller/cadence/pcie-cadence.h
 @@ -18,8 +18,9 @@
@@ -5035,10 +5036,10 @@ index e2a853d2c0ab0..5da4c36b25aa3 100644
  
  /**
 diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 9e073321b2dd2..a96b2eb1fc3af 100644
+index 812b01d24..5e70b2509 100644
 --- a/drivers/pci/quirks.c
 +++ b/drivers/pci/quirks.c
-@@ -2906,6 +2906,27 @@ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x229e,
+@@ -2928,6 +2928,27 @@ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_NVIDIA, 0x229e,
  			      PCI_CLASS_BRIDGE_PCI, 8,
  			      pci_quirk_nvidia_tegra_disable_rp_msi);
  
@@ -5066,3 +5067,6 @@ index 9e073321b2dd2..a96b2eb1fc3af 100644
  /*
   * Some versions of the MCP55 bridge from Nvidia have a legacy IRQ routing
   * config register.  This register controls the routing of legacy
+-- 
+2.56.1
+

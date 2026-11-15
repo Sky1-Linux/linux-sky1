@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From eae53a91ae8e924ad24096909c6c11c0a1dddb9e Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 21 Feb 2026 02:41:44 +1100
-Subject: [PATCH] drm: add sky1-drm render node bridge for CIX Sky1 SoC
+Subject: [PATCH 119/140] drm: add sky1-drm render node bridge for CIX Sky1 SoC
 
 The Mali GPU on Sky1 uses a non-standard /dev/mali0 interface instead
 of a DRM render node.  This prevents GBM and Mesa Zink from discovering
@@ -29,10 +29,10 @@ Modeled on drivers/gpu/drm/vgem/vgem_drv.c, minus fence ioctls.
  create mode 100644 drivers/gpu/drm/sky1/sky1-drm.c
 
 diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index dcb476f9a9582..416f49e850da8 100644
+index b1cd50c6f..4e4212d5e 100644
 --- a/drivers/gpu/drm/Kconfig
 +++ b/drivers/gpu/drm/Kconfig
-@@ -271,6 +271,8 @@ source "drivers/gpu/drm/arm/Kconfig"
+@@ -272,6 +272,8 @@ source "drivers/gpu/drm/arm/Kconfig"
  
  source "drivers/gpu/drm/cix/Kconfig"
  
@@ -42,7 +42,7 @@ index dcb476f9a9582..416f49e850da8 100644
  
  source "drivers/gpu/drm/amd/amdgpu/Kconfig"
 diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index 8e712361b2b67..594ee8cf6586c 100644
+index b412b21d2..0f93261c0 100644
 --- a/drivers/gpu/drm/Makefile
 +++ b/drivers/gpu/drm/Makefile
 @@ -167,6 +167,7 @@ obj-$(CONFIG_DRM_MIPI_DBI) += drm_mipi_dbi.o
@@ -55,7 +55,7 @@ index 8e712361b2b67..594ee8cf6586c 100644
  obj-$(CONFIG_DRM_TTM)	+= ttm/
 diff --git a/drivers/gpu/drm/sky1/Kconfig b/drivers/gpu/drm/sky1/Kconfig
 new file mode 100644
-index 0000000000000..8a4bfcaa10234
+index 000000000..8a4bfcaa1
 --- /dev/null
 +++ b/drivers/gpu/drm/sky1/Kconfig
 @@ -0,0 +1,14 @@
@@ -75,7 +75,7 @@ index 0000000000000..8a4bfcaa10234
 +	  If M is selected the module will be called sky1-drm.
 diff --git a/drivers/gpu/drm/sky1/Makefile b/drivers/gpu/drm/sky1/Makefile
 new file mode 100644
-index 0000000000000..dbdc99f8fec83
+index 000000000..dbdc99f8f
 --- /dev/null
 +++ b/drivers/gpu/drm/sky1/Makefile
 @@ -0,0 +1,2 @@
@@ -83,7 +83,7 @@ index 0000000000000..dbdc99f8fec83
 +obj-$(CONFIG_DRM_SKY1) += sky1-drm.o
 diff --git a/drivers/gpu/drm/sky1/sky1-drm.c b/drivers/gpu/drm/sky1/sky1-drm.c
 new file mode 100644
-index 0000000000000..31ac998552578
+index 000000000..31ac99855
 --- /dev/null
 +++ b/drivers/gpu/drm/sky1/sky1-drm.c
 @@ -0,0 +1,115 @@
@@ -202,3 +202,6 @@ index 0000000000000..31ac998552578
 +
 +MODULE_DESCRIPTION(DRIVER_DESC);
 +MODULE_LICENSE("GPL");
+-- 
+2.56.1
+

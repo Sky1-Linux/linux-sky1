@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 26b4f26e1a0e3827dbaa664485b1ecd70de4d75e Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 18:16:51 +1100
-Subject: [PATCH] clk: cix: Add ACPI support for sky1-audss clock and reset
+Subject: [PATCH 079/140] clk: cix: Add ACPI support for sky1-audss clock and
+ reset
 
 Three changes for audio subsystem ACPI boot:
 
@@ -27,7 +28,7 @@ Three changes for audio subsystem ACPI boot:
  3 files changed, 133 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clk/cix/clk-sky1-audss.c b/drivers/clk/cix/clk-sky1-audss.c
-index 378d2ff4d6e32..9de133e6c2275 100644
+index 378d2ff4d..9de133e6c 100644
 --- a/drivers/clk/cix/clk-sky1-audss.c
 +++ b/drivers/clk/cix/clk-sky1-audss.c
 @@ -8,12 +8,15 @@
@@ -178,7 +179,7 @@ index 378d2ff4d6e32..9de133e6c2275 100644
  		dev_err(dev, "failed to add clock provider: %d\n", ret);
  		goto err_rcsu;
 diff --git a/drivers/clk/clkdev.c b/drivers/clk/clkdev.c
-index e0bede6350e11..7ff364bef0fbb 100644
+index e0bede635..7ff364bef 100644
 --- a/drivers/clk/clkdev.c
 +++ b/drivers/clk/clkdev.c
 @@ -145,7 +145,7 @@ void clkdev_add_table(struct clk_lookup *cl, size_t num)
@@ -191,7 +192,7 @@ index e0bede6350e11..7ff364bef0fbb 100644
  struct clk_lookup_alloc {
  	struct clk_lookup cl;
 diff --git a/drivers/reset/reset-sky1-audss.c b/drivers/reset/reset-sky1-audss.c
-index 2ec4e015911ab..35d66e16f619e 100644
+index 2ec4e0159..35d66e16f 100644
 --- a/drivers/reset/reset-sky1-audss.c
 +++ b/drivers/reset/reset-sky1-audss.c
 @@ -7,10 +7,12 @@
@@ -232,3 +233,6 @@ index 2ec4e015911ab..35d66e16f619e 100644
  	if (IS_ERR(regmap))
  		return dev_err_probe(dev, PTR_ERR(regmap),
  				     "failed to get parent regmap\n");
+-- 
+2.56.1
+

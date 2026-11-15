@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 4afc4e8acfc9c7e5e184ca29c1e367cbc1de02b5 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 10 Feb 2026 21:19:09 +1100
-Subject: [PATCH] clk: cix: sky1-acpi: use CLKT consumer reference for clkdev
- registration
+Subject: [PATCH 106/140] clk: cix: sky1-acpi: use CLKT consumer reference for
+ clkdev registration
 
 CLKT table entries have the form { scmi_clock_id, con_id, consumer_ref }.
 The third element is the actual consumer device, but the parser was
@@ -20,7 +20,7 @@ clock is registered against its intended consumer device.
  1 file changed, 28 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/clk/cix/clk-sky1-acpi.c b/drivers/clk/cix/clk-sky1-acpi.c
-index 1cd096a5a8c09..4c5ca954da000 100644
+index 1cd096a5a..4c5ca954d 100644
 --- a/drivers/clk/cix/clk-sky1-acpi.c
 +++ b/drivers/clk/cix/clk-sky1-acpi.c
 @@ -116,11 +116,34 @@ static acpi_status sky1_clkt_walk_cb(acpi_handle handle, u32 level,
@@ -63,3 +63,6 @@ index 1cd096a5a8c09..4c5ca954da000 100644
  
  out:
  	kfree(buf.pointer);
+-- 
+2.56.1
+

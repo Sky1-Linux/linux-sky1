@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From e961f7878a9739250138f6c55cefe5e9b2d6e81b Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 3 Feb 2026 20:16:23 +1100
-Subject: [PATCH] arm64: dts: cix: Fix PCIe power supply GPIO assignments on
- Orion O6/O6N
+Subject: [PATCH 028/140] arm64: dts: cix: Fix PCIe power supply GPIO
+ assignments on Orion O6/O6N
 
 Fix several vendor DTS bugs in PCIe power supply GPIO mappings,
 verified against board schematics:
@@ -28,7 +28,7 @@ correctly uses s5_gpio0[11] for GPIO012 and s5_gpio0[12] for GPIO013.
  2 files changed, 78 insertions(+), 38 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-index 60c2a2985776c..8d6fc38a3657c 100644
+index 60c2a2985..8d6fc38a3 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 @@ -245,11 +245,11 @@ vgfx_power: vgfx-power {
@@ -168,7 +168,7 @@ index 60c2a2985776c..8d6fc38a3657c 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
-index cf7308d4ef6c1..6515de495200b 100644
+index cf7308d4e..6515de495 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 @@ -255,11 +255,11 @@ ufs_5v0: regulator-ufs-5v0 {
@@ -307,3 +307,6 @@ index cf7308d4ef6c1..6515de495200b 100644
  	vcc-pcie-supply = <&gbe2_power_3v3>;
  	status = "okay";
  };
+-- 
+2.56.1
+

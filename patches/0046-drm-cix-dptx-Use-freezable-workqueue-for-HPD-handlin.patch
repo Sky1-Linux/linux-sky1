@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 7aafdc6ada0d7d9af20e0d679886c8b02ba3e31b Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 21:52:08 +1100
-Subject: [PATCH] drm: cix: dptx: Use freezable workqueue for HPD handling
+Subject: [PATCH 046/140] drm: cix: dptx: Use freezable workqueue for HPD
+ handling
 
 Use system_freezable_wq instead of the default system workqueue for
 HPD (hot-plug detect) event and IRQ work. This ensures HPD work is
@@ -19,7 +20,7 @@ layer of protection against suspend-time races in the display driver.
  1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index 25429b641b84f..6093fe19a7da2 100644
+index 25429b641..6093fe19a 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -43,6 +43,7 @@
@@ -58,3 +59,6 @@ index 25429b641b84f..6093fe19a7da2 100644
  
  	return IRQ_HANDLED;
  }
+-- 
+2.56.1
+

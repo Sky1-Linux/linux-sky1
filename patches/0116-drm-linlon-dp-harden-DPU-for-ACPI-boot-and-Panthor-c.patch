@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 96a6401c7ed2ec2c574afa5af1280d138bd1d81c Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 13 Feb 2026 16:38:47 +1100
-Subject: [PATCH] drm: linlon-dp: harden DPU for ACPI boot and Panthor
+Subject: [PATCH 116/140] drm: linlon-dp: harden DPU for ACPI boot and Panthor
  coexistence
 
 Three DPU driver fixes for ACPI boot reliability:
@@ -25,7 +25,7 @@ Three DPU driver fixes for ACPI boot reliability:
  3 files changed, 27 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c
-index 16412dcd678a7..d6c0f148bea68 100644
+index 16412dcd6..d6c0f148b 100644
 --- a/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c
 @@ -12,6 +12,7 @@
@@ -56,7 +56,7 @@ index 16412dcd678a7..d6c0f148bea68 100644
      fwnode_for_each_child_node(np, child) {
          tmp_name = child->ops->get_name(child);
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
-index dd647f8a7935a..f3464a63c4265 100644
+index dd647f8a7..f3464a63c 100644
 --- a/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
 @@ -9,6 +9,7 @@
@@ -112,7 +112,7 @@ index dd647f8a7935a..f3464a63c4265 100644
  	if (!pm_runtime_status_suspended(dev))
  		linlondp_dev_resume(mdrv->mdev);
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c
-index 82f92d602cfec..ab4e3a4bb7c5a 100644
+index 82f92d602..ab4e3a4bb 100644
 --- a/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c
 @@ -25,9 +25,11 @@
@@ -140,3 +140,6 @@ index 82f92d602cfec..ab4e3a4bb7c5a 100644
  	kms = devm_drm_dev_alloc(mdev->dev, &linlondp_kms_driver,
  				 struct linlondp_kms_dev, base);
  	if (IS_ERR(kms))
+-- 
+2.56.1
+

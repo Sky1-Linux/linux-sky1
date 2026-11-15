@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From ed77f6048a970d26045123c26c95cad943715f2d Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 2 Feb 2026 23:58:18 +1100
-Subject: [PATCH] arm64: dts: cix: Fix WiFi RFKill GPIO on Orion O6 and O6N
+Subject: [PATCH 018/140] arm64: dts: cix: Fix WiFi RFKill GPIO on Orion O6 and
+ O6N
 
 GPIO019 was incorrectly assigned to the bluetooth node as BT,reset-gpios.
 It is actually the WLAN radio disable pin (WL_RADIO_DISABLE_L). Move it
@@ -20,7 +21,7 @@ muxed when the WiFi controller initializes.
  2 files changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-index 5cab6a509e500..7ad52ff49798a 100644
+index 5cab6a509..7ad52ff49 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 @@ -194,12 +194,16 @@ panel_edp0: panel_edp0 {
@@ -62,7 +63,7 @@ index 5cab6a509e500..7ad52ff49798a 100644
  	vcc-pcie-supply = <&vdd_3v3_pcie>;
  	status = "okay";
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
-index b1453dbcec64e..c8f61d311fdcb 100644
+index b1453dbce..c8f61d311 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 @@ -196,12 +196,18 @@ panel_edp0: panel_edp0 {
@@ -105,3 +106,6 @@ index b1453dbcec64e..c8f61d311fdcb 100644
  	reset-gpios = <&s5_gpio0 4 GPIO_ACTIVE_HIGH>;
  	vcc-pcie-supply = <&vdd_3v3_pcie>;
  	status = "okay";
+-- 
+2.56.1
+

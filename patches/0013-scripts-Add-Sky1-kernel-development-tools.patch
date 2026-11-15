@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 73b2b6643c5fd45adc3f7d70f483857acd19b185 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:39 +1100
-Subject: [PATCH] scripts: Add Sky1 kernel development tools
+Subject: [PATCH 013/140] scripts: Add Sky1 kernel development tools
 
 ---
  README.md                      |  76 ++++++++
@@ -22,7 +22,7 @@ Subject: [PATCH] scripts: Add Sky1 kernel development tools
 
 diff --git a/README.md b/README.md
 new file mode 100644
-index 0000000000000..982ad93c87a71
+index 000000000..982ad93c8
 --- /dev/null
 +++ b/README.md
 @@ -0,0 +1,76 @@
@@ -104,7 +104,7 @@ index 0000000000000..982ad93c87a71
 +- [Sky1 Linux](https://github.com/Sky1-Linux) — Full project
 diff --git a/scripts/build-install.py b/scripts/build-install.py
 new file mode 100755
-index 0000000000000..a53ace80304d1
+index 000000000..a53ace803
 --- /dev/null
 +++ b/scripts/build-install.py
 @@ -0,0 +1,205 @@
@@ -315,7 +315,7 @@ index 0000000000000..a53ace80304d1
 +    main()
 diff --git a/scripts/build-test.py b/scripts/build-test.py
 new file mode 100755
-index 0000000000000..dfcd92800d016
+index 000000000..dfcd92800
 --- /dev/null
 +++ b/scripts/build-test.py
 @@ -0,0 +1,189 @@
@@ -510,7 +510,7 @@ index 0000000000000..dfcd92800d016
 +    main()
 diff --git a/scripts/kernel-track-status.py b/scripts/kernel-track-status.py
 new file mode 100755
-index 0000000000000..73528e5786bf5
+index 000000000..73528e578
 --- /dev/null
 +++ b/scripts/kernel-track-status.py
 @@ -0,0 +1,222 @@
@@ -738,7 +738,7 @@ index 0000000000000..73528e5786bf5
 +    main()
 diff --git a/scripts/reconcile-configs.py b/scripts/reconcile-configs.py
 new file mode 100755
-index 0000000000000..eb0b035fecd1f
+index 000000000..eb0b035fe
 --- /dev/null
 +++ b/scripts/reconcile-configs.py
 @@ -0,0 +1,331 @@
@@ -1075,7 +1075,7 @@ index 0000000000000..eb0b035fecd1f
 +    main()
 diff --git a/scripts/sky1_lib.py b/scripts/sky1_lib.py
 new file mode 100755
-index 0000000000000..9fc021ec97c7d
+index 000000000..9fc021ec9
 --- /dev/null
 +++ b/scripts/sky1_lib.py
 @@ -0,0 +1,149 @@
@@ -1230,7 +1230,7 @@ index 0000000000000..9fc021ec97c7d
 +    return result.returncode == 0
 diff --git a/scripts/update-dev-boot.py b/scripts/update-dev-boot.py
 new file mode 100755
-index 0000000000000..86a8bf841ab1d
+index 000000000..86a8bf841
 --- /dev/null
 +++ b/scripts/update-dev-boot.py
 @@ -0,0 +1,229 @@
@@ -1463,3 +1463,6 @@ index 0000000000000..86a8bf841ab1d
 +
 +if __name__ == "__main__":
 +    main()
+-- 
+2.56.1
+

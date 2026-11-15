@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 1df82f4066dcba6a520a366e2580433f6f8265c9 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 3 Feb 2026 19:12:40 +1100
-Subject: [PATCH] drm/cix: Fix DPTX link rate selection for optimal bandwidth
- margin
+Subject: [PATCH 027/140] drm/cix: Fix DPTX link rate selection for optimal
+ bandwidth margin
 
 Replace the minimum-rate link selection algorithm with one that ensures
 adequate bandwidth margin. The old code picked the lowest link rate
@@ -25,7 +25,7 @@ the previous RBR which could not carry 10bpc at 120Hz.
  1 file changed, 41 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
-index 53954a5bed0ce..2b9e4a939eaa1 100644
+index 53954a5be..2b9e4a939 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_drm.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -878,6 +878,37 @@ static bool compute_available_clock_rate(struct trilin_dp *dp,
@@ -113,3 +113,6 @@ index 53954a5bed0ce..2b9e4a939eaa1 100644
  
  	ret = trilin_dp_mode_configure(dp, adjusted_mode->clock, link_rate_bw_code, bpp, false);
  	if (ret < 0)
+-- 
+2.56.1
+

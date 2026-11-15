@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 2c0998f23c447c277fce33a95cd5b4b981beb95c Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 13 Feb 2026 17:55:33 +1100
-Subject: [PATCH] drm/panthor: add ACE-Lite coherency and NC memattr fallback
- for Sky1
+Subject: [PATCH 117/140] drm/panthor: add ACE-Lite coherency and NC memattr
+ fallback for Sky1
 
 Replace the single boolean coherent field with an enum
 panthor_coherency_mode whose values match the GPU_COHERENCY_PROTOCOL
@@ -32,7 +32,7 @@ module parameter for debugging.
  6 files changed, 91 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/gpu/drm/panthor/panthor_device.c b/drivers/gpu/drm/panthor/panthor_device.c
-index d06c36569b278..7020465ebbaa3 100644
+index 72145bda9..590a513ac 100644
 --- a/drivers/gpu/drm/panthor/panthor_device.c
 +++ b/drivers/gpu/drm/panthor/panthor_device.c
 @@ -5,7 +5,9 @@
@@ -94,7 +94,7 @@ index d06c36569b278..7020465ebbaa3 100644
  	return -ENOTSUPP;
  }
  
-@@ -571,6 +592,11 @@ int panthor_device_init(struct panthor_device *ptdev)
+@@ -574,6 +595,11 @@ int panthor_device_init(struct panthor_device *ptdev)
  	if (ret)
  		goto err_unplug_gpu;
  
@@ -107,7 +107,7 @@ index d06c36569b278..7020465ebbaa3 100644
  	if (ret)
  		goto err_unplug_gpu;
 diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/panthor/panthor_device.h
-index d415ed49c73f5..9ac51732e4e8b 100644
+index d415ed49c..9ac51732e 100644
 --- a/drivers/gpu/drm/panthor/panthor_device.h
 +++ b/drivers/gpu/drm/panthor/panthor_device.h
 @@ -19,6 +19,27 @@
@@ -150,7 +150,7 @@ index d415ed49c73f5..9ac51732e4e8b 100644
  	/** @gpu_info: GPU information. */
  	struct drm_panthor_gpu_info gpu_info;
 diff --git a/drivers/gpu/drm/panthor/panthor_gem.c b/drivers/gpu/drm/panthor/panthor_gem.c
-index 43471babff86c..792709838a84e 100644
+index 43471babf..792709838 100644
 --- a/drivers/gpu/drm/panthor/panthor_gem.c
 +++ b/drivers/gpu/drm/panthor/panthor_gem.c
 @@ -236,7 +236,7 @@ struct drm_gem_object *panthor_gem_create_object(struct drm_device *ddev, size_t
@@ -163,7 +163,7 @@ index 43471babff86c..792709838a84e 100644
  
  	panthor_gem_debugfs_bo_init(obj);
 diff --git a/drivers/gpu/drm/panthor/panthor_gpu.c b/drivers/gpu/drm/panthor/panthor_gpu.c
-index 247024991a418..e98a92a3048b1 100644
+index 247024991..e98a92a30 100644
 --- a/drivers/gpu/drm/panthor/panthor_gpu.c
 +++ b/drivers/gpu/drm/panthor/panthor_gpu.c
 @@ -49,8 +49,16 @@ struct panthor_gpu {
@@ -186,7 +186,7 @@ index 247024991a418..e98a92a3048b1 100644
  
  static void panthor_gpu_irq_handler(struct panthor_device *ptdev, u32 status)
 diff --git a/drivers/gpu/drm/panthor/panthor_mmu.c b/drivers/gpu/drm/panthor/panthor_mmu.c
-index 95ef5469628d2..9de34e6d31c52 100644
+index 09756325c..8c034bc1b 100644
 --- a/drivers/gpu/drm/panthor/panthor_mmu.c
 +++ b/drivers/gpu/drm/panthor/panthor_mmu.c
 @@ -786,7 +786,7 @@ int panthor_vm_active(struct panthor_vm *vm)
@@ -244,7 +244,7 @@ index 95ef5469628d2..9de34e6d31c52 100644
  				out_attr |= AS_MEMATTR_AARCH64_SH_MIDGARD_INNER;
  			else
  				out_attr |= AS_MEMATTR_AARCH64_SH_CPU_INNER;
-@@ -2402,7 +2411,7 @@ panthor_vm_create(struct panthor_device *ptdev, bool for_mcu,
+@@ -2404,7 +2413,7 @@ panthor_vm_create(struct panthor_device *ptdev, bool for_mcu,
  		.pgsize_bitmap	= SZ_4K | SZ_2M,
  		.ias		= va_bits,
  		.oas		= pa_bits,
@@ -253,7 +253,7 @@ index 95ef5469628d2..9de34e6d31c52 100644
  		.tlb		= &mmu_tlb_ops,
  		.iommu_dev	= ptdev->base.dev,
  		.alloc		= alloc_pt,
-@@ -2425,7 +2434,8 @@ panthor_vm_create(struct panthor_device *ptdev, bool for_mcu,
+@@ -2427,7 +2436,8 @@ panthor_vm_create(struct panthor_device *ptdev, bool for_mcu,
  		goto err_sched_fini;
  
  	mair = io_pgtable_ops_to_pgtable(vm->pgtbl_ops)->cfg.arm_lpae_s1_cfg.mair;
@@ -264,7 +264,7 @@ index 95ef5469628d2..9de34e6d31c52 100644
  	mutex_lock(&ptdev->mmu->vm.lock);
  	list_add_tail(&vm->node, &ptdev->mmu->vm.list);
 diff --git a/drivers/gpu/drm/panthor/panthor_regs.h b/drivers/gpu/drm/panthor/panthor_regs.h
-index 4e707ed390044..98ae67a17bfb5 100644
+index 4e707ed39..98ae67a17 100644
 --- a/drivers/gpu/drm/panthor/panthor_regs.h
 +++ b/drivers/gpu/drm/panthor/panthor_regs.h
 @@ -117,6 +117,7 @@
@@ -275,3 +275,6 @@ index 4e707ed390044..98ae67a17bfb5 100644
  
  #define MCU_CONTROL					0x700
  #define MCU_CONTROL_ENABLE				1
+-- 
+2.56.1
+

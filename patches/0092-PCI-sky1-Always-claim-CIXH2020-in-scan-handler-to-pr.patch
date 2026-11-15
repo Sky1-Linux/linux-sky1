@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From d9d9e8eaf5b3861db469d3183ba78d6f5e295bc3 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 8 Feb 2026 22:05:41 +1100
-Subject: [PATCH] PCI: sky1: Always claim CIXH2020 in scan handler to prevent
- fallback
+Subject: [PATCH 092/140] PCI: sky1: Always claim CIXH2020 in scan handler to
+ prevent fallback
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -21,7 +21,7 @@ dev_err is preferable to a silent hang from fw_devlink deferred probe.
  1 file changed, 12 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/pci/controller/cadence/pci-sky1-acpi.c b/drivers/pci/controller/cadence/pci-sky1-acpi.c
-index 4e3d879a47261..1ad1318035904 100644
+index 4e3d879a4..1ad131803 100644
 --- a/drivers/pci/controller/cadence/pci-sky1-acpi.c
 +++ b/drivers/pci/controller/cadence/pci-sky1-acpi.c
 @@ -55,6 +55,12 @@ static int sky1_cixh2020_res_filter(struct acpi_resource *ares, void *data)
@@ -68,3 +68,6 @@ index 4e3d879a47261..1ad1318035904 100644
  	}
  
  	dev_info(&adev->dev, "Sky1: created platform device %s (%d resources)\n",
+-- 
+2.56.1
+

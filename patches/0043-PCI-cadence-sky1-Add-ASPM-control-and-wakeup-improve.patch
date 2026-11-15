@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From f29cc77fe9a3785c340097fe31c9e9362e4645b1 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 21:40:02 +1100
-Subject: [PATCH] PCI: cadence: sky1: Add ASPM control and wakeup improvements
+Subject: [PATCH 043/140] PCI: cadence: sky1: Add ASPM control and wakeup
+ improvements
 
 Port several PCIe improvements from CIX 6.6.89 kernel:
 
@@ -28,7 +29,7 @@ with various PCIe endpoint devices.
  2 files changed, 72 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/pci/controller/cadence/pci-sky1.c b/drivers/pci/controller/cadence/pci-sky1.c
-index 7512a7b923549..13b0d59223aa9 100644
+index 7512a7b92..13b0d5922 100644
 --- a/drivers/pci/controller/cadence/pci-sky1.c
 +++ b/drivers/pci/controller/cadence/pci-sky1.c
 @@ -10,6 +10,7 @@
@@ -172,7 +173,7 @@ index 7512a7b923549..13b0d59223aa9 100644
  
  	// i_cfg_5 register DLUC(Disable Link Upconfigure Capability) field set to 0
 diff --git a/drivers/pci/controller/cadence/pci-sky1.h b/drivers/pci/controller/cadence/pci-sky1.h
-index bfa1052b43812..368d359dba78c 100644
+index bfa1052b4..368d359db 100644
 --- a/drivers/pci/controller/cadence/pci-sky1.h
 +++ b/drivers/pci/controller/cadence/pci-sky1.h
 @@ -144,6 +144,7 @@ struct sky1_pcie {
@@ -183,3 +184,6 @@ index bfa1052b43812..368d359dba78c 100644
  	spinlock_t aer_lock;
  	struct work_struct pme_work;
  	bool is_aer_uncor_panic;
+-- 
+2.56.1
+

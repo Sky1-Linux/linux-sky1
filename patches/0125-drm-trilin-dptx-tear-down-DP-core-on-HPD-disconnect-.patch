@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b1984618420434aabbe5c8e0bdb0ec644776fb8c Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 27 Feb 2026 17:18:33 +1100
-Subject: [PATCH] drm/trilin-dptx: tear down DP core on HPD disconnect for
- clean replug
+Subject: [PATCH 125/140] drm/trilin-dptx: tear down DP core on HPD disconnect
+ for clean replug
 
 trilin_dp_handle_disconnect() only cleared DP_STATE_CONNECTED,
 leaving DP_STATE_READY and DP_STATE_ENABLED set.  The full PHY
@@ -24,7 +24,7 @@ the subsequent encoder_disable from KMS harmlessly no-ops.
  1 file changed, 20 insertions(+)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index ff2049532396f..f03762da0defe 100644
+index ff2049532..f03762da0 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -2600,6 +2600,26 @@ int trilin_dp_handle_disconnect(struct trilin_dp *dp, bool send_notification)
@@ -54,3 +54,6 @@ index ff2049532396f..f03762da0defe 100644
  	if (dp->mst.mst_active) {
  		/* user mode should active power off to disable encoder */
  		trilin_dp_set_mst_mgr_state(dp, false);
+-- 
+2.56.1
+

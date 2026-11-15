@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From a6d0d3006aaa6e3e522d7d77a4a292879b7c6386 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 23:18:49 +1100
-Subject: [PATCH] drm/panthor: Add SCMI perf domain support for GPU DVFS
+Subject: [PATCH 015/140] drm/panthor: Add SCMI perf domain support for GPU
+ DVFS
 
 On platforms with multiple power domains (e.g. CIX Sky1 with pd_gpu for
 power gating and perf for SCMI DVFS), the platform bus does not
@@ -25,7 +26,7 @@ without a named "perf" power domain.
  1 file changed, 149 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-index 47bdcf28bf587..5880a94dac593 100644
+index 47bdcf28b..5880a94da 100644
 --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
 +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
 @@ -5,9 +5,11 @@
@@ -252,3 +253,6 @@ index 47bdcf28bf587..5880a94dac593 100644
  	dev_pm_opp_put(opp);
  	if (ret) {
  		DRM_DEV_ERROR(dev, "Couldn't set recommended OPP\n");
+-- 
+2.56.1
+

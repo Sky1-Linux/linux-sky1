@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From ade08e5065ce59655a2a459df4bf8da0e76e35f6 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:36 +1100
-Subject: [PATCH] drm: cix: Add Sky1 display drivers
+Subject: [PATCH 005/140] drm: cix: Add Sky1 display drivers
 
 ---
  drivers/gpu/drm/Kconfig                       |    2 +
@@ -155,10 +155,10 @@ Subject: [PATCH] drm: cix: Add Sky1 display drivers
  create mode 100644 drivers/gpu/drm/cix/linlon-dp/linlondp_wb_connector.c
 
 diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index ed85d0ceee3ba..dcb476f9a9582 100644
+index 4b0228c88..b1cd50c6f 100644
 --- a/drivers/gpu/drm/Kconfig
 +++ b/drivers/gpu/drm/Kconfig
-@@ -269,6 +269,8 @@ source "drivers/gpu/drm/sysfb/Kconfig"
+@@ -270,6 +270,8 @@ source "drivers/gpu/drm/sysfb/Kconfig"
  
  source "drivers/gpu/drm/arm/Kconfig"
  
@@ -168,7 +168,7 @@ index ed85d0ceee3ba..dcb476f9a9582 100644
  
  source "drivers/gpu/drm/amd/amdgpu/Kconfig"
 diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index 742f0d590c5af..8e712361b2b67 100644
+index 1b3a7ab6d..b412b21d2 100644
 --- a/drivers/gpu/drm/Makefile
 +++ b/drivers/gpu/drm/Makefile
 @@ -166,6 +166,7 @@ obj-y			+= tests/
@@ -181,7 +181,7 @@ index 742f0d590c5af..8e712361b2b67 100644
  obj-$(CONFIG_DRM_TTM)	+= ttm/
 diff --git a/drivers/gpu/drm/cix/Kconfig b/drivers/gpu/drm/cix/Kconfig
 new file mode 100644
-index 0000000000000..c826b9decd7c7
+index 000000000..c826b9dec
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/Kconfig
 @@ -0,0 +1,55 @@
@@ -242,7 +242,7 @@ index 0000000000000..c826b9decd7c7
 +source "drivers/gpu/drm/cix/dptx/Kconfig"
 diff --git a/drivers/gpu/drm/cix/Makefile b/drivers/gpu/drm/cix/Makefile
 new file mode 100644
-index 0000000000000..10ff04825a6af
+index 000000000..10ff04825
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/Makefile
 @@ -0,0 +1,5 @@
@@ -253,7 +253,7 @@ index 0000000000000..10ff04825a6af
 +obj-$(CONFIG_DRM_TRILIN_DPSUB) += dptx/
 diff --git a/drivers/gpu/drm/cix/cix_display.c b/drivers/gpu/drm/cix/cix_display.c
 new file mode 100644
-index 0000000000000..2f9bd7cee38e3
+index 000000000..2f9bd7cee
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/cix_display.c
 @@ -0,0 +1,204 @@
@@ -463,7 +463,7 @@ index 0000000000000..2f9bd7cee38e3
 +
 diff --git a/drivers/gpu/drm/cix/cix_virtual.c b/drivers/gpu/drm/cix/cix_virtual.c
 new file mode 100644
-index 0000000000000..c3877c4cf4f64
+index 000000000..c3877c4cf
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/cix_virtual.c
 @@ -0,0 +1,312 @@
@@ -781,7 +781,7 @@ index 0000000000000..c3877c4cf4f64
 +MODULE_ALIAS("platform:cix-virtual");
 diff --git a/drivers/gpu/drm/cix/dptx/Kconfig b/drivers/gpu/drm/cix/dptx/Kconfig
 new file mode 100644
-index 0000000000000..08e5641df6a6a
+index 000000000..08e5641df
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/Kconfig
 @@ -0,0 +1,27 @@
@@ -814,7 +814,7 @@ index 0000000000000..08e5641df6a6a
 +	  Technologies DisplayPort subsystem.
 diff --git a/drivers/gpu/drm/cix/dptx/Makefile b/drivers/gpu/drm/cix/dptx/Makefile
 new file mode 100644
-index 0000000000000..1d3c95b318891
+index 000000000..1d3c95b31
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/Makefile
 @@ -0,0 +1,11 @@
@@ -832,7 +832,7 @@ index 0000000000000..1d3c95b318891
 \ No newline at end of file
 diff --git a/drivers/gpu/drm/cix/dptx/cix_edp_panel.c b/drivers/gpu/drm/cix/dptx/cix_edp_panel.c
 new file mode 100644
-index 0000000000000..00df3aa01360d
+index 000000000..00df3aa01
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/cix_edp_panel.c
 @@ -0,0 +1,879 @@
@@ -1717,7 +1717,7 @@ index 0000000000000..00df3aa01360d
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/cix_edp_panel.h b/drivers/gpu/drm/cix/dptx/cix_edp_panel.h
 new file mode 100755
-index 0000000000000..7fae7f6c43051
+index 000000000..7fae7f6c4
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/cix_edp_panel.h
 @@ -0,0 +1,26 @@
@@ -1749,7 +1749,7 @@ index 0000000000000..7fae7f6c43051
 +void cix_edp_panel_exit(void);
 diff --git a/drivers/gpu/drm/cix/dptx/dptx_infoframe.c b/drivers/gpu/drm/cix/dptx/dptx_infoframe.c
 new file mode 100644
-index 0000000000000..eacfdd4ec5453
+index 000000000..eacfdd4ec
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/dptx_infoframe.c
 @@ -0,0 +1,359 @@
@@ -2114,7 +2114,7 @@ index 0000000000000..eacfdd4ec5453
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/dptx_infoframe.h b/drivers/gpu/drm/cix/dptx/dptx_infoframe.h
 new file mode 100644
-index 0000000000000..227e0304b5bfe
+index 000000000..227e0304b
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/dptx_infoframe.h
 @@ -0,0 +1,46 @@
@@ -2166,7 +2166,7 @@ index 0000000000000..227e0304b5bfe
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp.c b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp.c
 new file mode 100644
-index 0000000000000..354a19b6eca9f
+index 000000000..354a19b6e
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp.c
 @@ -0,0 +1,396 @@
@@ -2568,7 +2568,7 @@ index 0000000000000..354a19b6eca9f
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp.h b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp.h
 new file mode 100644
-index 0000000000000..5a226485735be
+index 000000000..5a2264857
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp.h
 @@ -0,0 +1,141 @@
@@ -2715,7 +2715,7 @@ index 0000000000000..5a226485735be
 +#endif // __CIX_HDCP_H_
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c
 new file mode 100644
-index 0000000000000..afc975e083b55
+index 000000000..afc975e08
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c
 @@ -0,0 +1,183 @@
@@ -2904,7 +2904,7 @@ index 0000000000000..afc975e083b55
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.h b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.h
 new file mode 100644
-index 0000000000000..bd8916def52fe
+index 000000000..bd8916def
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.h
 @@ -0,0 +1,22 @@
@@ -2932,7 +2932,7 @@ index 0000000000000..bd8916def52fe
 +int cix_hdcp2_ioctl_get_dkey2(struct cix_hdcp *hdcp, void *kdata);
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl_cmd.h b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl_cmd.h
 new file mode 100644
-index 0000000000000..9528795d99ade
+index 000000000..9528795d9
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl_cmd.h
 @@ -0,0 +1,116 @@
@@ -3054,7 +3054,7 @@ index 0000000000000..9528795d99ade
 +#endif // CIX_HDCP_IOCTL_CMD_H_
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/dptx_aux_reg.h b/drivers/gpu/drm/cix/dptx/hdcp/dptx_aux_reg.h
 new file mode 100644
-index 0000000000000..f303515053d44
+index 000000000..f30351505
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/dptx_aux_reg.h
 @@ -0,0 +1,126 @@
@@ -3186,7 +3186,7 @@ index 0000000000000..f303515053d44
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/dptx_reg.h b/drivers/gpu/drm/cix/dptx/hdcp/dptx_reg.h
 new file mode 100644
-index 0000000000000..4db6635640ea7
+index 000000000..4db663564
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/dptx_reg.h
 @@ -0,0 +1,483 @@
@@ -3675,7 +3675,7 @@ index 0000000000000..4db6635640ea7
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_hw_tx.c b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_hw_tx.c
 new file mode 100644
-index 0000000000000..5d531cdaf2401
+index 000000000..5d531cdaf
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_hw_tx.c
 @@ -0,0 +1,920 @@
@@ -4601,7 +4601,7 @@ index 0000000000000..5d531cdaf2401
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_hw_tx.h b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_hw_tx.h
 new file mode 100644
-index 0000000000000..2b7d6b8800ea8
+index 000000000..2b7d6b880
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_hw_tx.h
 @@ -0,0 +1,62 @@
@@ -4669,7 +4669,7 @@ index 0000000000000..2b7d6b8800ea8
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_key_drvn_tx.c b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_key_drvn_tx.c
 new file mode 100644
-index 0000000000000..33a995a51b2e9
+index 000000000..33a995a51
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_key_drvn_tx.c
 @@ -0,0 +1,246 @@
@@ -4921,7 +4921,7 @@ index 0000000000000..33a995a51b2e9
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_key_drvn_tx.h b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_key_drvn_tx.h
 new file mode 100644
-index 0000000000000..c8b118eeef074
+index 000000000..c8b118eee
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_key_drvn_tx.h
 @@ -0,0 +1,46 @@
@@ -4973,7 +4973,7 @@ index 0000000000000..c8b118eeef074
 +#endif // HDCP2_KEY_DRVN_TX__
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_state.c b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_state.c
 new file mode 100644
-index 0000000000000..598f67295f70b
+index 000000000..598f67295
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_state.c
 @@ -0,0 +1,126 @@
@@ -5105,7 +5105,7 @@ index 0000000000000..598f67295f70b
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_state.h b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_state.h
 new file mode 100644
-index 0000000000000..250ed6a1f770e
+index 000000000..250ed6a1f
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_state.h
 @@ -0,0 +1,31 @@
@@ -5142,7 +5142,7 @@ index 0000000000000..250ed6a1f770e
 +#endif // HDCP2_TX_STATE__
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c
 new file mode 100644
-index 0000000000000..77e01f153f8b8
+index 000000000..77e01f153
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c
 @@ -0,0 +1,189 @@
@@ -5337,7 +5337,7 @@ index 0000000000000..77e01f153f8b8
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.h b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.h
 new file mode 100644
-index 0000000000000..f3c7927ea2d52
+index 000000000..f3c7927ea
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.h
 @@ -0,0 +1,19 @@
@@ -5362,7 +5362,7 @@ index 0000000000000..f3c7927ea2d52
 +#endif // HDCP2_TX_TMR__
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 new file mode 100644
-index 0000000000000..f007dea70d814
+index 000000000..f007dea70
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -0,0 +1,3293 @@
@@ -8661,7 +8661,7 @@ index 0000000000000..f007dea70d814
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.h b/drivers/gpu/drm/cix/dptx/trilin_dptx.h
 new file mode 100644
-index 0000000000000..69b1cf0a81d6c
+index 000000000..69b1cf0a8
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.h
 @@ -0,0 +1,580 @@
@@ -9247,7 +9247,7 @@ index 0000000000000..69b1cf0a81d6c
 +#endif /* _TRILIN_DPTX_H_ */
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
 new file mode 100644
-index 0000000000000..67fe6ce42c3a6
+index 000000000..67fe6ce42
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
 @@ -0,0 +1,178 @@
@@ -9431,7 +9431,7 @@ index 0000000000000..67fe6ce42c3a6
 +};
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.h b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.h
 new file mode 100644
-index 0000000000000..8df1f961f97fb
+index 000000000..8df1f961f
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.h
 @@ -0,0 +1,51 @@
@@ -9488,7 +9488,7 @@ index 0000000000000..8df1f961f97fb
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c b/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
 new file mode 100644
-index 0000000000000..8cfe75180379e
+index 000000000..8cfe75180
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
 @@ -0,0 +1,414 @@
@@ -9908,7 +9908,7 @@ index 0000000000000..8cfe75180379e
 +MODULE_ALIAS("platform:trilin-dptx-cix");
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_reg.h b/drivers/gpu/drm/cix/dptx/trilin_dptx_reg.h
 new file mode 100644
-index 0000000000000..93d5ca599bd9a
+index 000000000..93d5ca599
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_reg.h
 @@ -0,0 +1,452 @@
@@ -10366,7 +10366,7 @@ index 0000000000000..93d5ca599bd9a
 +#endif // _TRILIN_DPTX_REG_H_
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 new file mode 100644
-index 0000000000000..0bfc9cf14dac6
+index 000000000..0bfc9cf14
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -0,0 +1,1184 @@
@@ -11556,7 +11556,7 @@ index 0000000000000..0bfc9cf14dac6
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.h b/drivers/gpu/drm/cix/dptx/trilin_drm.h
 new file mode 100644
-index 0000000000000..b7c6ea09819ee
+index 000000000..b7c6ea098
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.h
 @@ -0,0 +1,27 @@
@@ -11590,7 +11590,7 @@ index 0000000000000..b7c6ea09819ee
 \ No newline at end of file
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm_mst.c b/drivers/gpu/drm/cix/dptx/trilin_drm_mst.c
 new file mode 100644
-index 0000000000000..472da257d27a5
+index 000000000..472da257d
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm_mst.c
 @@ -0,0 +1,935 @@
@@ -12531,7 +12531,7 @@ index 0000000000000..472da257d27a5
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm_mst.h b/drivers/gpu/drm/cix/dptx/trilin_drm_mst.h
 new file mode 100755
-index 0000000000000..b4834e5aa5329
+index 000000000..b4834e5aa
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm_mst.h
 @@ -0,0 +1,29 @@
@@ -12566,7 +12566,7 @@ index 0000000000000..b4834e5aa5329
 +#endif /* __TRILIN_DP_MST_H__ */
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c b/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c
 new file mode 100644
-index 0000000000000..bdf3acf588168
+index 000000000..bdf3acf58
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c
 @@ -0,0 +1,1185 @@
@@ -13757,7 +13757,7 @@ index 0000000000000..bdf3acf588168
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_edp_phy.h b/drivers/gpu/drm/cix/dptx/trilin_edp_phy.h
 new file mode 100644
-index 0000000000000..718cdf8857777
+index 000000000..718cdf885
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_edp_phy.h
 @@ -0,0 +1,746 @@
@@ -14509,7 +14509,7 @@ index 0000000000000..718cdf8857777
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_host_tmr.c b/drivers/gpu/drm/cix/dptx/trilin_host_tmr.c
 new file mode 100644
-index 0000000000000..b8f984647000f
+index 000000000..b8f984647
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_host_tmr.c
 @@ -0,0 +1,254 @@
@@ -14769,7 +14769,7 @@ index 0000000000000..b8f984647000f
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_host_tmr.h b/drivers/gpu/drm/cix/dptx/trilin_host_tmr.h
 new file mode 100644
-index 0000000000000..4f00c5e8bd0fc
+index 000000000..4f00c5e8b
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_host_tmr.h
 @@ -0,0 +1,62 @@
@@ -14837,7 +14837,7 @@ index 0000000000000..4f00c5e8bd0fc
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_phy.h b/drivers/gpu/drm/cix/dptx/trilin_phy.h
 new file mode 100644
-index 0000000000000..998de0a6610b6
+index 000000000..998de0a66
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_phy.h
 @@ -0,0 +1,126 @@
@@ -14969,7 +14969,7 @@ index 0000000000000..998de0a6610b6
 +#endif
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_usbdp_phy.c b/drivers/gpu/drm/cix/dptx/trilin_usbdp_phy.c
 new file mode 100644
-index 0000000000000..58558992398a4
+index 000000000..585589923
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_usbdp_phy.c
 @@ -0,0 +1,595 @@
@@ -15570,7 +15570,7 @@ index 0000000000000..58558992398a4
 +}
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_usbdp_phy.h b/drivers/gpu/drm/cix/dptx/trilin_usbdp_phy.h
 new file mode 100644
-index 0000000000000..64797255ac394
+index 000000000..64797255a
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/dptx/trilin_usbdp_phy.h
 @@ -0,0 +1,66 @@
@@ -15642,7 +15642,7 @@ index 0000000000000..64797255ac394
 +#endif
 diff --git a/drivers/gpu/drm/cix/linlon-dp/Makefile b/drivers/gpu/drm/cix/linlon-dp/Makefile
 new file mode 100644
-index 0000000000000..f1e10e44e8ed3
+index 000000000..f1e10e44e
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/Makefile
 @@ -0,0 +1,24 @@
@@ -15672,7 +15672,7 @@ index 0000000000000..f1e10e44e8ed3
 +obj-$(CONFIG_DRM_LINLONDP) += linlon-dp.o
 diff --git a/drivers/gpu/drm/cix/linlon-dp/hw/dp_axi.c b/drivers/gpu/drm/cix/linlon-dp/hw/dp_axi.c
 new file mode 100644
-index 0000000000000..4bc5c850e91c7
+index 000000000..4bc5c850e
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/hw/dp_axi.c
 @@ -0,0 +1,261 @@
@@ -15939,7 +15939,7 @@ index 0000000000000..4bc5c850e91c7
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/hw/dp_component.c b/drivers/gpu/drm/cix/linlon-dp/hw/dp_component.c
 new file mode 100644
-index 0000000000000..434248ab07960
+index 000000000..434248ab0
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/hw/dp_component.c
 @@ -0,0 +1,1696 @@
@@ -17641,7 +17641,7 @@ index 0000000000000..434248ab07960
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/hw/dp_dev.c b/drivers/gpu/drm/cix/linlon-dp/hw/dp_dev.c
 new file mode 100644
-index 0000000000000..5156fcdf50bc5
+index 000000000..5156fcdf5
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/hw/dp_dev.c
 @@ -0,0 +1,694 @@
@@ -18341,7 +18341,7 @@ index 0000000000000..5156fcdf50bc5
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/hw/dp_dev.h b/drivers/gpu/drm/cix/linlon-dp/hw/dp_dev.h
 new file mode 100644
-index 0000000000000..7380889075b12
+index 000000000..738088907
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/hw/dp_dev.h
 @@ -0,0 +1,63 @@
@@ -18410,7 +18410,7 @@ index 0000000000000..7380889075b12
 +#endif /* !_DP_DEV_H_ */
 diff --git a/drivers/gpu/drm/cix/linlon-dp/hw/dp_regs.h b/drivers/gpu/drm/cix/linlon-dp/hw/dp_regs.h
 new file mode 100644
-index 0000000000000..1adbfb5ab52fa
+index 000000000..1adbfb5ab
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/hw/dp_regs.h
 @@ -0,0 +1,562 @@
@@ -18978,7 +18978,7 @@ index 0000000000000..1adbfb5ab52fa
 +#endif /* !_DP_REG_H_ */
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_coeffs.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_coeffs.c
 new file mode 100644
-index 0000000000000..a1c6b45db14a3
+index 000000000..a1c6b45db
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_coeffs.c
 @@ -0,0 +1,120 @@
@@ -19104,7 +19104,7 @@ index 0000000000000..a1c6b45db14a3
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_coeffs.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_coeffs.h
 new file mode 100644
-index 0000000000000..1077c56f1ae91
+index 000000000..1077c56f1
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_coeffs.h
 @@ -0,0 +1,75 @@
@@ -19185,7 +19185,7 @@ index 0000000000000..1077c56f1ae91
 +#endif /*_LINLONDP_COEFFS_H_*/
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_color_mgmt.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_color_mgmt.c
 new file mode 100644
-index 0000000000000..6e811e11c9865
+index 000000000..6e811e11c
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_color_mgmt.c
 @@ -0,0 +1,270 @@
@@ -19461,7 +19461,7 @@ index 0000000000000..6e811e11c9865
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_color_mgmt.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_color_mgmt.h
 new file mode 100644
-index 0000000000000..61e871554bde7
+index 000000000..61e871554
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_color_mgmt.h
 @@ -0,0 +1,48 @@
@@ -19515,7 +19515,7 @@ index 0000000000000..61e871554bde7
 +#endif /*_LINLONDP_COLOR_MGMT_H_*/
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_crtc.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_crtc.c
 new file mode 100644
-index 0000000000000..589be279c4e3a
+index 000000000..589be279c
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_crtc.c
 @@ -0,0 +1,1015 @@
@@ -20536,7 +20536,7 @@ index 0000000000000..589be279c4e3a
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c
 new file mode 100644
-index 0000000000000..16412dcd678a7
+index 000000000..16412dcd6
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.c
 @@ -0,0 +1,832 @@
@@ -21374,7 +21374,7 @@ index 0000000000000..16412dcd678a7
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.h
 new file mode 100644
-index 0000000000000..5cae6bc336640
+index 000000000..5cae6bc33
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_dev.h
 @@ -0,0 +1,303 @@
@@ -21683,7 +21683,7 @@ index 0000000000000..5cae6bc336640
 +#endif /*_LINLONDP_DEV_H_*/
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_drm.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_drm.h
 new file mode 100644
-index 0000000000000..f7f3800dddfac
+index 000000000..f7f3800dd
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_drm.h
 @@ -0,0 +1,26 @@
@@ -21715,7 +21715,7 @@ index 0000000000000..f7f3800dddfac
 +#endif
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
 new file mode 100644
-index 0000000000000..933c09b9bb6fb
+index 000000000..933c09b9b
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
 @@ -0,0 +1,360 @@
@@ -22081,7 +22081,7 @@ index 0000000000000..933c09b9bb6fb
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_event.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_event.c
 new file mode 100644
-index 0000000000000..84573de488f0b
+index 000000000..84573de48
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_event.c
 @@ -0,0 +1,159 @@
@@ -22246,7 +22246,7 @@ index 0000000000000..84573de488f0b
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_format_caps.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_format_caps.c
 new file mode 100644
-index 0000000000000..d8e0be5509d78
+index 000000000..d8e0be550
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_format_caps.c
 @@ -0,0 +1,149 @@
@@ -22401,7 +22401,7 @@ index 0000000000000..d8e0be5509d78
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_format_caps.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_format_caps.h
 new file mode 100644
-index 0000000000000..9851264f0f9ee
+index 000000000..9851264f0
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_format_caps.h
 @@ -0,0 +1,101 @@
@@ -22508,7 +22508,7 @@ index 0000000000000..9851264f0f9ee
 +#endif
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_framebuffer.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_framebuffer.c
 new file mode 100644
-index 0000000000000..f2fcb3eaf503b
+index 000000000..f2fcb3eaf
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_framebuffer.c
 @@ -0,0 +1,289 @@
@@ -22803,7 +22803,7 @@ index 0000000000000..f2fcb3eaf503b
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_framebuffer.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_framebuffer.h
 new file mode 100644
-index 0000000000000..4a0d4cca7d17d
+index 000000000..4a0d4cca7
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_framebuffer.h
 @@ -0,0 +1,49 @@
@@ -22858,7 +22858,7 @@ index 0000000000000..4a0d4cca7d17d
 +#endif
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_io.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_io.h
 new file mode 100644
-index 0000000000000..602c5731269b8
+index 000000000..602c57312
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_io.h
 @@ -0,0 +1,46 @@
@@ -22910,7 +22910,7 @@ index 0000000000000..602c5731269b8
 +#endif /*_LINLONDP_IO_H_*/
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c
 new file mode 100644
-index 0000000000000..82f92d602cfec
+index 000000000..82f92d602
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.c
 @@ -0,0 +1,413 @@
@@ -23329,7 +23329,7 @@ index 0000000000000..82f92d602cfec
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.h
 new file mode 100644
-index 0000000000000..6405ab68e08a0
+index 000000000..6405ab68e
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_kms.h
 @@ -0,0 +1,339 @@
@@ -23674,7 +23674,7 @@ index 0000000000000..6405ab68e08a0
 +#endif /*_LINLONDP_KMS_H_*/
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline.c
 new file mode 100644
-index 0000000000000..2c5a850812aac
+index 000000000..2c5a85081
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline.c
 @@ -0,0 +1,464 @@
@@ -24144,7 +24144,7 @@ index 0000000000000..2c5a850812aac
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline.h
 new file mode 100644
-index 0000000000000..ba58188c0214c
+index 000000000..ba58188c0
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline.h
 @@ -0,0 +1,597 @@
@@ -24747,7 +24747,7 @@ index 0000000000000..ba58188c0214c
 +#endif /* _LINLONDP_PIPELINE_H_*/
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline_state.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline_state.c
 new file mode 100644
-index 0000000000000..5fef06d02ae62
+index 000000000..5fef06d02
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_pipeline_state.c
 @@ -0,0 +1,1733 @@
@@ -26486,7 +26486,7 @@ index 0000000000000..5fef06d02ae62
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c
 new file mode 100644
-index 0000000000000..aa0d28b2b1cd1
+index 000000000..aa0d28b2b
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c
 @@ -0,0 +1,653 @@
@@ -27145,7 +27145,7 @@ index 0000000000000..aa0d28b2b1cd1
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_private_obj.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_private_obj.c
 new file mode 100644
-index 0000000000000..04625f362c47a
+index 000000000..04625f362
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_private_obj.c
 @@ -0,0 +1,433 @@
@@ -27584,7 +27584,7 @@ index 0000000000000..04625f362c47a
 +}
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_product.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_product.h
 new file mode 100644
-index 0000000000000..a4a9d62ff5da7
+index 000000000..a4a9d62ff
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_product.h
 @@ -0,0 +1,37 @@
@@ -27627,7 +27627,7 @@ index 0000000000000..a4a9d62ff5da7
 +#endif /* _LINLONDP_PRODUCT_H_ */
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_utils.h b/drivers/gpu/drm/cix/linlon-dp/linlondp_utils.h
 new file mode 100644
-index 0000000000000..a3b04f66058a8
+index 000000000..a3b04f660
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_utils.h
 @@ -0,0 +1,43 @@
@@ -27676,7 +27676,7 @@ index 0000000000000..a3b04f66058a8
 +#endif /* _LINLONDP_UTILS_ */
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_wb_connector.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_wb_connector.c
 new file mode 100644
-index 0000000000000..27d369aba482c
+index 000000000..27d369aba
 --- /dev/null
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_wb_connector.c
 @@ -0,0 +1,391 @@
@@ -28071,3 +28071,6 @@ index 0000000000000..27d369aba482c
 +
 +	return 0;
 +}
+-- 
+2.56.1
+

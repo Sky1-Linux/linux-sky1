@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 7082cc47f1c9f0f2f00018b2a2923b7015c29496 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 12 Feb 2026 12:43:33 +1100
-Subject: [PATCH] soc: cix: add ACPI USB scan handler to block PNP0D10
+Subject: [PATCH 109/140] soc: cix: add ACPI USB scan handler to block PNP0D10
 
 On CIX Sky1, USB controllers need the vendor driver chain
 (cdnsp-sky1 wrapper + cdnsp-plat controller) for proper
@@ -18,7 +18,7 @@ vendor drivers for the same hardware.
  create mode 100644 drivers/soc/cix/cix-acpi-usb-scan.c
 
 diff --git a/drivers/soc/cix/Kconfig b/drivers/soc/cix/Kconfig
-index 2da33995eb9a2..831b909787cc6 100644
+index 2da33995e..831b90978 100644
 --- a/drivers/soc/cix/Kconfig
 +++ b/drivers/soc/cix/Kconfig
 @@ -44,6 +44,18 @@ config CIX_ACPI_RESOURCE_LOOKUP
@@ -41,7 +41,7 @@ index 2da33995eb9a2..831b909787cc6 100644
  	tristate "CIX Bus Performance State Control driver"
  	depends on ARCH_CIX || COMPILE_TEST
 diff --git a/drivers/soc/cix/Makefile b/drivers/soc/cix/Makefile
-index 5b89966c44454..13db813918183 100644
+index 5b89966c4..13db81391 100644
 --- a/drivers/soc/cix/Makefile
 +++ b/drivers/soc/cix/Makefile
 @@ -3,3 +3,4 @@ obj-$(CONFIG_CIX_SKY1_SOCINFO)	+= sky1-socinfo.o
@@ -51,7 +51,7 @@ index 5b89966c44454..13db813918183 100644
 +obj-$(CONFIG_CIX_ACPI_USB_SCAN)		+= cix-acpi-usb-scan.o
 diff --git a/drivers/soc/cix/cix-acpi-usb-scan.c b/drivers/soc/cix/cix-acpi-usb-scan.c
 new file mode 100644
-index 0000000000000..36767c4feb60f
+index 000000000..36767c4fe
 --- /dev/null
 +++ b/drivers/soc/cix/cix-acpi-usb-scan.c
 @@ -0,0 +1,68 @@
@@ -123,3 +123,6 @@ index 0000000000000..36767c4feb60f
 +arch_initcall(sky1_usb_acpi_init);
 +
 +#endif /* CONFIG_ACPI */
+-- 
+2.56.1
+

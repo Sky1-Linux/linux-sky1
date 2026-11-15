@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b1954e1caf19f4e6634dd1e050d738d6c9b7fb31 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 11:08:15 +1100
-Subject: [PATCH] PCI: sky1: Fix ACPI probe with proper RSTL reset and
+Subject: [PATCH 093/140] PCI: sky1: Fix ACPI probe with proper RSTL reset and
  regulator support
 
 The scan handler creates CIXH2020 platform devices without fwnode to
@@ -29,7 +29,7 @@ allocation, and make internal functions static.
  4 files changed, 107 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/pci/controller/cadence/pci-sky1-acpi.c b/drivers/pci/controller/cadence/pci-sky1-acpi.c
-index 1ad1318035904..1032a73cc7ad6 100644
+index 1ad131803..1032a73cc 100644
 --- a/drivers/pci/controller/cadence/pci-sky1-acpi.c
 +++ b/drivers/pci/controller/cadence/pci-sky1-acpi.c
 @@ -94,12 +94,11 @@ static int sky1_cixh2020_create_pdev(struct acpi_device *adev)
@@ -73,7 +73,7 @@ index 1ad1318035904..1032a73cc7ad6 100644
  		 dev_name(&pdev->dev), count);
  	return 1;
 diff --git a/drivers/pci/controller/cadence/pci-sky1-acpi.h b/drivers/pci/controller/cadence/pci-sky1-acpi.h
-index 2e4869c78e8cf..43b20a339027e 100644
+index 2e4869c78..43b20a339 100644
 --- a/drivers/pci/controller/cadence/pci-sky1-acpi.h
 +++ b/drivers/pci/controller/cadence/pci-sky1-acpi.h
 @@ -7,9 +7,9 @@ struct acpi_device;
@@ -90,7 +90,7 @@ index 2e4869c78e8cf..43b20a339027e 100644
  struct sky1_pcie_acpi_pdata {
  	struct acpi_device *adev;
 diff --git a/drivers/pci/controller/cadence/pci-sky1.c b/drivers/pci/controller/cadence/pci-sky1.c
-index 46e96678befae..8b67daf8708d0 100644
+index 46e96678b..8b67daf87 100644
 --- a/drivers/pci/controller/cadence/pci-sky1.c
 +++ b/drivers/pci/controller/cadence/pci-sky1.c
 @@ -339,7 +339,7 @@ static void sky1_pcie_ctrl_writel_reg(struct sky1_pcie *pcie, u32 reg, u32 val)
@@ -197,7 +197,7 @@ index 46e96678befae..8b67daf8708d0 100644
  	if (ret < 0)
  		return -EINVAL;
 diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
-index 3c0255ca03133..61917ea611ed3 100644
+index 3c0255ca0..61917ea61 100644
 --- a/drivers/regulator/fixed.c
 +++ b/drivers/regulator/fixed.c
 @@ -29,6 +29,7 @@
@@ -278,3 +278,6 @@ index 3c0255ca03133..61917ea611ed3 100644
  	} else {
  		config = dev_get_platdata(&pdev->dev);
  	}
+-- 
+2.56.1
+

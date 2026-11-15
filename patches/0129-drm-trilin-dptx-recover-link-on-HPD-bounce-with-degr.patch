@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 4ca06f8ca49f723bfd79293a5fb6cf903989eee0 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 28 Feb 2026 01:24:34 +1100
-Subject: [PATCH] drm/trilin-dptx: recover link on HPD bounce with degraded
- DPCD status
+Subject: [PATCH 129/140] drm/trilin-dptx: recover link on HPD bounce with
+ degraded DPCD status
 
 When a cable is unplugged and replugged faster than the HPD work queue
 fires, the driver sees only a single HPD-high event.  handle_connect()
@@ -23,7 +23,7 @@ already-connected HPD events rather than trusting cached state.
  1 file changed, 42 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index c36690fb6c71c..20a26ec845a17 100644
+index c36690fb6..20a26ec84 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -2537,6 +2537,29 @@ static bool trilin_dp_is_sink_count_zero(struct trilin_dp *dp)
@@ -84,3 +84,6 @@ index c36690fb6c71c..20a26ec845a17 100644
  
  	dp->plugin = connected;
  
+-- 
+2.56.1
+

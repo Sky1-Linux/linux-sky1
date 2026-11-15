@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 1a07099fd3573169e6a9d4a7230ab53cbb2453f0 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 18:16:38 +1100
-Subject: [PATCH] usb: cdns3: Harden cdnsp-sky1 probe for ACPI boot
+Subject: [PATCH 078/140] usb: cdns3: Harden cdnsp-sky1 probe for ACPI boot
 
 Add a NULL guard for usb_syscon in sky1_set_mode_by_id() since the
 syscon regmap may not be available under ACPI.
@@ -16,7 +16,7 @@ clocks early ensures clean failure without touching hardware.
  1 file changed, 23 insertions(+)
 
 diff --git a/drivers/usb/cdns3/cdnsp-sky1.c b/drivers/usb/cdns3/cdnsp-sky1.c
-index 378f955e59094..023c1fa937dc1 100644
+index 378f955e5..023c1fa93 100644
 --- a/drivers/usb/cdns3/cdnsp-sky1.c
 +++ b/drivers/usb/cdns3/cdnsp-sky1.c
 @@ -54,6 +54,9 @@ static int sky1_set_mode_by_id(struct device *dev, int mode)
@@ -56,3 +56,6 @@ index 378f955e59094..023c1fa937dc1 100644
  	ret = cdnsp_sky1_drd_init(data);
  	if (ret == -ETIMEDOUT)
  		return -EPROBE_DEFER;
+-- 
+2.56.1
+

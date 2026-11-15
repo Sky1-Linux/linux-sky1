@@ -1,15 +1,15 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 640819d5366fe21016995145031056c00319d95c Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 3 Feb 2026 15:54:45 +1100
-Subject: [PATCH] Update README: 24 patches, add individual patch list, OPi6+
- support
+Subject: [PATCH 025/140] Update README: 24 patches, add individual patch list,
+ OPi6+ support
 
 ---
  README.md | 31 +++++++++++++++++++++++--------
  1 file changed, 23 insertions(+), 8 deletions(-)
 
 diff --git a/README.md b/README.md
-index 982ad93c87a71..5ee76dce5ef58 100644
+index 982ad93c8..5ee76dce5 100644
 --- a/README.md
 +++ b/README.md
 @@ -8,18 +8,20 @@ This is the development repo where patches are written, tested, and rebased. Exp
@@ -72,3 +72,6 @@ index 982ad93c87a71..5ee76dce5ef58 100644
  ```
  
  ### Building for local testing
+-- 
+2.56.1
+

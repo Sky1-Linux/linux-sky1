@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From e3fd88c55b2c8d2d63b727a7622654f077bba7c5 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 18:16:29 +1100
-Subject: [PATCH] soc: cix: Add ACPI resource lookup driver
+Subject: [PATCH 077/140] soc: cix: Add ACPI resource lookup driver
 
 Add driver for CIX ACPI device CIXA1019 that processes custom DSDT
 tables to bridge the firmware with Linux kernel resource frameworks:
@@ -22,7 +22,7 @@ supplier-before-consumer probe ordering.
  create mode 100644 drivers/soc/cix/cix-acpi-resource-lookup.c
 
 diff --git a/drivers/soc/cix/Kconfig b/drivers/soc/cix/Kconfig
-index 40c57dde7d53f..2da33995eb9a2 100644
+index 40c57dde7..2da33995e 100644
 --- a/drivers/soc/cix/Kconfig
 +++ b/drivers/soc/cix/Kconfig
 @@ -29,6 +29,21 @@ config CIX_DDR_LP
@@ -48,7 +48,7 @@ index 40c57dde7d53f..2da33995eb9a2 100644
  	tristate "CIX Bus Performance State Control driver"
  	depends on ARCH_CIX || COMPILE_TEST
 diff --git a/drivers/soc/cix/Makefile b/drivers/soc/cix/Makefile
-index 2bb69fdaf3354..5b89966c44454 100644
+index 2bb69fdaf..5b89966c4 100644
 --- a/drivers/soc/cix/Makefile
 +++ b/drivers/soc/cix/Makefile
 @@ -2,3 +2,4 @@
@@ -58,7 +58,7 @@ index 2bb69fdaf3354..5b89966c44454 100644
 +obj-$(CONFIG_CIX_ACPI_RESOURCE_LOOKUP)	+= cix-acpi-resource-lookup.o
 diff --git a/drivers/soc/cix/cix-acpi-resource-lookup.c b/drivers/soc/cix/cix-acpi-resource-lookup.c
 new file mode 100644
-index 0000000000000..0abe62febd504
+index 000000000..0abe62feb
 --- /dev/null
 +++ b/drivers/soc/cix/cix-acpi-resource-lookup.c
 @@ -0,0 +1,394 @@
@@ -456,3 +456,6 @@ index 0000000000000..0abe62febd504
 +
 +MODULE_DESCRIPTION("CIX ACPI resource lookup driver");
 +MODULE_LICENSE("GPL");
+-- 
+2.56.1
+

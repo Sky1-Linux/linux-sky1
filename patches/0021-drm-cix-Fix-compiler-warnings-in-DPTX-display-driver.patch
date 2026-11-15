@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 9d7e372976acae0fbe520937f58bf254f385c744 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 3 Feb 2026 13:04:17 +1100
-Subject: [PATCH] drm/cix: Fix compiler warnings in DPTX display driver
+Subject: [PATCH 021/140] drm/cix: Fix compiler warnings in DPTX display driver
 
 Fix all compiler warnings in the Trilinear DPTX module:
 
@@ -29,7 +29,7 @@ Fix all compiler warnings in the Trilinear DPTX module:
  6 files changed, 14 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c
-index afc975e083b55..fa7d763744b6d 100644
+index afc975e08..fa7d76374 100644
 --- a/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/cix_hdcp_ioctl.c
 @@ -10,6 +10,7 @@
@@ -41,7 +41,7 @@ index afc975e083b55..fa7d763744b6d 100644
  #include "hdcp2_tx_tmr.h"
  #include "hdcp2_tx_state.h"
 diff --git a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c
-index 77e01f153f8b8..2a5d6c3f92bfc 100644
+index 77e01f153..2a5d6c3f9 100644
 --- a/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c
 +++ b/drivers/gpu/drm/cix/dptx/hdcp/hdcp2_tx_tmr.c
 @@ -10,6 +10,7 @@
@@ -98,7 +98,7 @@ index 77e01f153f8b8..2a5d6c3f92bfc 100644
  	uint32_t tmr_val = readl(addr);
  
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index f007dea70d814..dfd5b3dd49cc4 100644
+index f007dea70..dfd5b3dd4 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -114,7 +114,6 @@ static void trilin_link_rate_update(struct trilin_dp *dp, u32 reg)
@@ -156,7 +156,7 @@ index f007dea70d814..dfd5b3dd49cc4 100644
  
  static int trilin_dp_host_init_from_bootloader(struct trilin_dp *dp)
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c b/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
-index 8cfe75180379e..a2b016610e329 100644
+index 8cfe75180..a2b016610 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
 @@ -122,7 +122,6 @@ static int trilin_dptx_cix_bind(struct device *comp, struct device *master,
@@ -187,7 +187,7 @@ index 8cfe75180379e..a2b016610e329 100644
  	if (unlikely(!match))
  		return -ENODEV;
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
-index 0bfc9cf14dac6..217050e337667 100644
+index 0bfc9cf14..217050e33 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_drm.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -977,7 +977,7 @@ int trilin_dp_encoder_compute_config(struct drm_encoder *encoder,
@@ -200,7 +200,7 @@ index 0bfc9cf14dac6..217050e337667 100644
  				  struct drm_connector_state *connector_state)
  {
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c b/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c
-index bdf3acf588168..84319eee3c23d 100644
+index bdf3acf58..84319eee3 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_edp_phy.c
 @@ -656,7 +656,7 @@ static const phy_voltage_conf_t dp_volt_cfg[] = {
@@ -212,3 +212,6 @@ index bdf3acf588168..84319eee3c23d 100644
  	{ 0x08A4, 0x0003, 0x0027, 0x0000 }, // swing level == 0
  	{ 0x08A4, 0x0003, 0x0023, 0x0009 },
  	{ 0x08A4, 0x0003, 0x001E, 0x0010 },
+-- 
+2.56.1
+

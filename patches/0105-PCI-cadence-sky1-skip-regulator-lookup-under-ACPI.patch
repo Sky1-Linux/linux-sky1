@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From dd94db5ed9347eb69324a604272aed4f0821b082 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 10 Feb 2026 21:18:58 +1100
-Subject: [PATCH] PCI: cadence: sky1: skip regulator lookup under ACPI
+Subject: [PATCH 105/140] PCI: cadence: sky1: skip regulator lookup under ACPI
 
 Under ACPI, firmware manages PCIe endpoint power rails via power
 resources (_PR0/_PR3).  The optional regulator lookup produces
@@ -13,7 +13,7 @@ with ACPI.
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/pci/controller/cadence/pci-sky1.c b/drivers/pci/controller/cadence/pci-sky1.c
-index 8b67daf8708d0..48930759f9873 100644
+index 8b67daf87..48930759f 100644
 --- a/drivers/pci/controller/cadence/pci-sky1.c
 +++ b/drivers/pci/controller/cadence/pci-sky1.c
 @@ -1410,6 +1410,13 @@ static void sky1_pcie_parse_ep_pwr_supply(struct sky1_pcie *pcie)
@@ -30,3 +30,6 @@ index 8b67daf8708d0..48930759f9873 100644
  	/* optional power control for device */
  	pcie->vsupply = devm_regulator_get_optional(dev, "vcc-pcie");
  	if (IS_ERR(pcie->vsupply)) {
+-- 
+2.56.1
+

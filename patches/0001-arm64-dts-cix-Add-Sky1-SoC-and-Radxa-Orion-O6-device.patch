@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 2df88322f17f39a21cf666a0b3156bd5d170b1de Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:35 +1100
-Subject: [PATCH] arm64: dts: cix: Add Sky1 SoC and Radxa Orion O6 device tree
+Subject: [PATCH 001/140] arm64: dts: cix: Add Sky1 SoC and Radxa Orion O6
+ device tree
 
 ---
  arch/arm64/Kconfig                            |    5 +-
@@ -17,10 +18,10 @@ Subject: [PATCH] arm64: dts: cix: Add Sky1 SoC and Radxa Orion O6 device tree
  create mode 100644 arch/arm64/boot/dts/cix/sky1.dtsi.mainline
 
 diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 6663ffd23f252..0a3ede870df81 100644
+index 2e567a7d8..b68c82388 100644
 --- a/arch/arm64/Kconfig
 +++ b/arch/arm64/Kconfig
-@@ -1593,10 +1593,11 @@ config ARCH_SUPPORTS_KEXEC_SIG
+@@ -1673,10 +1673,11 @@ config ARCH_SUPPORTS_KEXEC_SIG
  config ARCH_SUPPORTS_KEXEC_IMAGE_VERIFY_SIG
  	def_bool y
  
@@ -35,7 +36,7 @@ index 6663ffd23f252..0a3ede870df81 100644
  
  config ARCH_SUPPORTS_CRASH_DUMP
 diff --git a/arch/arm64/boot/dts/cix/Makefile b/arch/arm64/boot/dts/cix/Makefile
-index ed37139820128..4618f7a6655ce 100644
+index ed3713982..4618f7a66 100644
 --- a/arch/arm64/boot/dts/cix/Makefile
 +++ b/arch/arm64/boot/dts/cix/Makefile
 @@ -1,2 +1,3 @@
@@ -43,7 +44,7 @@ index ed37139820128..4618f7a6655ce 100644
  dtb-$(CONFIG_ARCH_CIX) += sky1-orion-o6.dtb
 +dtb-$(CONFIG_ARCH_CIX) += sky1-orion-o6n.dtb
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-index d74964d53c3bc..5cab6a509e500 100644
+index d74964d53..5cab6a509 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 @@ -1,39 +1,2435 @@
@@ -2501,7 +2502,7 @@ index d74964d53c3bc..5cab6a509e500 100644
  };
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts.mainline b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts.mainline
 new file mode 100644
-index 0000000000000..d74964d53c3bc
+index 000000000..d74964d53
 --- /dev/null
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts.mainline
 @@ -0,0 +1,39 @@
@@ -2546,7 +2547,7 @@ index 0000000000000..d74964d53c3bc
 +};
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 new file mode 100644
-index 0000000000000..b1453dbcec64e
+index 000000000..b1453dbce
 --- /dev/null
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 @@ -0,0 +1,2570 @@
@@ -5121,7 +5122,7 @@ index 0000000000000..b1453dbcec64e
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index 2fb2c99c0796d..728cc7bc750a6 100644
+index 2fb2c99c0..728cc7bc7 100644
 --- a/arch/arm64/boot/dts/cix/sky1.dtsi
 +++ b/arch/arm64/boot/dts/cix/sky1.dtsi
 @@ -1,430 +1,4613 @@
@@ -10022,7 +10023,7 @@ index 2fb2c99c0796d..728cc7bc750a6 100644
 +
 diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi.mainline b/arch/arm64/boot/dts/cix/sky1.dtsi.mainline
 new file mode 100644
-index 0000000000000..2fb2c99c0796d
+index 000000000..2fb2c99c0
 --- /dev/null
 +++ b/arch/arm64/boot/dts/cix/sky1.dtsi.mainline
 @@ -0,0 +1,430 @@
@@ -10456,3 +10457,6 @@ index 0000000000000..2fb2c99c0796d
 +			     <GIC_PPI 12 IRQ_TYPE_LEVEL_LOW 0>;
 +	};
 +};
+-- 
+2.56.1
+
