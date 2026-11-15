@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 7379cc80c13535a6bfe5c92900173321c11c59ac Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 23:21:49 +1100
-Subject: [PATCH] arm64: dts: cix: Add GPU OPP table for Sky1
+Subject: [PATCH 016/140] arm64: dts: cix: Add GPU OPP table for Sky1
 
 Add operating-points-v2 table documenting the GPU frequency levels from
 the CIX P1 GPU Development Guide: 350, 600, 800, and 1000 MHz.
@@ -18,7 +18,7 @@ those are omitted.
  1 file changed, 27 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index 728cc7bc750a6..fdc23eca42478 100644
+index 728cc7bc7..fdc23eca4 100644
 --- a/arch/arm64/boot/dts/cix/sky1.dtsi
 +++ b/arch/arm64/boot/dts/cix/sky1.dtsi
 @@ -3037,6 +3037,32 @@ gpu_protected_memory_allocator: protected-memory-allocator {
@@ -62,3 +62,6 @@ index 728cc7bc750a6..fdc23eca42478 100644
  			power-domains = <&smc_devpd SKY1_PD_GPU>, <&scmi_dvfs 0>;
  			power-domain-names = "pd_gpu", "perf";
  			clocks = <&scmi_clk CLK_TREE_GPU_CLK_CORE>, <&scmi_clk CLK_TREE_GPU_CLK_STACKS>,
+-- 
+2.56.1
+

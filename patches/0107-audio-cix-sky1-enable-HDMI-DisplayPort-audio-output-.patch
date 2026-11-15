@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From ef378971ea5b87997e1bf2ba30371a6f7b69ecd9 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 10 Feb 2026 21:19:38 +1100
-Subject: [PATCH] audio: cix: sky1: enable HDMI/DisplayPort audio output under
- ACPI
+Subject: [PATCH 107/140] audio: cix: sky1: enable HDMI/DisplayPort audio
+ output under ACPI
 
 Wire up the complete HDMI/DP audio pipeline for ACPI boot on Sky1.
 Five I2S multi-channel controllers (I2S5-I2S9) feed audio to five
@@ -54,7 +54,7 @@ PipeWire/GNOME with working jack detection for connected displays.
  11 files changed, 264 insertions(+), 26 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts b/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
-index 970b533c7ebd0..e52e49600776f 100644
+index 970b533c7..e52e49600 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
 @@ -25,7 +25,7 @@ alc269_codec: alc269_codec {
@@ -67,7 +67,7 @@ index 970b533c7ebd0..e52e49600776f 100644
  
  		hda: hda {
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-index 1080bf59631b8..dce958281ee31 100644
+index 1080bf596..dce958281 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 @@ -26,7 +26,7 @@ dummy_codec: dummy_codec {
@@ -80,7 +80,7 @@ index 1080bf59631b8..dce958281ee31 100644
  
  		bt_audio {
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
-index 99c92f0053d67..2d4e1cd5db793 100644
+index 99c92f005..2d4e1cd5d 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 @@ -27,7 +27,7 @@ dummy_codec: dummy_codec {
@@ -93,7 +93,7 @@ index 99c92f0053d67..2d4e1cd5db793 100644
  
  		bt_audio {
 diff --git a/drivers/clk/cix/clk-sky1-audss.c b/drivers/clk/cix/clk-sky1-audss.c
-index 1edaf6a70827a..174058167d562 100644
+index 1edaf6a70..174058167 100644
 --- a/drivers/clk/cix/clk-sky1-audss.c
 +++ b/drivers/clk/cix/clk-sky1-audss.c
 @@ -755,6 +755,20 @@ static int sky1_audss_clk_probe(struct platform_device *pdev)
@@ -129,7 +129,7 @@ index 1edaf6a70827a..174058167d562 100644
  	return 0;
  
 diff --git a/drivers/dma/arm-dma350.c b/drivers/dma/arm-dma350.c
-index c8f39f6d589bd..4dcc7868fa534 100644
+index c8f39f6d5..4dcc7868f 100644
 --- a/drivers/dma/arm-dma350.c
 +++ b/drivers/dma/arm-dma350.c
 @@ -3,6 +3,7 @@
@@ -271,7 +271,7 @@ index c8f39f6d589bd..4dcc7868fa534 100644
  	dma_async_device_unregister(&dmac->dma);
  	of_reserved_mem_device_release(&pdev->dev);
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index e4668c67bdcf6..ff2049532396f 100644
+index e4668c67b..ff2049532 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -33,6 +33,7 @@
@@ -306,7 +306,7 @@ index e4668c67bdcf6..ff2049532396f 100644
  
  	return PTR_ERR_OR_ZERO(dptx_aud->pdev);
 diff --git a/drivers/reset/reset-sky1-audss.c b/drivers/reset/reset-sky1-audss.c
-index 35d66e16f619e..7d08c711175c7 100644
+index 35d66e16f..7d08c7111 100644
 --- a/drivers/reset/reset-sky1-audss.c
 +++ b/drivers/reset/reset-sky1-audss.c
 @@ -102,6 +102,7 @@ static int sky1_audss_reset_probe(struct platform_device *pdev)
@@ -354,7 +354,7 @@ index 35d66e16f619e..7d08c711175c7 100644
  
  static const struct of_device_id sky1_audss_reset_of_match[] = {
 diff --git a/sound/soc/cix/card-utils.c b/sound/soc/cix/card-utils.c
-index 880f3e011aa2e..6cf278eb24195 100644
+index 880f3e011..6cf278eb2 100644
 --- a/sound/soc/cix/card-utils.c
 +++ b/sound/soc/cix/card-utils.c
 @@ -1,6 +1,7 @@
@@ -481,7 +481,7 @@ index 880f3e011aa2e..6cf278eb24195 100644
  MODULE_AUTHOR("Xing.Wang <xing.wang@cixtech.com>");
  MODULE_LICENSE("GPL v2");
 diff --git a/sound/soc/cix/card-utils.h b/sound/soc/cix/card-utils.h
-index 2d0be35d24f98..2b0bf8065a739 100644
+index 2d0be35d2..2b0bf8065 100644
 --- a/sound/soc/cix/card-utils.h
 +++ b/sound/soc/cix/card-utils.h
 @@ -68,5 +68,6 @@ struct cix_asoc_card {
@@ -492,7 +492,7 @@ index 2d0be35d24f98..2b0bf8065a739 100644
  
  #endif
 diff --git a/sound/soc/cix/cdns_i2s_mc.c b/sound/soc/cix/cdns_i2s_mc.c
-index 37f79cbb2a373..29b2aa3dfa546 100644
+index 37f79cbb2..29b2aa3df 100644
 --- a/sound/soc/cix/cdns_i2s_mc.c
 +++ b/sound/soc/cix/cdns_i2s_mc.c
 @@ -2,6 +2,7 @@
@@ -546,7 +546,7 @@ index 37f79cbb2a373..29b2aa3dfa546 100644
  };
  module_platform_driver(cdns_i2s_mc_driver);
 diff --git a/sound/soc/cix/sky1-card.c b/sound/soc/cix/sky1-card.c
-index b5eead0d44d72..a119dae36009b 100644
+index b5eead0d4..a119dae36 100644
 --- a/sound/soc/cix/sky1-card.c
 +++ b/sound/soc/cix/sky1-card.c
 @@ -1,6 +1,8 @@
@@ -592,3 +592,6 @@ index b5eead0d44d72..a119dae36009b 100644
  		.pm = &snd_soc_pm_ops,
  	},
  	.probe = cix_asoc_card_probe,
+-- 
+2.56.1
+

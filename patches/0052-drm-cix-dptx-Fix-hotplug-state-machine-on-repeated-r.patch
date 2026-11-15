@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From dee2c0db22403394fcbfa529bd3ef21a82f8f26d Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:10:04 +1100
-Subject: [PATCH] drm: cix: dptx: Fix hotplug state machine on repeated resets
+Subject: [PATCH 052/140] drm: cix: dptx: Fix hotplug state machine on repeated
+ resets
 
 When a display is unplugged but the system continues requesting output,
 repeated DP resets can cause loss of HDMI signal and missed HPD events.
@@ -16,7 +17,7 @@ Fix the state machine:
  1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index 93d0cf511749e..e4668c67bdcf6 100644
+index 93d0cf511..e4668c67b 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -2148,6 +2148,7 @@ static int trilin_dp_core_off(struct trilin_dp *dp)
@@ -53,3 +54,6 @@ index 93d0cf511749e..e4668c67bdcf6 100644
  		goto end;
  	}
  
+-- 
+2.56.1
+

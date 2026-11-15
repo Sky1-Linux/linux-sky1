@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 6b3d829640936f16fd5d160119a49a1309733b44 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 14:22:51 +1100
-Subject: [PATCH] pmdomain: Enable SCMI power and perf domain registration
- under ACPI
+Subject: [PATCH 095/140] pmdomain: Enable SCMI power and perf domain
+ registration under ACPI
 
 The SCMI power domain and perf domain drivers bail out early when
 booting without device tree, preventing genpd registration on ACPI
@@ -30,7 +30,7 @@ pmdomain core:
  4 files changed, 70 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-index 3693423459c9c..9b93a4ca948a5 100644
+index e390f902a..6033fc44e 100644
 --- a/drivers/pmdomain/arm/scmi_perf_domain.c
 +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
 @@ -88,8 +88,13 @@ static int scmi_perf_domain_probe(struct scmi_device *sdev)
@@ -84,7 +84,7 @@ index 3693423459c9c..9b93a4ca948a5 100644
  	for (i = 0; i < scmi_pd_data->num_domains; i++)
  		pm_genpd_remove(scmi_pd_data->domains[i]);
 diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index 8ed148360e8d7..0e16898abb5e8 100644
+index 8ed148360..0e16898ab 100644
 --- a/drivers/pmdomain/arm/scmi_pm_domain.c
 +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
 @@ -89,11 +89,6 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
@@ -142,7 +142,7 @@ index 8ed148360e8d7..0e16898abb5e8 100644
  	scmi_pd_data = dev_get_drvdata(dev);
  	for (i = 0; i < scmi_pd_data->num_domains; i++) {
 diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 61c2277c9ce39..33cf86946803a 100644
+index 5fd08a511..83b0eb4f8 100644
 --- a/drivers/pmdomain/core.c
 +++ b/drivers/pmdomain/core.c
 @@ -2454,6 +2454,33 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
@@ -180,7 +180,7 @@ index 61c2277c9ce39..33cf86946803a 100644
  {
  	struct gpd_link *l, *link;
 diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index f67a2cb7d7814..593d19df1fd11 100644
+index 5ed1753a7..cbf03d1c4 100644
 --- a/include/linux/pm_domain.h
 +++ b/include/linux/pm_domain.h
 @@ -316,6 +316,7 @@ int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
@@ -203,3 +203,6 @@ index f67a2cb7d7814..593d19df1fd11 100644
  
  static inline void pm_genpd_inc_rejected(struct generic_pm_domain *genpd,
  					 unsigned int state_idx)
+-- 
+2.56.1
+

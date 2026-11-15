@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From fe7a12f5ac07058b0f2cb52a40f66b8171bb25e5 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 2 Feb 2026 01:30:11 +1100
-Subject: [PATCH] drm/panthor: Fix SCMI perf domain DVFS to use existing
- virtual device
+Subject: [PATCH 017/140] drm/panthor: Fix SCMI perf domain DVFS to use
+ existing virtual device
 
 panthor_devfreq_scmi_init() was calling dev_pm_domain_attach_by_name()
 to create a virtual device for the SCMI "perf" power domain. This failed
@@ -31,7 +31,7 @@ the firmware to manage both frequency and voltage for each OPP level.
  2 files changed, 22 insertions(+), 53 deletions(-)
 
 diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-index 5880a94dac593..3aff5c60b0505 100644
+index 5880a94da..3aff5c60b 100644
 --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
 +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
 @@ -4,8 +4,8 @@
@@ -161,10 +161,10 @@ index 5880a94dac593..3aff5c60b0505 100644
  	drm_info(&ptdev->base,
  		 "GPU DVFS: %d OPPs from SCMI perf domain\n", i);
 diff --git a/drivers/gpu/drm/panthor/panthor_device.c b/drivers/gpu/drm/panthor/panthor_device.c
-index e3b212c5ecef6..b1cd4bf7a1c5b 100644
+index 0df5f4ba3..c94ebb25a 100644
 --- a/drivers/gpu/drm/panthor/panthor_device.c
 +++ b/drivers/gpu/drm/panthor/panthor_device.c
-@@ -329,13 +329,13 @@ int panthor_device_init(struct panthor_device *ptdev)
+@@ -332,13 +332,13 @@ int panthor_device_init(struct panthor_device *ptdev)
  	if (ret)
  		return ret;
  
@@ -181,3 +181,6 @@ index e3b212c5ecef6..b1cd4bf7a1c5b 100644
  
  	ret = panthor_resets_init(ptdev);
  	if (ret)
+-- 
+2.56.1
+

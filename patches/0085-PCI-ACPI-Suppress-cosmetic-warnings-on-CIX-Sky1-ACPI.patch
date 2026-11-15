@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b639261be794d9a19b7b96fafee2f6980a41f7c6 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 22:11:07 +1100
-Subject: [PATCH] PCI: ACPI: Suppress cosmetic warnings on CIX Sky1 ACPI boot
+Subject: [PATCH 085/140] PCI: ACPI: Suppress cosmetic warnings on CIX Sky1
+ ACPI boot
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -27,10 +28,10 @@ during PCI enumeration:
  2 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-index 48d15dd785f6e..7631935ba2ae4 100644
+index 62ab6d7f3..2f38a6b0c 100644
 --- a/drivers/acpi/acpi_platform.c
 +++ b/drivers/acpi/acpi_platform.c
-@@ -30,6 +30,7 @@ static const struct acpi_device_id forbidden_id_list[] = {
+@@ -31,6 +31,7 @@ static const struct acpi_device_id forbidden_id_list[] = {
  	{"PNP0100",  0},	/* Timer */
  	{"PNP0200",  0},	/* AT DMA Controller */
  	{ACPI_SMBUS_MS_HID,  ACPI_ALLOW_WO_RESOURCES},	/* ACPI SMBUS virtual device */
@@ -39,7 +40,7 @@ index 48d15dd785f6e..7631935ba2ae4 100644
  };
  
 diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 3579265f11984..cf54a54f27091 100644
+index 3579265f1..cf54a54f2 100644
 --- a/drivers/pci/of.c
 +++ b/drivers/pci/of.c
 @@ -773,11 +773,9 @@ void of_pci_make_host_bridge_node(struct pci_host_bridge *bridge)
@@ -56,3 +57,6 @@ index 3579265f11984..cf54a54f27091 100644
  
  	name = kasprintf(GFP_KERNEL, "pci@%x,%x", pci_domain_nr(bridge->bus),
  			 bridge->bus->number);
+-- 
+2.56.1
+

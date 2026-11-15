@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From dc74ae4240b01a7261cb86b4de1c022bdf3f5c03 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 21:29:15 +1100
-Subject: [PATCH] net: realtek: r8125/r8126: Add IRQ affinity hint for
+Subject: [PATCH 042/140] net: realtek: r8125/r8126: Add IRQ affinity hint for
  performance cores
 
 On ARM big.LITTLE systems, network interrupt processing benefits from
@@ -22,7 +22,7 @@ efficiency cores (typically ~446 on Sky1) and performance cores
  2 files changed, 70 insertions(+)
 
 diff --git a/drivers/net/ethernet/realtek/r8125/r8125_n.c b/drivers/net/ethernet/realtek/r8125/r8125_n.c
-index 783c7b4c712c8..73a1cbf1c37c6 100755
+index 783c7b4c7..73a1cbf1c 100755
 --- a/drivers/net/ethernet/realtek/r8125/r8125_n.c
 +++ b/drivers/net/ethernet/realtek/r8125/r8125_n.c
 @@ -71,6 +71,7 @@
@@ -96,7 +96,7 @@ index 783c7b4c712c8..73a1cbf1c37c6 100755
  }
  
 diff --git a/drivers/net/ethernet/realtek/r8126/r8126_n.c b/drivers/net/ethernet/realtek/r8126/r8126_n.c
-index 9174cee339773..55b989eb8fec1 100644
+index 9174cee33..55b989eb8 100644
 --- a/drivers/net/ethernet/realtek/r8126/r8126_n.c
 +++ b/drivers/net/ethernet/realtek/r8126/r8126_n.c
 @@ -71,6 +71,7 @@
@@ -169,3 +169,6 @@ index 9174cee339773..55b989eb8fec1 100644
          return rc;
  }
  
+-- 
+2.56.1
+

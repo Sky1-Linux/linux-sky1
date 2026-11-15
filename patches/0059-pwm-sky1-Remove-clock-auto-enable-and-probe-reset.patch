@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From afe400ee9d43d97d6ba6ff57bad43d271a8cb802 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 00:02:58 +1100
-Subject: [PATCH] pwm: sky1: Remove clock auto-enable and probe reset
+Subject: [PATCH 059/140] pwm: sky1: Remove clock auto-enable and probe reset
 
 Remove clock enable/disable toggling during get_state() and apply()
 operations. Clocks are now kept enabled after probe, simplifying the
@@ -18,7 +18,7 @@ savings.
  1 file changed, 8 insertions(+), 50 deletions(-)
 
 diff --git a/drivers/pwm/pwm-sky1.c b/drivers/pwm/pwm-sky1.c
-index 3b55c4000359f..f6688b404952f 100644
+index 3b55c4000..f6688b404 100644
 --- a/drivers/pwm/pwm-sky1.c
 +++ b/drivers/pwm/pwm-sky1.c
 @@ -76,11 +76,6 @@ static int pwm_sky1_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
@@ -140,3 +140,6 @@ index 3b55c4000359f..f6688b404952f 100644
  	return devm_pwmchip_add(dev, chip);
  }
  
+-- 
+2.56.1
+

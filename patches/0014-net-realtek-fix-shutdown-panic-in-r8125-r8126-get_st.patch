@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 580375e838c8aa1e3461baf9c81b6353c2a55e49 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 19:36:00 +1100
-Subject: [PATCH] net: realtek: fix shutdown panic in r8125/r8126 get_stats64
+Subject: [PATCH 014/140] net: realtek: fix shutdown panic in r8125/r8126
+ get_stats64
 
 During system poweroff, netif_carrier_off() in the shutdown path
 schedules a linkwatch_event on the events_unbound workqueue.  This
@@ -18,7 +19,7 @@ the ordering is correct.  Cached counter values are still returned.
  2 files changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/ethernet/realtek/r8125/r8125_n.c b/drivers/net/ethernet/realtek/r8125/r8125_n.c
-index 3d775975bfc42..783c7b4c712c8 100755
+index 3d775975b..783c7b4c7 100755
 --- a/drivers/net/ethernet/realtek/r8125/r8125_n.c
 +++ b/drivers/net/ethernet/realtek/r8125/r8125_n.c
 @@ -17026,9 +17026,11 @@ rtl8125_get_stats64(struct net_device *dev, struct rtnl_link_stats64 *stats)
@@ -36,7 +37,7 @@ index 3d775975bfc42..783c7b4c712c8 100755
          stats->tx_errors = le64_to_cpu(counters->tx_errors);
          stats->collisions = le32_to_cpu(counters->tx_multi_collision);
 diff --git a/drivers/net/ethernet/realtek/r8126/r8126_n.c b/drivers/net/ethernet/realtek/r8126/r8126_n.c
-index 0ca695efe7efd..9174cee339773 100644
+index 0ca695efe..9174cee33 100644
 --- a/drivers/net/ethernet/realtek/r8126/r8126_n.c
 +++ b/drivers/net/ethernet/realtek/r8126/r8126_n.c
 @@ -13367,9 +13367,11 @@ rtl8126_get_stats64(struct net_device *dev, struct rtnl_link_stats64 *stats)
@@ -53,3 +54,6 @@ index 0ca695efe7efd..9174cee339773 100644
  
          stats->tx_errors = le64_to_cpu(counters->tx_errors);
          stats->collisions = le32_to_cpu(counters->tx_multi_collision);
+-- 
+2.56.1
+

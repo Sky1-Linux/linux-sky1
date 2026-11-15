@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b2a85a8afc82247047ba1ffeb3d691e5c55c66ce Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 17:10:04 +1100
-Subject: [PATCH] misc: armchina-npu: add ACPI DVFS support via fwnode genpd
- provider
+Subject: [PATCH 103/140] misc: armchina-npu: add ACPI DVFS support via fwnode
+ genpd provider
 
 Under ACPI, the NPU device's pm_domain is already set by the ACPI
 general PM domain (from _PR0/_PR3 power resources), which causes
@@ -21,7 +21,7 @@ Also fix sky1_priv_init() missing static qualifier.
  1 file changed, 22 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/misc/armchina-npu/sky1/sky1.c b/drivers/misc/armchina-npu/sky1/sky1.c
-index 46bfbb8cafbcd..80daab087e999 100644
+index 46bfbb8ca..80daab087 100644
 --- a/drivers/misc/armchina-npu/sky1/sky1.c
 +++ b/drivers/misc/armchina-npu/sky1/sky1.c
 @@ -16,6 +16,7 @@
@@ -72,3 +72,6 @@ index 46bfbb8cafbcd..80daab087e999 100644
          return -EFAULT;
      }
      cix_aipu_priv->opp_dl = device_link_add(dev, cix_aipu_priv->opp_pmdomain,
+-- 
+2.56.1
+

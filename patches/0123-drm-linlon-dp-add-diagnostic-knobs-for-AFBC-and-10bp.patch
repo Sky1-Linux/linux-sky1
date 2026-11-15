@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From d266919eb43a24d444a04d5f0744f76186dd9f88 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 26 Feb 2026 13:27:06 +1100
-Subject: [PATCH] drm/linlon-dp: add diagnostic knobs for AFBC and 10bpc
- scanout gating
+Subject: [PATCH 123/140] drm/linlon-dp: add diagnostic knobs for AFBC and
+ 10bpc scanout gating
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -25,7 +25,7 @@ Both default to off and are controllable via modprobe options or sysfs.
  1 file changed, 75 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c
-index aa0d28b2b1cd1..7fe041bdc97a0 100644
+index aa0d28b2b..7fe041bdc 100644
 --- a/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_plane.c
 @@ -5,10 +5,12 @@
@@ -146,3 +146,6 @@ index aa0d28b2b1cd1..7fe041bdc97a0 100644
  				       get_plane_type(kms, c), "%s", c->name);
  
  	linlondp_put_fourcc_list(formats);
+-- 
+2.56.1
+

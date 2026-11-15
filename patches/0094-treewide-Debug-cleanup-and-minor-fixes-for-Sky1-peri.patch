@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From e9c7968784bcac8d0e5d2210d6ed3091bae11851 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 14:22:34 +1100
-Subject: [PATCH] treewide: Debug cleanup and minor fixes for Sky1 peripherals
+Subject: [PATCH 094/140] treewide: Debug cleanup and minor fixes for Sky1
+ peripherals
 
 arm-dma350:
 - Convert probe dev_info messages to dev_dbg
@@ -22,7 +23,7 @@ sof: cix:
  4 files changed, 27 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/clk/cix/clk-sky1-audss.c b/drivers/clk/cix/clk-sky1-audss.c
-index 9de133e6c2275..1edaf6a70827a 100644
+index 9de133e6c..1edaf6a70 100644
 --- a/drivers/clk/cix/clk-sky1-audss.c
 +++ b/drivers/clk/cix/clk-sky1-audss.c
 @@ -381,17 +381,12 @@ static int sky1_audss_gate_prepare(struct clk_hw *hw)
@@ -44,7 +45,7 @@ index 9de133e6c2275..1edaf6a70827a 100644
  }
  
 diff --git a/drivers/dma/arm-dma350.c b/drivers/dma/arm-dma350.c
-index f8245660595d4..c8f39f6d589bd 100644
+index f82456605..c8f39f6d5 100644
 --- a/drivers/dma/arm-dma350.c
 +++ b/drivers/dma/arm-dma350.c
 @@ -1243,17 +1243,17 @@ static int d350_probe(struct platform_device *pdev)
@@ -127,7 +128,7 @@ index f8245660595d4..c8f39f6d589bd 100644
  
  	dev_info(dev, "DMA-350 r%dp%d initialized with %d channels\n",
 diff --git a/sound/soc/sof/cix/cix-common.c b/sound/soc/sof/cix/cix-common.c
-index 5a1706f264d20..31df10c63e471 100644
+index 5a1706f26..31df10c63 100644
 --- a/sound/soc/sof/cix/cix-common.c
 +++ b/sound/soc/sof/cix/cix-common.c
 @@ -105,4 +105,5 @@ void cix_disable_clocks(struct snd_sof_dev *sdev, struct cix_clocks *clks)
@@ -137,7 +138,7 @@ index 5a1706f264d20..31df10c63e471 100644
 +MODULE_DESCRIPTION("SOF common support for CIX platforms");
  MODULE_LICENSE("Dual BSD/GPL");
 diff --git a/sound/soc/sof/cix/cix-sky1.c b/sound/soc/sof/cix/cix-sky1.c
-index a2e226cccf749..fcd1ec131a6dd 100644
+index a2e226ccc..fcd1ec131 100644
 --- a/sound/soc/sof/cix/cix-sky1.c
 +++ b/sound/soc/sof/cix/cix-sky1.c
 @@ -575,4 +575,5 @@ module_platform_driver(snd_sof_of_sky1_driver);
@@ -146,3 +147,6 @@ index a2e226cccf749..fcd1ec131a6dd 100644
  MODULE_AUTHOR("Joakim Zhang <joakim.zhang@cixtech.com>");
 +MODULE_DESCRIPTION("SOF support for CIX Sky1");
  MODULE_LICENSE("Dual BSD/GPL");
+-- 
+2.56.1
+

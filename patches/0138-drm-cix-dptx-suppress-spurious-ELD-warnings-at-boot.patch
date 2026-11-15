@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 37010dd142ff3892d8f102e3b91e04286332f1b8 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 28 Feb 2026 16:40:09 +1100
-Subject: [PATCH] drm/cix/dptx: suppress spurious ELD warnings at boot
+Subject: [PATCH 138/140] drm/cix/dptx: suppress spurious ELD warnings at boot
 
 At boot the hdmi-codec plugged callback fires before EDID has been
 read, so the connector ELD is all-zeros.  Returning that from get_eld
@@ -19,7 +19,7 @@ available.
  4 files changed, 49 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index 2dbe1abdc24da..f8ff7823d0536 100644
+index 2dbe1abdc..f8ff7823d 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -2766,8 +2766,15 @@ static void trilin_dp_hpd_event_work_func(struct work_struct *work)
@@ -41,7 +41,7 @@ index 2dbe1abdc24da..f8ff7823d0536 100644
  	cix_hdcp_hpd_event_process(&dp->hdcp, dp->plugin);
  }
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
-index a56927404094e..0119509f017fd 100644
+index a56927404..0119509f0 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
 @@ -2,6 +2,7 @@
@@ -94,7 +94,7 @@ index a56927404094e..0119509f017fd 100644
  	return 0;
  }
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
-index 423b3f018f9b5..9341485488c5e 100644
+index 423b3f018..934148548 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_drm.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -232,6 +232,12 @@ int trilin_connector_update_modes(struct drm_connector *connector,
@@ -111,10 +111,10 @@ index 423b3f018f9b5..9341485488c5e 100644
  }
  
 diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-index e1933f733af10..6743111a39c1f 100644
+index df32032e6..3a81a9302 100644
 --- a/sound/soc/codecs/hdmi-codec.c
 +++ b/sound/soc/codecs/hdmi-codec.c
-@@ -468,18 +468,23 @@ static int hdmi_codec_startup(struct snd_pcm_substream *substream,
+@@ -472,18 +472,23 @@ static int hdmi_codec_startup(struct snd_pcm_substream *substream,
  	if (tx && hcp->hcd.ops->get_eld) {
  		ret = hcp->hcd.ops->get_eld(dai->dev->parent, hcp->hcd.data,
  					    hcp->eld, sizeof(hcp->eld));
@@ -147,3 +147,6 @@ index e1933f733af10..6743111a39c1f 100644
  	}
  
  	hcp->busy = true;
+-- 
+2.56.1
+

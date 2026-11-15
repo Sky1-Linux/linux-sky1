@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b7d66bd23988c393e7124065895b64fa27e91557 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 21 Feb 2026 04:08:30 +1100
-Subject: [PATCH] drm/sky1: switch from faux_device to platform_device
+Subject: [PATCH 120/140] drm/sky1: switch from faux_device to platform_device
 
 Use platform_device_register_simple() instead of faux_device_create()
 so the render node appears on DRM_BUS_PLATFORM. This allows Mesa's
@@ -12,7 +12,7 @@ for the linlondp DPU via standard platform bus enumeration.
  1 file changed, 19 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/gpu/drm/sky1/sky1-drm.c b/drivers/gpu/drm/sky1/sky1-drm.c
-index 31ac998552578..6f96cebc748d9 100644
+index 31ac99855..6f96cebc7 100644
 --- a/drivers/gpu/drm/sky1/sky1-drm.c
 +++ b/drivers/gpu/drm/sky1/sky1-drm.c
 @@ -8,12 +8,16 @@
@@ -102,3 +102,6 @@ index 31ac998552578..6f96cebc748d9 100644
  }
  
  module_init(sky1_drm_init);
+-- 
+2.56.1
+

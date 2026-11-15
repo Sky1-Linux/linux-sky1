@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 056496bb3b626d04d8cb0a05d54be9edc68bc87f Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 17:41:42 +1100
-Subject: [PATCH] mailbox: cix-mailbox: Remove debug print statements
+Subject: [PATCH 069/140] mailbox: cix-mailbox: Remove debug print statements
 
 Remove debug/development print statements that produce unnecessary log
 spam during normal operation:
@@ -16,7 +16,7 @@ spam during normal operation:
  1 file changed, 2 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/mailbox/cix-mailbox.c b/drivers/mailbox/cix-mailbox.c
-index 9cd5e8ffd4e62..4043466683a61 100644
+index 9cd5e8ffd..404346668 100644
 --- a/drivers/mailbox/cix-mailbox.c
 +++ b/drivers/mailbox/cix-mailbox.c
 @@ -174,7 +174,7 @@ static int cix_mbox_send_data_fifo(struct mbox_chan *chan, void *data)
@@ -63,3 +63,6 @@ index 9cd5e8ffd4e62..4043466683a61 100644
  }
  subsys_initcall(cix_mailbox_init);
  
+-- 
+2.56.1
+

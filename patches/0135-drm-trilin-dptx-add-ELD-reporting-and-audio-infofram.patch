@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 64ece673545e9d9b1599c4407b97abea361bd5d0 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 28 Feb 2026 14:07:37 +1100
-Subject: [PATCH] drm/trilin-dptx: add ELD reporting and audio infoframe for
- HDMI/DP
+Subject: [PATCH 135/140] drm/trilin-dptx: add ELD reporting and audio
+ infoframe for HDMI/DP
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -26,7 +26,7 @@ to stereo regardless of how many channels were being transmitted.
  1 file changed, 43 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
-index 67fe6ce42c3a6..740ddaea47a64 100644
+index 67fe6ce42..740ddaea4 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_audio.c
 @@ -1,8 +1,10 @@
@@ -119,3 +119,6 @@ index 67fe6ce42c3a6..740ddaea47a64 100644
  	.get_dai_id = dptx_audio_get_dai_id,
  	.hook_plugged_cb = dptx_audio_hook_plugged_cb
  };
+-- 
+2.56.1
+

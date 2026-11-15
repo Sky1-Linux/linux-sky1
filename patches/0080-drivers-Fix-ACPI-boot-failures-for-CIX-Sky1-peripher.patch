@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 102dda6927c5962741b0316353284a4317a0eedc Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 18:17:06 +1100
-Subject: [PATCH] drivers: Fix ACPI boot failures for CIX Sky1 peripherals
+Subject: [PATCH 080/140] drivers: Fix ACPI boot failures for CIX Sky1
+ peripherals
 
 Fix six drivers that fail under ACPI boot on CIX Sky1 SoCs:
 
@@ -37,7 +38,7 @@ Fix six drivers that fail under ACPI boot on CIX Sky1 SoCs:
  6 files changed, 35 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/clocksource/timer-sky1-gpt.c b/drivers/clocksource/timer-sky1-gpt.c
-index 775a981ed8c77..df9db89ff087b 100644
+index 775a981ed..df9db89ff 100644
 --- a/drivers/clocksource/timer-sky1-gpt.c
 +++ b/drivers/clocksource/timer-sky1-gpt.c
 @@ -217,11 +217,17 @@ static int sky1_timer_probe(struct platform_device *pdev)
@@ -59,7 +60,7 @@ index 775a981ed8c77..df9db89ff087b 100644
  		return dev_err_probe(dev, PTR_ERR(sky1tm->tclk),
  				     "failed to get func clock\n");
 diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index fcce7b7a1bccb..8ed148360e8d7 100644
+index fcce7b7a1..8ed148360 100644
 --- a/drivers/pmdomain/arm/scmi_pm_domain.c
 +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
 @@ -89,6 +89,11 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
@@ -75,7 +76,7 @@ index fcce7b7a1bccb..8ed148360e8d7 100644
  	if (!scmi_pd)
  		return -ENOMEM;
 diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
-index 254c0a8a45559..3c0255ca03133 100644
+index 254c0a8a4..3c0255ca0 100644
 --- a/drivers/regulator/fixed.c
 +++ b/drivers/regulator/fixed.c
 @@ -244,7 +244,7 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
@@ -88,7 +89,7 @@ index 254c0a8a45559..3c0255ca03133 100644
  	drvdata->desc.name = devm_kstrdup(&pdev->dev,
  					  config->supply_name,
 diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index 1ef17e82c12d0..440f65a396129 100644
+index 1ef17e82c..440f65a39 100644
 --- a/drivers/video/backlight/pwm_bl.c
 +++ b/drivers/video/backlight/pwm_bl.c
 @@ -12,6 +12,7 @@
@@ -178,7 +179,7 @@ index 1ef17e82c12d0..440f65a396129 100644
  		/*
  		 * Make sure that there is at least two entries in the
 diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index bc68b4de5287d..cab46fb95ad6b 100644
+index bc68b4de5..cab46fb95 100644
 --- a/fs/pstore/ram.c
 +++ b/fs/pstore/ram.c
 @@ -750,9 +750,8 @@ static int ramoops_probe(struct platform_device *pdev)
@@ -194,7 +195,7 @@ index bc68b4de5287d..cab46fb95ad6b 100644
  
  	if (!pdata->mem_size || (!pdata->record_size && !pdata->console_size &&
 diff --git a/sound/hda/controllers/hda_cix_ipbloq.c b/sound/hda/controllers/hda_cix_ipbloq.c
-index df1facafc75a3..4133556c2c732 100644
+index df1facafc..4133556c2 100644
 --- a/sound/hda/controllers/hda_cix_ipbloq.c
 +++ b/sound/hda/controllers/hda_cix_ipbloq.c
 @@ -672,7 +672,7 @@ static int cix_ipbloq_hda_probe(struct platform_device *pdev)
@@ -206,3 +207,6 @@ index df1facafc75a3..4133556c2c732 100644
  		/*
  		 * if dev.dma_mem not allocated
  		 * we should try to get it from dts
+-- 
+2.56.1
+

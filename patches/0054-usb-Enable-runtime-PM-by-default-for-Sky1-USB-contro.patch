@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 26205a1b8d719842963f769e40a08f65b8b30e4d Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:14:33 +1100
-Subject: [PATCH] usb: Enable runtime PM by default for Sky1 USB controllers
+Subject: [PATCH 054/140] usb: Enable runtime PM by default for Sky1 USB
+ controllers
 
 Enable runtime power management by default for Sky1 USB controllers:
 - Set CDNS3_DEFAULT_PM_RUNTIME_ALLOW quirk for cdnsp-sky1
@@ -16,7 +17,7 @@ when no devices are connected, improving power efficiency.
  2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/cdns3/cdnsp-sky1.c b/drivers/usb/cdns3/cdnsp-sky1.c
-index 01fa58510ff3e..33ace97ae8dd4 100644
+index 01fa58510..33ace97ae 100644
 --- a/drivers/usb/cdns3/cdnsp-sky1.c
 +++ b/drivers/usb/cdns3/cdnsp-sky1.c
 @@ -217,7 +217,7 @@ static int cdns_sky1_platform_suspend(struct device *dev,
@@ -37,7 +38,7 @@ index 01fa58510ff3e..33ace97ae8dd4 100644
  		cdns_sky1_auxdata->platform_data = cdns_sky1_pdata;
  		ret = of_platform_populate(node, NULL, cdns_sky1_auxdata, dev);
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 074d9c731639f..6b3235d5a4849 100644
+index 074d9c731..6b3235d5a 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
 @@ -359,7 +359,10 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
@@ -52,3 +53,6 @@ index 074d9c731639f..6b3235d5a4849 100644
  
  	return 0;
  
+-- 
+2.56.1
+

@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From ad080d06d4f2541b26fb65a5319a62d891394479 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:38 +1100
-Subject: [PATCH] arm64: cix: Add Sky1 thermal, PWM, watchdog, and misc drivers
+Subject: [PATCH 012/140] arm64: cix: Add Sky1 thermal, PWM, watchdog, and misc
+ drivers
 
 ---
  drivers/base/arch_topology.c       |  20 ++
@@ -25,7 +26,7 @@ Subject: [PATCH] arm64: cix: Add Sky1 thermal, PWM, watchdog, and misc drivers
  create mode 100644 drivers/watchdog/sky1_wdt.c
 
 diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index e1eff05bea4aa..9604b869a0c8f 100644
+index e1eff05be..9604b869a 100644
 --- a/drivers/base/arch_topology.c
 +++ b/drivers/base/arch_topology.c
 @@ -415,6 +415,26 @@ init_cpu_capacity_callback(struct notifier_block *nb,
@@ -56,7 +57,7 @@ index e1eff05bea4aa..9604b869a0c8f 100644
  	.notifier_call = init_cpu_capacity_callback,
  };
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 852e024facc3c..9d6faeb300528 100644
+index ec577a205..591062879 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
 @@ -14,6 +14,7 @@
@@ -67,7 +68,7 @@ index 852e024facc3c..9d6faeb300528 100644
  #include <linux/cpu.h>
  #include <linux/cpufreq.h>
  #include <linux/cpu_cooling.h>
-@@ -2788,6 +2789,9 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+@@ -2793,6 +2794,9 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
  		return ret;
  	}
  
@@ -78,7 +79,7 @@ index 852e024facc3c..9d6faeb300528 100644
  	if (ret < 0)
  		return ret;
 diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
-index f9db86da0818b..c766201b59393 100644
+index f9db86da0..c766201b5 100644
 --- a/drivers/input/keyboard/gpio_keys.c
 +++ b/drivers/input/keyboard/gpio_keys.c
 @@ -596,7 +596,21 @@ static int gpio_keys_setup_key(struct platform_device *pdev,
@@ -105,7 +106,7 @@ index f9db86da0818b..c766201b59393 100644
  		switch (button->wakeup_event_action) {
  		case EV_ACT_ASSERTED:
 diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index c2fd3f4b62d9e..021441161fc7d 100644
+index c2fd3f4b6..021441161 100644
 --- a/drivers/pwm/Kconfig
 +++ b/drivers/pwm/Kconfig
 @@ -819,4 +819,13 @@ config PWM_XILINX
@@ -123,7 +124,7 @@ index c2fd3f4b62d9e..021441161fc7d 100644
 +
  endif
 diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-index dfa8b4966ee19..dac7a013d98bc 100644
+index dfa8b4966..dac7a013d 100644
 --- a/drivers/pwm/Makefile
 +++ b/drivers/pwm/Makefile
 @@ -75,3 +75,4 @@ obj-$(CONFIG_PWM_TWL_LED)	+= pwm-twl-led.o
@@ -133,7 +134,7 @@ index dfa8b4966ee19..dac7a013d98bc 100644
 +obj-$(CONFIG_PWM_SKY1) += pwm-sky1.o
 diff --git a/drivers/pwm/pwm-sky1.c b/drivers/pwm/pwm-sky1.c
 new file mode 100644
-index 0000000000000..3b55c4000359f
+index 000000000..3b55c4000
 --- /dev/null
 +++ b/drivers/pwm/pwm-sky1.c
 @@ -0,0 +1,291 @@
@@ -429,7 +430,7 @@ index 0000000000000..3b55c4000359f
 +MODULE_AUTHOR("Jerry Zhu <jerry.zhu@cixtech.com>");
 +MODULE_DESCRIPTION("CIX Sky1 PWM driver");
 diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index a09c188b9ad11..fd82787db9a6e 100644
+index a09c188b9..fd82787db 100644
 --- a/drivers/thermal/Kconfig
 +++ b/drivers/thermal/Kconfig
 @@ -517,4 +517,18 @@ config LOONGSON2_THERMAL
@@ -452,7 +453,7 @@ index a09c188b9ad11..fd82787db9a6e 100644
 +
  endif
 diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index d7718978db245..2f19b12439799 100644
+index d7718978d..2f19b1243 100644
 --- a/drivers/thermal/Makefile
 +++ b/drivers/thermal/Makefile
 @@ -67,4 +67,5 @@ obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
@@ -463,7 +464,7 @@ index d7718978db245..2f19b12439799 100644
  obj-$(CONFIG_THERMAL_CORE_TESTING)	+= testing/
 diff --git a/drivers/thermal/cix/Makefile b/drivers/thermal/cix/Makefile
 new file mode 100644
-index 0000000000000..4f6d776b4c536
+index 000000000..4f6d776b4
 --- /dev/null
 +++ b/drivers/thermal/cix/Makefile
 @@ -0,0 +1,2 @@
@@ -471,7 +472,7 @@ index 0000000000000..4f6d776b4c536
 +obj-$(CONFIG_CIX_CPU_IPA)	+= cix_cpu_ipa.o
 diff --git a/drivers/thermal/cix/cix_cpu_ipa.c b/drivers/thermal/cix/cix_cpu_ipa.c
 new file mode 100644
-index 0000000000000..77d656826e071
+index 000000000..77d656826
 --- /dev/null
 +++ b/drivers/thermal/cix/cix_cpu_ipa.c
 @@ -0,0 +1,131 @@
@@ -607,7 +608,7 @@ index 0000000000000..77d656826e071
 +MODULE_DESCRIPTION("CIX CPU IPA Power Monitoring Driver");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 05008d937e405..702a020644e52 100644
+index 05008d937..702a02064 100644
 --- a/drivers/watchdog/Kconfig
 +++ b/drivers/watchdog/Kconfig
 @@ -2354,4 +2354,14 @@ config KEEMBAY_WATCHDOG
@@ -626,7 +627,7 @@ index 05008d937e405..702a020644e52 100644
 +
  endif # WATCHDOG
 diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index b680e4d3c1bc2..2e149fb08ae46 100644
+index b680e4d3c..2e149fb08 100644
 --- a/drivers/watchdog/Makefile
 +++ b/drivers/watchdog/Makefile
 @@ -243,3 +243,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
@@ -636,7 +637,7 @@ index b680e4d3c1bc2..2e149fb08ae46 100644
 +obj-$(CONFIG_SKY1_WATCHDOG) += sky1_wdt.o
 diff --git a/drivers/watchdog/sky1_wdt.c b/drivers/watchdog/sky1_wdt.c
 new file mode 100644
-index 0000000000000..0c40e2b5c787c
+index 000000000..0c40e2b5c
 --- /dev/null
 +++ b/drivers/watchdog/sky1_wdt.c
 @@ -0,0 +1,431 @@
@@ -1072,7 +1073,7 @@ index 0000000000000..0c40e2b5c787c
 +MODULE_LICENSE("GPL v2");
 +MODULE_ALIAS("platform:" DRIVER_NAME);
 diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index d72d6e5aa2002..8ae0b155f118b 100644
+index d72d6e5aa..8ae0b155f 100644
 --- a/include/linux/arch_topology.h
 +++ b/include/linux/arch_topology.h
 @@ -89,6 +89,15 @@ void remove_cpu_topology(unsigned int cpuid);
@@ -1091,3 +1092,6 @@ index d72d6e5aa2002..8ae0b155f118b 100644
 +#endif /* CONFIG_GENERIC_ARCH_TOPOLOGY */
  
  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
+-- 
+2.56.1
+

@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 1fbfaf6c8f56d9c3bbc365b2862c2377b88de3f9 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 02:06:53 +1100
-Subject: [PATCH] treewide: Add ACPI device IDs for CIX Sky1 SoC peripherals
+Subject: [PATCH 065/140] treewide: Add ACPI device IDs for CIX Sky1 SoC
+ peripherals
 
 Add ACPI device IDs to existing drivers to support ACPI enumeration
 on CIX Sky1 SoC systems:
@@ -44,7 +45,7 @@ and probed when booting with ACPI firmware.
  10 files changed, 101 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/cix/clk-sky1-audss.c b/drivers/clk/cix/clk-sky1-audss.c
-index 975313767b605..378d2ff4d6e32 100644
+index 975313767..378d2ff4d 100644
 --- a/drivers/clk/cix/clk-sky1-audss.c
 +++ b/drivers/clk/cix/clk-sky1-audss.c
 @@ -5,6 +5,7 @@
@@ -78,7 +79,7 @@ index 975313767b605..378d2ff4d6e32 100644
  	},
  };
 diff --git a/drivers/dma/arm-dma350.c b/drivers/dma/arm-dma350.c
-index 1e7948c58c437..f8245660595d4 100644
+index 1e7948c58..f82456605 100644
 --- a/drivers/dma/arm-dma350.c
 +++ b/drivers/dma/arm-dma350.c
 @@ -2,6 +2,7 @@
@@ -111,7 +112,7 @@ index 1e7948c58c437..f8245660595d4 100644
  	},
  	.probe = d350_probe,
 diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 0fb728ade92e4..2f200cdf678d8 100644
+index 0fb728ade..2f200cdf6 100644
 --- a/drivers/i2c/busses/i2c-cadence.c
 +++ b/drivers/i2c/busses/i2c-cadence.c
 @@ -5,6 +5,7 @@
@@ -146,7 +147,7 @@ index 0fb728ade92e4..2f200cdf678d8 100644
  	},
  	.probe  = cdns_i2c_probe,
 diff --git a/drivers/i3c/master/i3c-master-cdns.c b/drivers/i3c/master/i3c-master-cdns.c
-index 97b151564d3d3..a7181da47b088 100644
+index 46a24b860..2217a46a4 100644
 --- a/drivers/i3c/master/i3c-master-cdns.c
 +++ b/drivers/i3c/master/i3c-master-cdns.c
 @@ -5,6 +5,7 @@
@@ -157,7 +158,7 @@ index 97b151564d3d3..a7181da47b088 100644
  #include <linux/bitops.h>
  #include <linux/clk.h>
  #include <linux/err.h>
-@@ -1547,6 +1548,14 @@ static const struct of_device_id cdns_i3c_master_of_ids[] = {
+@@ -1537,6 +1538,14 @@ static const struct of_device_id cdns_i3c_master_of_ids[] = {
  };
  MODULE_DEVICE_TABLE(of, cdns_i3c_master_of_ids);
  
@@ -172,7 +173,7 @@ index 97b151564d3d3..a7181da47b088 100644
  static int cdns_i3c_master_probe(struct platform_device *pdev)
  {
  	struct cdns_i3c_master *master;
-@@ -1637,6 +1646,7 @@ static struct platform_driver cdns_i3c_master = {
+@@ -1625,6 +1634,7 @@ static struct platform_driver cdns_i3c_master = {
  	.driver = {
  		.name = "cdns-i3c-master",
  		.of_match_table = cdns_i3c_master_of_ids,
@@ -181,7 +182,7 @@ index 97b151564d3d3..a7181da47b088 100644
  };
  module_platform_driver(cdns_i3c_master);
 diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 90050f4a5a3eb..e4318fa6095bd 100644
+index be926ecc3..9c4b7355e 100644
 --- a/drivers/net/ethernet/cadence/macb_main.c
 +++ b/drivers/net/ethernet/cadence/macb_main.c
 @@ -6,6 +6,7 @@
@@ -189,10 +190,10 @@ index 90050f4a5a3eb..e4318fa6095bd 100644
  
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +#include <linux/acpi.h>
- #include <linux/clk.h>
+ #include <linux/circ_buf.h>
  #include <linux/clk-provider.h>
- #include <linux/crc32.h>
-@@ -5412,6 +5413,14 @@ static const struct of_device_id macb_dt_ids[] = {
+ #include <linux/clk.h>
+@@ -5543,6 +5544,14 @@ static const struct of_device_id macb_dt_ids[] = {
  MODULE_DEVICE_TABLE(of, macb_dt_ids);
  #endif /* CONFIG_OF */
  
@@ -207,7 +208,7 @@ index 90050f4a5a3eb..e4318fa6095bd 100644
  static const struct macb_config default_gem_config = {
  	.caps = MACB_CAPS_GIGABIT_MODE_AVAILABLE |
  		MACB_CAPS_JUMBO |
-@@ -5937,6 +5946,7 @@ static struct platform_driver macb_driver = {
+@@ -6093,6 +6102,7 @@ static struct platform_driver macb_driver = {
  	.driver		= {
  		.name		= "macb",
  		.of_match_table	= of_match_ptr(macb_dt_ids),
@@ -216,7 +217,7 @@ index 90050f4a5a3eb..e4318fa6095bd 100644
  	},
  	.shutdown	= macb_shutdown,
 diff --git a/drivers/reset/reset-sky1-audss.c b/drivers/reset/reset-sky1-audss.c
-index 62950613f199d..2ec4e015911ab 100644
+index 62950613f..2ec4e0159 100644
 --- a/drivers/reset/reset-sky1-audss.c
 +++ b/drivers/reset/reset-sky1-audss.c
 @@ -5,6 +5,7 @@
@@ -249,7 +250,7 @@ index 62950613f199d..2ec4e015911ab 100644
  };
  module_platform_driver(sky1_audss_reset_driver);
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 1cca9d87fbde4..4596458ad1bad 100644
+index 441426bc2..54bd96313 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
 @@ -6,6 +6,7 @@
@@ -260,7 +261,7 @@ index 1cca9d87fbde4..4596458ad1bad 100644
  #include <linux/clk.h>
  #include <linux/completion.h>
  #include <linux/delay.h>
-@@ -2229,6 +2230,14 @@ static const struct of_device_id cqspi_dt_ids[] = {
+@@ -2233,6 +2234,14 @@ static const struct of_device_id cqspi_dt_ids[] = {
  
  MODULE_DEVICE_TABLE(of, cqspi_dt_ids);
  
@@ -275,7 +276,7 @@ index 1cca9d87fbde4..4596458ad1bad 100644
  static struct platform_driver cqspi_platform_driver = {
  	.probe = cqspi_probe,
  	.remove = cqspi_remove,
-@@ -2236,6 +2245,7 @@ static struct platform_driver cqspi_platform_driver = {
+@@ -2240,6 +2249,7 @@ static struct platform_driver cqspi_platform_driver = {
  		.name = CQSPI_NAME,
  		.pm = pm_ptr(&cqspi_dev_pm_ops),
  		.of_match_table = cqspi_dt_ids,
@@ -284,7 +285,7 @@ index 1cca9d87fbde4..4596458ad1bad 100644
  };
  
 diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 5ae09b21d23a5..79b67fa8ea063 100644
+index 640e8723a..796f8fa18 100644
 --- a/drivers/spi/spi-cadence.c
 +++ b/drivers/spi/spi-cadence.c
 @@ -7,6 +7,7 @@
@@ -295,7 +296,7 @@ index 5ae09b21d23a5..79b67fa8ea063 100644
  #include <linux/clk.h>
  #include <linux/delay.h>
  #include <linux/gpio/consumer.h>
-@@ -802,6 +803,14 @@ static const struct of_device_id cdns_spi_of_match[] = {
+@@ -904,6 +905,14 @@ static const struct of_device_id cdns_spi_of_match[] = {
  };
  MODULE_DEVICE_TABLE(of, cdns_spi_of_match);
  
@@ -310,7 +311,7 @@ index 5ae09b21d23a5..79b67fa8ea063 100644
  /* cdns_spi_driver - This structure defines the SPI subsystem platform driver */
  static struct platform_driver cdns_spi_driver = {
  	.probe	= cdns_spi_probe,
-@@ -809,6 +818,7 @@ static struct platform_driver cdns_spi_driver = {
+@@ -911,6 +920,7 @@ static struct platform_driver cdns_spi_driver = {
  	.driver = {
  		.name = CDNS_SPI_NAME,
  		.of_match_table = cdns_spi_of_match,
@@ -319,7 +320,7 @@ index 5ae09b21d23a5..79b67fa8ea063 100644
  	},
  };
 diff --git a/drivers/usb/typec/rts5453.c b/drivers/usb/typec/rts5453.c
-index f71b7a632b6c4..5521a00d41d40 100644
+index f71b7a632..5521a00d4 100644
 --- a/drivers/usb/typec/rts5453.c
 +++ b/drivers/usb/typec/rts5453.c
 @@ -10,6 +10,7 @@
@@ -354,7 +355,7 @@ index f71b7a632b6c4..5521a00d41d40 100644
  	},
  	.probe = rts5453_probe,
 diff --git a/drivers/video/backlight/pwm_bl.c b/drivers/video/backlight/pwm_bl.c
-index 237d3d3f3bb1a..1ef17e82c12d0 100644
+index 237d3d3f3..1ef17e82c 100644
 --- a/drivers/video/backlight/pwm_bl.c
 +++ b/drivers/video/backlight/pwm_bl.c
 @@ -5,6 +5,7 @@
@@ -390,3 +391,6 @@ index 237d3d3f3bb1a..1ef17e82c12d0 100644
  	},
  	.probe		= pwm_backlight_probe,
  	.remove		= pwm_backlight_remove,
+-- 
+2.56.1
+

@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From c7c4aca1fe03db1d81e571d242ca1307ca3f059e Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 13:44:50 +1100
-Subject: [PATCH] gpio: cadence: Fix IRQ storm and harden IRQ handling
+Subject: [PATCH 067/140] gpio: cadence: Fix IRQ storm and harden IRQ handling
 
 Fix 6 issues in the Cadence GPIO IRQ support added in a8e7200785d82:
 
@@ -28,7 +28,7 @@ Fix 6 issues in the Cadence GPIO IRQ support added in a8e7200785d82:
  1 file changed, 37 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/gpio/gpio-cadence.c b/drivers/gpio/gpio-cadence.c
-index e2ca7b20fa776..5c11aceedeb82 100644
+index e2ca7b20f..5c11aceed 100644
 --- a/drivers/gpio/gpio-cadence.c
 +++ b/drivers/gpio/gpio-cadence.c
 @@ -95,6 +95,14 @@ static void cdns_gpio_irq_mask(struct irq_data *d)
@@ -148,3 +148,6 @@ index e2ca7b20fa776..5c11aceedeb82 100644
  	platform_set_drvdata(pdev, cgpio);
  	return 0;
  
+-- 
+2.56.1
+

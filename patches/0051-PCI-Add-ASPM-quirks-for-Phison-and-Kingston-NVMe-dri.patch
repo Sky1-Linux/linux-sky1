@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 355caca048ea941f5a4aa7fb2de41af955d428ee Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:07:44 +1100
-Subject: [PATCH] PCI: Add ASPM quirks for Phison and Kingston NVMe drives
+Subject: [PATCH 051/140] PCI: Add ASPM quirks for Phison and Kingston NVMe
+ drives
 
 Some Phison E13T (1987:5013) and Kingston (2646:501d) NVMe drives
 experience link instability when ASPM L0s/L1 is enabled. Disable
@@ -11,10 +12,10 @@ ASPM for these devices to prevent link training failures.
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index a96b2eb1fc3af..968b8ff9229eb 100644
+index 5e70b2509..1ffd8a9f8 100644
 --- a/drivers/pci/quirks.c
 +++ b/drivers/pci/quirks.c
-@@ -2526,6 +2526,10 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_ASMEDIA, 0x1080, quirk_disable_aspm_l0s_l
+@@ -2548,6 +2548,10 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_ASMEDIA, 0x1080, quirk_disable_aspm_l0s_l
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_FREESCALE, 0x0451, quirk_disable_aspm_l0s_l1);
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_PASEMI, 0xa002, quirk_disable_aspm_l0s_l1);
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_HUAWEI, 0x1105, quirk_disable_aspm_l0s_l1);
@@ -25,3 +26,6 @@ index a96b2eb1fc3af..968b8ff9229eb 100644
  
  /*
   * Some Pericom PCIe-to-PCI bridges in reverse mode need the PCIe Retrain
+-- 
+2.56.1
+

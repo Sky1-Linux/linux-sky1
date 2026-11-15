@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 012de04ab09290dc08f150ca61950a46bf292fe1 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 16:02:13 +1100
-Subject: [PATCH] drm/cix/linlon-dp: clean up ACPI probe logging and guard NULL
- match
+Subject: [PATCH 099/140] drm/cix/linlon-dp: clean up ACPI probe logging and
+ guard NULL match
 
 Replace pr_info debug messages with dev_dbg for cleaner boot output.
 
@@ -15,7 +15,7 @@ resolve any remote endpoints.
  1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c b/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
-index 933c09b9bb6fb..dd647f8a7935a 100644
+index 933c09b9b..dd647f8a7 100644
 --- a/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
 +++ b/drivers/gpu/drm/cix/linlon-dp/linlondp_drv.c
 @@ -136,7 +136,6 @@ static void linlondp_add_acpi_slave(struct device *master,
@@ -69,3 +69,6 @@ index 933c09b9bb6fb..dd647f8a7935a 100644
  	return component_master_add_with_match(dev, &linlondp_master_ops,
  					       match);
  #else
+-- 
+2.56.1
+

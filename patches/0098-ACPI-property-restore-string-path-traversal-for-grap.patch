@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 9426df80fc955b7865d19ef50cf9a565ba5a927f Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 16:02:05 +1100
-Subject: [PATCH] ACPI: property: restore string-path traversal for graph
- references
+Subject: [PATCH 098/140] ACPI: property: restore string-path traversal for
+ graph references
 
 ACPI graph references encode the path to a remote endpoint as:
 Package { DEV, "port@N", "endpoint@N" }
@@ -19,7 +19,7 @@ graph traversal correctly resolves port/endpoint references.
  1 file changed, 16 insertions(+)
 
 diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-index 19737f9e1e16f..c5c95490a03df 100644
+index 19737f9e1..c5c95490a 100644
 --- a/drivers/acpi/property.c
 +++ b/drivers/acpi/property.c
 @@ -873,6 +873,22 @@ static int acpi_get_ref_args(struct fwnode_reference_args *args,
@@ -45,3 +45,6 @@ index 19737f9e1e16f..c5c95490a03df 100644
  	/*
  	 * Assume the following integer elements are all args. Stop counting on
  	 * the first reference (possibly represented as a string) or end of the
+-- 
+2.56.1
+

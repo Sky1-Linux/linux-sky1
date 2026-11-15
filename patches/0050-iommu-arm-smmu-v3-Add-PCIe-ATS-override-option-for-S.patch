@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From e9d34727473071f57f689c7b3a961bc57369a22f Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:07:36 +1100
-Subject: [PATCH] iommu/arm-smmu-v3: Add PCIe ATS override option for Sky1
+Subject: [PATCH 050/140] iommu/arm-smmu-v3: Add PCIe ATS override option for
+ Sky1
 
 Sky1's PCIe controller has a DTI (Distributed Translation Interface)
 ATS Master that can send translated TLP messages to the SMMU even when
@@ -21,7 +22,7 @@ SMMU node. Enable it for smmu_pciehub on Sky1 platforms.
  3 files changed, 17 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index 76b9e659e480e..3c184d900be95 100644
+index 76b9e659e..3c184d900 100644
 --- a/arch/arm64/boot/dts/cix/sky1.dtsi
 +++ b/arch/arm64/boot/dts/cix/sky1.dtsi
 @@ -676,6 +676,13 @@ smmu_pciehub: iommu@b010000 {
@@ -39,7 +40,7 @@ index 76b9e659e480e..3c184d900be95 100644
  	};
  
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index f278e4ce82c29..42a97ddfab42a 100644
+index 43aaead91..62df5ea8d 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 @@ -81,6 +81,7 @@ DEFINE_MUTEX(arm_smmu_asid_lock);
@@ -50,7 +51,7 @@ index f278e4ce82c29..42a97ddfab42a 100644
  	{ 0, NULL},
  };
  
-@@ -1624,7 +1625,10 @@ void arm_smmu_make_cdtable_ste(struct arm_smmu_ste *target,
+@@ -1692,7 +1693,10 @@ void arm_smmu_make_cdtable_ste(struct arm_smmu_ste *target,
  			 STRTAB_STE_1_S1STALLD :
  			 0) |
  		FIELD_PREP(STRTAB_STE_1_EATS,
@@ -62,7 +63,7 @@ index f278e4ce82c29..42a97ddfab42a 100644
  
  	if ((smmu->features & ARM_SMMU_FEAT_ATTR_TYPES_OVR) &&
  	    s1dss == STRTAB_STE_1_S1DSS_BYPASS)
-@@ -1676,7 +1680,10 @@ void arm_smmu_make_s2_domain_ste(struct arm_smmu_ste *target,
+@@ -1744,7 +1748,10 @@ void arm_smmu_make_s2_domain_ste(struct arm_smmu_ste *target,
  
  	target->data[1] = cpu_to_le64(
  		FIELD_PREP(STRTAB_STE_1_EATS,
@@ -75,10 +76,10 @@ index f278e4ce82c29..42a97ddfab42a 100644
  	if (pgtbl_cfg->quirks & IO_PGTABLE_QUIRK_ARM_S2FWB)
  		target->data[1] |= cpu_to_le64(STRTAB_STE_1_S2FWB);
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index 9c9b9dd8fcce2..0ba303a065ae6 100644
+index 048bab661..5b8a07089 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -777,6 +777,7 @@ struct arm_smmu_device {
+@@ -781,6 +781,7 @@ struct arm_smmu_device {
  #define ARM_SMMU_OPT_MSIPOLL		(1 << 2)
  #define ARM_SMMU_OPT_CMDQ_FORCE_SYNC	(1 << 3)
  #define ARM_SMMU_OPT_TEGRA241_CMDQV	(1 << 4)
@@ -86,3 +87,6 @@ index 9c9b9dd8fcce2..0ba303a065ae6 100644
  	u32				options;
  
  	struct arm_smmu_cmdq		cmdq;
+-- 
+2.56.1
+

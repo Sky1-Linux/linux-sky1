@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 0d326385b209f6d911685e6d010dbc4dbdbfb354 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 18:16:00 +1100
-Subject: [PATCH] firmware: arm_scmi: Add ACPI boot support for CIX Sky1
+Subject: [PATCH 074/140] firmware: arm_scmi: Add ACPI boot support for CIX
+ Sky1
 
 Enable SCMI firmware communication under ACPI boot on CIX Sky1 SoCs.
 
@@ -23,13 +24,13 @@ the reg-io-width property indicates it.
  5 files changed, 73 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-index c7698cfaa4e83..19da052838c45 100644
+index 1115e8398..01ecdd284 100644
 --- a/drivers/firmware/arm_scmi/bus.c
 +++ b/drivers/firmware/arm_scmi/bus.c
-@@ -466,6 +466,9 @@ __scmi_device_create(struct device_node *np, struct device *parent,
- 	scmi_dev->protocol_id = protocol;
+@@ -496,6 +496,9 @@ __scmi_device_create(struct device_node *np, struct device *parent,
+ 	scmi_dev->id = id;
  	scmi_dev->dev.parent = parent;
- 	device_set_node(&scmi_dev->dev, of_fwnode_handle(np));
+ 	device_set_node(&scmi_dev->dev, of_fwnode_handle(of_node_get(np)));
 +	/* ACPI: inherit parent fwnode when no DT node */
 +	if (!np && parent)
 +		scmi_dev->dev.fwnode = dev_fwnode(parent);
@@ -37,10 +38,10 @@ index c7698cfaa4e83..19da052838c45 100644
  	scmi_dev->dev.release = scmi_device_release;
  	dev_set_name(&scmi_dev->dev, "scmi_dev.%d", id);
 diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-index d86babb90b4f8..8f37e66c772ca 100644
+index 502a8f854..2a5d71924 100644
 --- a/drivers/firmware/arm_scmi/common.h
 +++ b/drivers/firmware/arm_scmi/common.h
-@@ -495,6 +495,9 @@ static int __tag##_probe(struct platform_device *pdev)			       \
+@@ -497,6 +497,9 @@ static int __tag##_probe(struct platform_device *pdev)			       \
  		return -ENOMEM;						       \
  									       \
  	device_set_of_node_from_dev(&spdev->dev, dev);			       \
@@ -51,10 +52,10 @@ index d86babb90b4f8..8f37e66c772ca 100644
  	strans.supplier = dev;						       \
  	memcpy(&strans.desc, &(__desc), sizeof(strans.desc));		       \
 diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 5caa9191a8d1a..a34243fea3025 100644
+index 9e81d7c9a..cb679022d 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
-@@ -174,6 +174,9 @@ struct scmi_info {
+@@ -175,6 +175,9 @@ struct scmi_info {
  };
  
  #define handle_to_scmi_info(h)	container_of(h, struct scmi_info, handle)
@@ -64,9 +65,9 @@ index 5caa9191a8d1a..a34243fea3025 100644
  #define tx_minfo_to_scmi_info(h) container_of(h, struct scmi_info, tx_minfo)
  #define bus_nb_to_scmi_info(nb)	container_of(nb, struct scmi_info, bus_nb)
  #define req_nb_to_scmi_info(nb)	container_of(nb, struct scmi_info, dev_req_nb)
-@@ -2663,6 +2666,18 @@ static int scmi_chan_setup(struct scmi_info *info, struct device_node *of_node,
- 	idx = tx ? 0 : 1;
- 	idr = tx ? &info->tx_idr : &info->rx_idr;
+@@ -2677,6 +2680,18 @@ static int scmi_chan_setup(struct scmi_info *info, struct device_node *of_node,
+ 	if (idr_find(idr, prot_id))
+ 		return -EEXIST;
  
 +	/*
 +	 * ACPI: no DT children describe per-protocol channels.
@@ -83,8 +84,8 @@ index 5caa9191a8d1a..a34243fea3025 100644
  	if (!info->desc->ops->chan_available(of_node, idx)) {
  		cinfo = idr_find(idr, SCMI_PROTOCOL_BASE);
  		if (unlikely(!cinfo)) /* Possible only if platform has no Rx */
-@@ -2871,6 +2886,8 @@ static int scmi_device_request_notifier(struct notifier_block *nb,
- 	np = idr_find(&info->active_protocols, id_table->protocol_id);
+@@ -2889,6 +2904,8 @@ static int scmi_device_request_notifier(struct notifier_block *nb,
+ 	rcu_read_unlock();
  	if (!np)
  		return NOTIFY_DONE;
 +	if (np == SCMI_NO_DT_NODE)
@@ -92,7 +93,7 @@ index 5caa9191a8d1a..a34243fea3025 100644
  
  	dev_dbg(info->dev, "%sRequested device (%s) for protocol 0x%x\n",
  		action == SCMI_BUS_NOTIFY_DEVICE_REQUEST ? "" : "UN-",
-@@ -3273,6 +3290,38 @@ static int scmi_probe(struct platform_device *pdev)
+@@ -3293,6 +3310,38 @@ static int scmi_probe(struct platform_device *pdev)
  		scmi_create_protocol_devices(child, info, prot_id, NULL);
  	}
  
@@ -130,8 +131,8 @@ index 5caa9191a8d1a..a34243fea3025 100644
 +
  	return 0;
  
- notification_exit:
-@@ -3316,7 +3365,8 @@ static void scmi_remove(struct platform_device *pdev)
+ raw_mode_cleanup:
+@@ -3342,7 +3391,8 @@ static void scmi_remove(struct platform_device *pdev)
  	mutex_unlock(&info->protocols_mtx);
  
  	idr_for_each_entry(&info->active_protocols, child, id)
@@ -140,9 +141,9 @@ index 5caa9191a8d1a..a34243fea3025 100644
 +			of_node_put(child);
  	idr_destroy(&info->active_protocols);
  
- 	blocking_notifier_chain_unregister(&scmi_requested_devices_nh,
+ 	bus_unregister_notifier(&scmi_bus_type, &info->bus_nb);
 diff --git a/drivers/firmware/arm_scmi/shmem.c b/drivers/firmware/arm_scmi/shmem.c
-index da61234b77fd4..c158ddd1fc4bc 100644
+index da61234b7..c158ddd1f 100644
 --- a/drivers/firmware/arm_scmi/shmem.c
 +++ b/drivers/firmware/arm_scmi/shmem.c
 @@ -258,10 +258,23 @@ static void __iomem *shmem_acpi_setup_iomap(struct scmi_chan_info *cinfo,
@@ -173,7 +174,7 @@ index da61234b77fd4..c158ddd1fc4bc 100644
  	return addr;
  }
 diff --git a/drivers/firmware/arm_scmi/transports/mailbox.c b/drivers/firmware/arm_scmi/transports/mailbox.c
-index 9c3f6f28cc6bd..0502edd332b9f 100644
+index ba294beb6..daeaf01d2 100644
 --- a/drivers/firmware/arm_scmi/transports/mailbox.c
 +++ b/drivers/firmware/arm_scmi/transports/mailbox.c
 @@ -82,10 +82,6 @@ static bool mailbox_chan_available(struct device_node *of_node, int idx)
@@ -187,3 +188,6 @@ index 9c3f6f28cc6bd..0502edd332b9f 100644
  	if (!of_node)
  		return true;
  
+-- 
+2.56.1
+

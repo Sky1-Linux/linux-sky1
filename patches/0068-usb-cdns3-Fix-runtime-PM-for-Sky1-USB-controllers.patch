@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 14a837232d9c26dc0332c0d618e65f9278545eef Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 13:45:01 +1100
-Subject: [PATCH] usb: cdns3: Fix runtime PM for Sky1 USB controllers
+Subject: [PATCH 068/140] usb: cdns3: Fix runtime PM for Sky1 USB controllers
 
 The unconditional CDNS3_DEFAULT_PM_RUNTIME_ALLOW quirk caused USB-A
 (host-only) controllers to enter D3 where they cannot detect hot-plug
@@ -24,7 +24,7 @@ to 200ms to avoid excessive D3 cycling.
  4 files changed, 31 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/usb/cdns3/cdnsp-plat.c b/drivers/usb/cdns3/cdnsp-plat.c
-index cc7bb4b7ba6d4..0132aa18ee063 100644
+index cc7bb4b7b..0132aa18e 100644
 --- a/drivers/usb/cdns3/cdnsp-plat.c
 +++ b/drivers/usb/cdns3/cdnsp-plat.c
 @@ -159,11 +159,13 @@ static int cdnsp_plat_probe(struct platform_device *pdev)
@@ -46,7 +46,7 @@ index cc7bb4b7ba6d4..0132aa18ee063 100644
  	pm_runtime_use_autosuspend(dev);
  
 diff --git a/drivers/usb/cdns3/cdnsp-sky1.c b/drivers/usb/cdns3/cdnsp-sky1.c
-index 33ace97ae8dd4..378f955e59094 100644
+index 33ace97ae..378f955e5 100644
 --- a/drivers/usb/cdns3/cdnsp-sky1.c
 +++ b/drivers/usb/cdns3/cdnsp-sky1.c
 @@ -633,7 +633,25 @@ static int cdnsp_sky1_probe(struct platform_device *pdev)
@@ -77,7 +77,7 @@ index 33ace97ae8dd4..378f955e59094 100644
  		cdns_sky1_auxdata->platform_data = cdns_sky1_pdata;
  		ret = of_platform_populate(node, NULL, cdns_sky1_auxdata, dev);
 diff --git a/drivers/usb/cdns3/cdnsp-sky1.h b/drivers/usb/cdns3/cdnsp-sky1.h
-index 767cc6581325d..82563bd1000bd 100644
+index 767cc6581..82563bd10 100644
 --- a/drivers/usb/cdns3/cdnsp-sky1.h
 +++ b/drivers/usb/cdns3/cdnsp-sky1.h
 @@ -117,7 +117,7 @@ struct cdnsp_sky1 {
@@ -90,7 +90,7 @@ index 767cc6581325d..82563bd1000bd 100644
  
  #endif /* __LINUX_CDNSP_SKY1_H */
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 6b3235d5a4849..0baa3be7618c8 100644
+index 6b3235d5a..0baa3be76 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
 @@ -359,10 +359,13 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
@@ -109,3 +109,6 @@ index 6b3235d5a4849..0baa3be7618c8 100644
  
  	return 0;
  
+-- 
+2.56.1
+

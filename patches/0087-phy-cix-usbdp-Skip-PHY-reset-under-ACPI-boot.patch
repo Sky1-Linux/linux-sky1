@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 9f1a956c312612adde6932ff74ebac60924169c9 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 22:50:12 +1100
-Subject: [PATCH] phy: cix-usbdp: Skip PHY reset under ACPI boot
+Subject: [PATCH 087/140] phy: cix-usbdp: Skip PHY reset under ACPI boot
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -20,7 +20,7 @@ PHY initialization ordering is controlled by the device tree.
  1 file changed, 35 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/phy/cix/phy-cix-usbdp.c b/drivers/phy/cix/phy-cix-usbdp.c
-index 548b2b856f769..9b1eb5afe3a6a 100644
+index 548b2b856..9b1eb5afe 100644
 --- a/drivers/phy/cix/phy-cix-usbdp.c
 +++ b/drivers/phy/cix/phy-cix-usbdp.c
 @@ -1458,32 +1458,46 @@ static int cix_udphy_probe(struct platform_device *pdev)
@@ -91,3 +91,6 @@ index 548b2b856f769..9b1eb5afe3a6a 100644
  	}
  
  	dev_info(dev, "get phy-status:[%d]%d\n", id, gop_value);
+-- 
+2.56.1
+

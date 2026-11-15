@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From cfda80f081a1789cba4ea6e1d7eb55eec8714278 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 18:16:08 +1100
-Subject: [PATCH] mailbox: Add ACPI fwnode support for channel lookup
+Subject: [PATCH 075/140] mailbox: Add ACPI fwnode support for channel lookup
 
 Under ACPI, provider devices lack #mbox-cells properties, so skip the
 nargs_prop lookup and auto-detect integer arguments following each
@@ -16,7 +16,7 @@ overlap the base of mailbox MMIO regions, causing -EBUSY under ACPI.
  2 files changed, 30 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/mailbox/cix-mailbox.c b/drivers/mailbox/cix-mailbox.c
-index 4725288c87571..683c5bde1951f 100644
+index 4725288c8..683c5bde1 100644
 --- a/drivers/mailbox/cix-mailbox.c
 +++ b/drivers/mailbox/cix-mailbox.c
 @@ -562,9 +562,21 @@ static int cix_mbox_probe(struct platform_device *pdev)
@@ -45,10 +45,10 @@ index 4725288c87571..683c5bde1951f 100644
  	priv->irq = platform_get_irq(pdev, 0);
  	if (priv->irq < 0)
 diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
-index 2acc6ec229a45..d7467307b9c9a 100644
+index 0f2019aad..abc81b843 100644
 --- a/drivers/mailbox/mailbox.c
 +++ b/drivers/mailbox/mailbox.c
-@@ -405,8 +405,21 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+@@ -409,8 +409,21 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
  		return ERR_PTR(-ENODEV);
  	}
  
@@ -72,3 +72,6 @@ index 2acc6ec229a45..d7467307b9c9a 100644
  	if (ret) {
  		dev_err(dev, "%s: can't parse \"%s\" property\n", __func__, "mboxes");
  		return ERR_PTR(ret);
+-- 
+2.56.1
+

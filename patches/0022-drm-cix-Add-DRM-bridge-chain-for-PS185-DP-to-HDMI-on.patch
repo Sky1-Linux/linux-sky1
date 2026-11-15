@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From d7269fd641421a97c6590d5ae39269d0f68d3ce2 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 3 Feb 2026 13:04:41 +1100
-Subject: [PATCH] drm/cix: Add DRM bridge chain for PS185 DP-to-HDMI on Orange
- Pi 6 Plus
+Subject: [PATCH 022/140] drm/cix: Add DRM bridge chain for PS185 DP-to-HDMI on
+ Orange Pi 6 Plus
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -32,7 +32,7 @@ lookup returns -ENODEV which is treated as "no bridge".
  4 files changed, 88 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts b/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
-index a22a0d06e47a0..b059fce0f0010 100644
+index a22a0d06e..b059fce0f 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
 @@ -235,6 +235,54 @@ vdd_1v8_pcie_x1_0_rc: regulator-vdd-1v8-pcie-x1-0-rc {
@@ -118,7 +118,7 @@ index a22a0d06e47a0..b059fce0f0010 100644
  };
  
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.h b/drivers/gpu/drm/cix/dptx/trilin_dptx.h
-index 69b1cf0a81d6c..c14384ada4229 100644
+index 69b1cf0a8..c14384ada 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.h
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.h
 @@ -422,6 +422,7 @@ struct trilin_dp {
@@ -130,7 +130,7 @@ index 69b1cf0a81d6c..c14384ada4229 100644
  	struct trilin_dpsub *dpsub;
  	struct drm_device **drm;
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c b/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
-index a2b016610e329..4eacfdd27060a 100644
+index a2b016610..4eacfdd27 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx_cix.c
 @@ -16,6 +16,7 @@
@@ -162,7 +162,7 @@ index a2b016610e329..4eacfdd27060a 100644
  	if (ret)
  		return ret;
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
-index 217050e337667..53954a5bed0ce 100644
+index 217050e33..53954a5be 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_drm.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -17,6 +17,7 @@
@@ -198,3 +198,6 @@ index 217050e337667..53954a5bed0ce 100644
  
  	ret = drm_connector_init(encoder->dev, connector,
  				 &trilin_dp_connector_funcs,
+-- 
+2.56.1
+

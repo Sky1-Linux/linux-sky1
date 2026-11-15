@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 55157ff8c53a933a51d64520198b76967c1dc01d Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 22:55:52 +1100
-Subject: [PATCH] PCI: Silence I/O BAR assignment failures when no I/O windows
- exist
+Subject: [PATCH 089/140] PCI: Silence I/O BAR assignment failures when no I/O
+ windows exist
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -27,10 +27,10 @@ platforms where I/O space is available and failures are unexpected.
  1 file changed, 33 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
-index c3ba4ccecd433..e04117675d1fa 100644
+index 1769ba960..110cb40be 100644
 --- a/drivers/pci/setup-res.c
 +++ b/drivers/pci/setup-res.c
-@@ -321,6 +321,27 @@ static int _pci_assign_resource(struct pci_dev *dev, int resno,
+@@ -323,6 +323,27 @@ static int _pci_assign_resource(struct pci_dev *dev, int resno,
  	return ret;
  }
  
@@ -58,7 +58,7 @@ index c3ba4ccecd433..e04117675d1fa 100644
  int pci_assign_resource(struct pci_dev *dev, int resno)
  {
  	struct resource *res = pci_resource_n(dev, resno);
-@@ -348,12 +369,22 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
+@@ -350,12 +371,22 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
  	 * working, which is better than just leaving it disabled.
  	 */
  	if (ret < 0) {
@@ -83,3 +83,6 @@ index c3ba4ccecd433..e04117675d1fa 100644
  		return ret;
  	}
  
+-- 
+2.56.1
+

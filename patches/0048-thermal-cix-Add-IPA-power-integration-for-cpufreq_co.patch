@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From e8aa2d5f7de9eba8cf8a5b4dc0abbd7677c6811c Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 22:38:17 +1100
-Subject: [PATCH] thermal: cix: Add IPA power integration for cpufreq_cooling
+Subject: [PATCH 048/140] thermal: cix: Add IPA power integration for
+ cpufreq_cooling
 
 Export cix_get_static_power_cpus() and cix_get_dynamic_power_cpus()
 from the CIX IPA driver for use by cpufreq_cooling.
@@ -28,7 +29,7 @@ is disabled, so there's no runtime overhead for other platforms.
  create mode 100644 include/linux/cix/cix_cpu_ipa.h
 
 diff --git a/drivers/thermal/cix/cix_cpu_ipa.c b/drivers/thermal/cix/cix_cpu_ipa.c
-index 77d656826e071..10979593d97c6 100644
+index 77d656826..10979593d 100644
 --- a/drivers/thermal/cix/cix_cpu_ipa.c
 +++ b/drivers/thermal/cix/cix_cpu_ipa.c
 @@ -8,11 +8,13 @@
@@ -91,7 +92,7 @@ index 77d656826e071..10979593d97c6 100644
  static ssize_t cpu_power_show(struct device *dev,
  			      struct device_attribute *attr, char *buf)
 diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 6b7ab1814c12d..5b472da0b090c 100644
+index 6b7ab1814..5b472da0b 100644
 --- a/drivers/thermal/cpufreq_cooling.c
 +++ b/drivers/thermal/cpufreq_cooling.c
 @@ -23,6 +23,8 @@
@@ -157,7 +158,7 @@ index 6b7ab1814c12d..5b472da0b090c 100644
  	*state = get_level(cpufreq_cdev, target_freq);
 diff --git a/include/linux/cix/cix_cpu_ipa.h b/include/linux/cix/cix_cpu_ipa.h
 new file mode 100644
-index 0000000000000..7b7850ba0e953
+index 000000000..7b7850ba0
 --- /dev/null
 +++ b/include/linux/cix/cix_cpu_ipa.h
 @@ -0,0 +1,32 @@
@@ -193,3 +194,6 @@ index 0000000000000..7b7850ba0e953
 +#endif /* CONFIG_CIX_CPU_IPA */
 +
 +#endif /* __LINUX_CIX_CPU_IPA_H */
+-- 
+2.56.1
+

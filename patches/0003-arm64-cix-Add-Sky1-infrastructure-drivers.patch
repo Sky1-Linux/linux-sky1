@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 88e93fe23a9846f244dfde1b095b2e647180fe02 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sun, 1 Feb 2026 17:23:35 +1100
-Subject: [PATCH] arm64: cix: Add Sky1 infrastructure drivers
+Subject: [PATCH 003/140] arm64: cix: Add Sky1 infrastructure drivers
 
 ---
  drivers/clk/Kconfig                           |   1 +
@@ -78,7 +78,7 @@ Subject: [PATCH] arm64: cix: Add Sky1 infrastructure drivers
  create mode 100644 include/dt-bindings/thermal/sky1-thermal.h
 
 diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 3a1611008e48e..4dee61242cc87 100644
+index 3a1611008..4dee61242 100644
 --- a/drivers/clk/Kconfig
 +++ b/drivers/clk/Kconfig
 @@ -515,6 +515,7 @@ source "drivers/clk/actions/Kconfig"
@@ -90,7 +90,7 @@ index 3a1611008e48e..4dee61242cc87 100644
  source "drivers/clk/imgtec/Kconfig"
  source "drivers/clk/imx/Kconfig"
 diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 61ec08404442b..cfc5930b339e4 100644
+index 61ec08404..cfc5930b3 100644
 --- a/drivers/clk/Makefile
 +++ b/drivers/clk/Makefile
 @@ -119,6 +119,7 @@ obj-$(CONFIG_ARCH_ARTPEC)		+= axis/
@@ -103,7 +103,7 @@ index 61ec08404442b..cfc5930b339e4 100644
  obj-$(CONFIG_ARCH_HISI)			+= hisilicon/
 diff --git a/drivers/clk/cix/Kconfig b/drivers/clk/cix/Kconfig
 new file mode 100644
-index 0000000000000..d572e14db5bb5
+index 000000000..d572e14db
 --- /dev/null
 +++ b/drivers/clk/cix/Kconfig
 @@ -0,0 +1,12 @@
@@ -121,7 +121,7 @@ index 0000000000000..d572e14db5bb5
 +	  controllers and DSP.
 diff --git a/drivers/clk/cix/Makefile b/drivers/clk/cix/Makefile
 new file mode 100644
-index 0000000000000..4a5d3ec7ee218
+index 000000000..4a5d3ec7e
 --- /dev/null
 +++ b/drivers/clk/cix/Makefile
 @@ -0,0 +1,3 @@
@@ -130,7 +130,7 @@ index 0000000000000..4a5d3ec7ee218
 +obj-$(CONFIG_CLK_SKY1_AUDSS) += clk-sky1-audss.o
 diff --git a/drivers/clk/cix/clk-sky1-audss.c b/drivers/clk/cix/clk-sky1-audss.c
 new file mode 100644
-index 0000000000000..975313767b605
+index 000000000..975313767
 --- /dev/null
 +++ b/drivers/clk/cix/clk-sky1-audss.c
 @@ -0,0 +1,792 @@
@@ -927,7 +927,7 @@ index 0000000000000..975313767b605
 +MODULE_DESCRIPTION("CIX Sky1 Audio Subsystem Clock Controller");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/firmware/arm_scmi/shmem.c b/drivers/firmware/arm_scmi/shmem.c
-index 11c347bff7667..4f1b2b65b1950 100644
+index 11c347bff..4f1b2b65b 100644
 --- a/drivers/firmware/arm_scmi/shmem.c
 +++ b/drivers/firmware/arm_scmi/shmem.c
 @@ -205,9 +205,14 @@ static void __iomem *shmem_setup_iomap(struct scmi_chan_info *cinfo,
@@ -947,7 +947,7 @@ index 11c347bff7667..4f1b2b65b1950 100644
  	if (!of_device_is_compatible(shmem, "arm,scmi-shmem"))
  		return IOMEM_ERR_PTR(-ENXIO);
 diff --git a/drivers/firmware/arm_scmi/transports/smc.c b/drivers/firmware/arm_scmi/transports/smc.c
-index 21abb571e4f2f..b4d5ebbfb6927 100644
+index 1fce3ccde..140145262 100644
 --- a/drivers/firmware/arm_scmi/transports/smc.c
 +++ b/drivers/firmware/arm_scmi/transports/smc.c
 @@ -139,6 +139,11 @@ static int smc_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
@@ -983,7 +983,7 @@ index 21abb571e4f2f..b4d5ebbfb6927 100644
  	if (of_device_is_compatible(dev->of_node, "qcom,scmi-smc")) {
  		resource_size_t size = resource_size(&res);
 diff --git a/drivers/hwspinlock/Kconfig b/drivers/hwspinlock/Kconfig
-index 3874d15b0e9b7..b84c892e18031 100644
+index 3874d15b0..b84c892e1 100644
 --- a/drivers/hwspinlock/Kconfig
 +++ b/drivers/hwspinlock/Kconfig
 @@ -53,6 +53,16 @@ config HWSPINLOCK_SUN6I
@@ -1004,7 +1004,7 @@ index 3874d15b0e9b7..b84c892e18031 100644
  	tristate "STE Hardware Semaphore functionality"
  	depends on ARCH_U8500 || COMPILE_TEST
 diff --git a/drivers/hwspinlock/Makefile b/drivers/hwspinlock/Makefile
-index a0f16c9aaa821..1cef7cf04377a 100644
+index a0f16c9aa..1cef7cf04 100644
 --- a/drivers/hwspinlock/Makefile
 +++ b/drivers/hwspinlock/Makefile
 @@ -8,5 +8,6 @@ obj-$(CONFIG_HWSPINLOCK_OMAP)		+= omap_hwspinlock.o
@@ -1016,7 +1016,7 @@ index a0f16c9aaa821..1cef7cf04377a 100644
  obj-$(CONFIG_HSEM_U8500)		+= u8500_hsem.o
 diff --git a/drivers/hwspinlock/sky1_hwspinlock.c b/drivers/hwspinlock/sky1_hwspinlock.c
 new file mode 100644
-index 0000000000000..c73ca035def8c
+index 000000000..c73ca035d
 --- /dev/null
 +++ b/drivers/hwspinlock/sky1_hwspinlock.c
 @@ -0,0 +1,169 @@
@@ -1190,7 +1190,7 @@ index 0000000000000..c73ca035def8c
 +MODULE_DESCRIPTION("Sky1 Hardware Spinlock driver");
 +MODULE_AUTHOR("Cix Technology Group Co., Ltd.");
 diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 29f16f220384f..5b719705eff25 100644
+index 29f16f220..5b719705e 100644
 --- a/drivers/mailbox/Kconfig
 +++ b/drivers/mailbox/Kconfig
 @@ -360,7 +360,7 @@ config THEAD_TH1520_MBOX
@@ -1203,7 +1203,7 @@ index 29f16f220384f..5b719705eff25 100644
          depends on OF
          help
 diff --git a/drivers/mailbox/cix-mailbox.c b/drivers/mailbox/cix-mailbox.c
-index 5bb1416c26a50..9cd5e8ffd4e62 100644
+index 5bb1416c2..9cd5e8ffd 100644
 --- a/drivers/mailbox/cix-mailbox.c
 +++ b/drivers/mailbox/cix-mailbox.c
 @@ -1,79 +1,80 @@
@@ -2024,7 +2024,7 @@ index 5bb1416c26a50..9cd5e8ffd4e62 100644
 -MODULE_LICENSE("GPL");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 11b098705ec62..688e4b349d823 100644
+index 11b098705..688e4b349 100644
 --- a/drivers/nvmem/Kconfig
 +++ b/drivers/nvmem/Kconfig
 @@ -364,6 +364,17 @@ config NVMEM_SPMI_SDAM
@@ -2046,7 +2046,7 @@ index 11b098705ec62..688e4b349d823 100644
  	tristate "Spreadtrum SoC eFuse Support"
  	depends on ARCH_SPRD || COMPILE_TEST
 diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 70a4464dcb1e2..4764d860f663a 100644
+index 70a4464dc..4764d860f 100644
 --- a/drivers/nvmem/Makefile
 +++ b/drivers/nvmem/Makefile
 @@ -72,6 +72,8 @@ obj-$(CONFIG_NVMEM_SNVS_LPGPR)		+= nvmem_snvs_lpgpr.o
@@ -2060,7 +2060,7 @@ index 70a4464dcb1e2..4764d860f663a 100644
  obj-$(CONFIG_NVMEM_STM32_ROMEM)		+= nvmem_stm32_romem.o
 diff --git a/drivers/nvmem/sky1-nvmem.c b/drivers/nvmem/sky1-nvmem.c
 new file mode 100644
-index 0000000000000..aaf55aa4db236
+index 000000000..aaf55aa4d
 --- /dev/null
 +++ b/drivers/nvmem/sky1-nvmem.c
 @@ -0,0 +1,93 @@
@@ -2158,10 +2158,10 @@ index 0000000000000..aaf55aa4db236
 +MODULE_DESCRIPTION("Sky1 NVMEM (eFuse) driver");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 4f8507ebbdacd..cb84b2f9896c8 100644
+index 80db4195a..280772782 100644
 --- a/drivers/pinctrl/Kconfig
 +++ b/drivers/pinctrl/Kconfig
-@@ -686,6 +686,7 @@ source "drivers/pinctrl/aspeed/Kconfig"
+@@ -688,6 +688,7 @@ source "drivers/pinctrl/aspeed/Kconfig"
  source "drivers/pinctrl/bcm/Kconfig"
  source "drivers/pinctrl/berlin/Kconfig"
  source "drivers/pinctrl/cirrus/Kconfig"
@@ -2170,7 +2170,7 @@ index 4f8507ebbdacd..cb84b2f9896c8 100644
  source "drivers/pinctrl/intel/Kconfig"
  source "drivers/pinctrl/mediatek/Kconfig"
 diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index e0cfb9b7c99ba..a8f3c39681df4 100644
+index e0cfb9b7c..a8f3c3968 100644
 --- a/drivers/pinctrl/Makefile
 +++ b/drivers/pinctrl/Makefile
 @@ -67,6 +67,7 @@ obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
@@ -2183,7 +2183,7 @@ index e0cfb9b7c99ba..a8f3c39681df4 100644
  obj-y				+= freescale/
 diff --git a/drivers/pinctrl/cix/Kconfig b/drivers/pinctrl/cix/Kconfig
 new file mode 100644
-index 0000000000000..64593fe0121c7
+index 000000000..64593fe01
 --- /dev/null
 +++ b/drivers/pinctrl/cix/Kconfig
 @@ -0,0 +1,13 @@
@@ -2202,7 +2202,7 @@ index 0000000000000..64593fe0121c7
 +	  Say Y here to enable the sky1 pinctrl driver
 diff --git a/drivers/pinctrl/cix/Makefile b/drivers/pinctrl/cix/Makefile
 new file mode 100644
-index 0000000000000..22685d6a107b2
+index 000000000..22685d6a1
 --- /dev/null
 +++ b/drivers/pinctrl/cix/Makefile
 @@ -0,0 +1,4 @@
@@ -2212,7 +2212,7 @@ index 0000000000000..22685d6a107b2
 +obj-$(CONFIG_PINCTRL_SKY1)	+= pinctrl-sky1.o
 diff --git a/drivers/pinctrl/cix/pinctrl-sky1-base.c b/drivers/pinctrl/cix/pinctrl-sky1-base.c
 new file mode 100644
-index 0000000000000..7efd50ce8a04a
+index 000000000..7efd50ce8
 --- /dev/null
 +++ b/drivers/pinctrl/cix/pinctrl-sky1-base.c
 @@ -0,0 +1,624 @@
@@ -2842,7 +2842,7 @@ index 0000000000000..7efd50ce8a04a
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/pinctrl/cix/pinctrl-sky1.c b/drivers/pinctrl/cix/pinctrl-sky1.c
 new file mode 100644
-index 0000000000000..c0649e283fdf2
+index 000000000..c0649e283
 --- /dev/null
 +++ b/drivers/pinctrl/cix/pinctrl-sky1.c
 @@ -0,0 +1,562 @@
@@ -3410,7 +3410,7 @@ index 0000000000000..c0649e283fdf2
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/pinctrl/cix/pinctrl-sky1.h b/drivers/pinctrl/cix/pinctrl-sky1.h
 new file mode 100644
-index 0000000000000..1c9b835634e60
+index 000000000..1c9b83563
 --- /dev/null
 +++ b/drivers/pinctrl/cix/pinctrl-sky1.h
 @@ -0,0 +1,60 @@
@@ -3476,7 +3476,7 @@ index 0000000000000..1c9b835634e60
 +#endif /* __DRIVERS_PINCTRL_SKY1_H */
 diff --git a/drivers/pinctrl/pinctrl-acpi.h b/drivers/pinctrl/pinctrl-acpi.h
 new file mode 100644
-index 0000000000000..53d0eb919b831
+index 000000000..53d0eb919
 --- /dev/null
 +++ b/drivers/pinctrl/pinctrl-acpi.h
 @@ -0,0 +1,101 @@
@@ -3582,7 +3582,7 @@ index 0000000000000..53d0eb919b831
 +
 +#endif
 diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index b5e2ffd5ea64c..fcce7b7a1bccb 100644
+index b5e2ffd5e..fcce7b7a1 100644
 --- a/drivers/pmdomain/arm/scmi_pm_domain.c
 +++ b/drivers/pmdomain/arm/scmi_pm_domain.c
 @@ -24,9 +24,35 @@ struct scmi_pm_domain {
@@ -3644,7 +3644,7 @@ index b5e2ffd5ea64c..fcce7b7a1bccb 100644
  MODULE_AUTHOR("Sudeep Holla <sudeep.holla@arm.com>");
  MODULE_DESCRIPTION("ARM SCMI power domain driver");
 diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index b3b9e0f9d8c48..51f4e679b57ab 100644
+index b3b9e0f9d..51f4e679b 100644
 --- a/drivers/reset/Kconfig
 +++ b/drivers/reset/Kconfig
 @@ -398,4 +398,21 @@ source "drivers/reset/sti/Kconfig"
@@ -3670,7 +3670,7 @@ index b3b9e0f9d8c48..51f4e679b57ab 100644
 +
  endif
 diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-index f7934f9fb90bb..bef639af32410 100644
+index f7934f9fb..bef639af3 100644
 --- a/drivers/reset/Makefile
 +++ b/drivers/reset/Makefile
 @@ -49,3 +49,5 @@ obj-$(CONFIG_RESET_UNIPHIER) += reset-uniphier.o
@@ -3681,7 +3681,7 @@ index f7934f9fb90bb..bef639af32410 100644
 +obj-$(CONFIG_RESET_SKY1_AUDSS) += reset-sky1-audss.o
 diff --git a/drivers/reset/reset-sky1-audss.c b/drivers/reset/reset-sky1-audss.c
 new file mode 100644
-index 0000000000000..62950613f199d
+index 000000000..62950613f
 --- /dev/null
 +++ b/drivers/reset/reset-sky1-audss.c
 @@ -0,0 +1,142 @@
@@ -3829,7 +3829,7 @@ index 0000000000000..62950613f199d
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/reset/reset-sky1.c b/drivers/reset/reset-sky1.c
 new file mode 100644
-index 0000000000000..0a2871372118b
+index 000000000..0a2871372
 --- /dev/null
 +++ b/drivers/reset/reset-sky1.c
 @@ -0,0 +1,421 @@
@@ -4255,7 +4255,7 @@ index 0000000000000..0a2871372118b
 +MODULE_DESCRIPTION("Cix Sky1 reset driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index a2d65adffb805..a17223668ffe1 100644
+index a2d65adff..a17223668 100644
 --- a/drivers/soc/Kconfig
 +++ b/drivers/soc/Kconfig
 @@ -7,6 +7,7 @@ source "drivers/soc/aspeed/Kconfig"
@@ -4267,7 +4267,7 @@ index a2d65adffb805..a17223668ffe1 100644
  source "drivers/soc/fsl/Kconfig"
  source "drivers/soc/fujitsu/Kconfig"
 diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index c9e689080ceb7..22aac89ba0b12 100644
+index c9e689080..22aac89ba 100644
 --- a/drivers/soc/Makefile
 +++ b/drivers/soc/Makefile
 @@ -8,6 +8,7 @@ obj-y				+= aspeed/
@@ -4280,7 +4280,7 @@ index c9e689080ceb7..22aac89ba0b12 100644
  obj-$(CONFIG_MACH_DOVE)		+= dove/
 diff --git a/drivers/soc/cix/Kconfig b/drivers/soc/cix/Kconfig
 new file mode 100644
-index 0000000000000..40c57dde7d53f
+index 000000000..40c57dde7
 --- /dev/null
 +++ b/drivers/soc/cix/Kconfig
 @@ -0,0 +1,46 @@
@@ -4332,7 +4332,7 @@ index 0000000000000..40c57dde7d53f
 +	  will be called cix-bus-perf.
 diff --git a/drivers/soc/cix/Makefile b/drivers/soc/cix/Makefile
 new file mode 100644
-index 0000000000000..2bb69fdaf3354
+index 000000000..2bb69fdaf
 --- /dev/null
 +++ b/drivers/soc/cix/Makefile
 @@ -0,0 +1,4 @@
@@ -4342,7 +4342,7 @@ index 0000000000000..2bb69fdaf3354
 +obj-$(CONFIG_CIX_BUS_PERF)	+= cix-bus-perf.o
 diff --git a/drivers/soc/cix/cix-bus-perf.c b/drivers/soc/cix/cix-bus-perf.c
 new file mode 100644
-index 0000000000000..ec82a485dea5d
+index 000000000..ec82a485d
 --- /dev/null
 +++ b/drivers/soc/cix/cix-bus-perf.c
 @@ -0,0 +1,202 @@
@@ -4550,7 +4550,7 @@ index 0000000000000..ec82a485dea5d
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/soc/cix/cix-ddr-lp.c b/drivers/soc/cix/cix-ddr-lp.c
 new file mode 100644
-index 0000000000000..09076f37a11c9
+index 000000000..09076f37a
 --- /dev/null
 +++ b/drivers/soc/cix/cix-ddr-lp.c
 @@ -0,0 +1,172 @@
@@ -4728,7 +4728,7 @@ index 0000000000000..09076f37a11c9
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/soc/cix/sky1-socinfo.c b/drivers/soc/cix/sky1-socinfo.c
 new file mode 100644
-index 0000000000000..6e7dd9a7f036d
+index 000000000..6e7dd9a7f
 --- /dev/null
 +++ b/drivers/soc/cix/sky1-socinfo.c
 @@ -0,0 +1,478 @@
@@ -5212,7 +5212,7 @@ index 0000000000000..6e7dd9a7f036d
 +MODULE_LICENSE("GPL");
 diff --git a/include/dt-bindings/clock/sky1-audss.h b/include/dt-bindings/clock/sky1-audss.h
 new file mode 100644
-index 0000000000000..8d9a185581c99
+index 000000000..8d9a18558
 --- /dev/null
 +++ b/include/dt-bindings/clock/sky1-audss.h
 @@ -0,0 +1,71 @@
@@ -5289,7 +5289,7 @@ index 0000000000000..8d9a185581c99
 +#endif
 diff --git a/include/dt-bindings/clock/sky1-clk.h b/include/dt-bindings/clock/sky1-clk.h
 new file mode 100644
-index 0000000000000..87ff8183e2bde
+index 000000000..87ff8183e
 --- /dev/null
 +++ b/include/dt-bindings/clock/sky1-clk.h
 @@ -0,0 +1,278 @@
@@ -5573,7 +5573,7 @@ index 0000000000000..87ff8183e2bde
 +#endif
 diff --git a/include/dt-bindings/phy/phy-cadence-torrent.h b/include/dt-bindings/phy/phy-cadence-torrent.h
 new file mode 100644
-index 0000000000000..987e8b7d788bb
+index 000000000..987e8b7d7
 --- /dev/null
 +++ b/include/dt-bindings/phy/phy-cadence-torrent.h
 @@ -0,0 +1,62 @@
@@ -5641,7 +5641,7 @@ index 0000000000000..987e8b7d788bb
 +#endif /* _DT_BINDINGS_TORRENT_SERDES_H */
 diff --git a/include/dt-bindings/pinctrl/pads-sky1.h b/include/dt-bindings/pinctrl/pads-sky1.h
 new file mode 100644
-index 0000000000000..e659db9b38a20
+index 000000000..e659db9b3
 --- /dev/null
 +++ b/include/dt-bindings/pinctrl/pads-sky1.h
 @@ -0,0 +1,587 @@
@@ -6234,7 +6234,7 @@ index 0000000000000..e659db9b38a20
 +#endif
 diff --git a/include/dt-bindings/power/sky1-power.h b/include/dt-bindings/power/sky1-power.h
 new file mode 100644
-index 0000000000000..c989bfbecb1ee
+index 000000000..c989bfbec
 --- /dev/null
 +++ b/include/dt-bindings/power/sky1-power.h
 @@ -0,0 +1,48 @@
@@ -6288,7 +6288,7 @@ index 0000000000000..c989bfbecb1ee
 +#endif
 diff --git a/include/dt-bindings/reset/sky1-reset-audss.h b/include/dt-bindings/reset/sky1-reset-audss.h
 new file mode 100644
-index 0000000000000..d5d1465a8bd8b
+index 000000000..d5d1465a8
 --- /dev/null
 +++ b/include/dt-bindings/reset/sky1-reset-audss.h
 @@ -0,0 +1,23 @@
@@ -6317,7 +6317,7 @@ index 0000000000000..d5d1465a8bd8b
 +#endif
 diff --git a/include/dt-bindings/reset/sky1-reset-fch.h b/include/dt-bindings/reset/sky1-reset-fch.h
 new file mode 100644
-index 0000000000000..d7e478face9ff
+index 000000000..d7e478fac
 --- /dev/null
 +++ b/include/dt-bindings/reset/sky1-reset-fch.h
 @@ -0,0 +1,44 @@
@@ -6367,7 +6367,7 @@ index 0000000000000..d7e478face9ff
 +
 diff --git a/include/dt-bindings/reset/sky1-reset.h b/include/dt-bindings/reset/sky1-reset.h
 new file mode 100644
-index 0000000000000..b43dbf39fdc7e
+index 000000000..b43dbf39f
 --- /dev/null
 +++ b/include/dt-bindings/reset/sky1-reset.h
 @@ -0,0 +1,166 @@
@@ -6539,7 +6539,7 @@ index 0000000000000..b43dbf39fdc7e
 +
 diff --git a/include/dt-bindings/thermal/sky1-thermal.h b/include/dt-bindings/thermal/sky1-thermal.h
 new file mode 100644
-index 0000000000000..a13e68c3daa8a
+index 000000000..a13e68c3d
 --- /dev/null
 +++ b/include/dt-bindings/thermal/sky1-thermal.h
 @@ -0,0 +1,29 @@
@@ -6572,3 +6572,6 @@ index 0000000000000..a13e68c3daa8a
 +#define REG_SENSOR_DEV_COUNT	32
 +
 +#endif
+-- 
+2.56.1
+

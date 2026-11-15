@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From aed3377bc47b6c63dee1174d8cc46b1648bc37f5 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 7 Feb 2026 21:21:29 +1100
-Subject: [PATCH] sound: hda: cix-ipbloq: Add ACPI DMA range map and reserved
- memory support
+Subject: [PATCH 083/140] sound: hda: cix-ipbloq: Add ACPI DMA range map and
+ reserved memory support
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -26,7 +26,7 @@ linear map by firmware.
  2 files changed, 151 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/dma/coherent.c b/kernel/dma/coherent.c
-index 77c8d9487a9ab..308a43111d440 100644
+index 87f2f02e9..ff7093ea6 100644
 --- a/kernel/dma/coherent.c
 +++ b/kernel/dma/coherent.c
 @@ -45,7 +45,14 @@ static struct dma_coherent_mem *dma_init_coherent_memory(phys_addr_t phys_addr,
@@ -54,7 +54,7 @@ index 77c8d9487a9ab..308a43111d440 100644
  void dma_release_coherent_memory(struct device *dev)
  {
 diff --git a/sound/hda/controllers/hda_cix_ipbloq.c b/sound/hda/controllers/hda_cix_ipbloq.c
-index 4133556c2c732..b453ab4102727 100644
+index 4133556c2..b453ab410 100644
 --- a/sound/hda/controllers/hda_cix_ipbloq.c
 +++ b/sound/hda/controllers/hda_cix_ipbloq.c
 @@ -2,8 +2,11 @@
@@ -251,3 +251,6 @@ index 4133556c2c732..b453ab4102727 100644
  	hda->resets[hda->nresets++].id = "hda";
  	err = devm_reset_control_bulk_get_exclusive(&pdev->dev, hda->nresets,
  						    hda->resets);
+-- 
+2.56.1
+

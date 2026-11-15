@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 03d25027e02e53a3aca5b19809d49630afec1df8 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 6 Feb 2026 02:06:37 +1100
-Subject: [PATCH] hwmon: Add CIX Sky1 fan controller driver
+Subject: [PATCH 064/140] hwmon: Add CIX Sky1 fan controller driver
 
 Add driver for the CIX Sky1 SoC fan controller which provides:
 - PWM-based fan speed control via hwmon interface
@@ -18,7 +18,7 @@ with the kernel's hwmon subsystem for thermal management.
  create mode 100644 drivers/hwmon/cix-fan.c
 
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 2760feb9f83b5..216417d4ebb68 100644
+index 4d852e68b..0befcebd1 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
 @@ -503,6 +503,19 @@ config SENSORS_CHIPCAP2
@@ -42,7 +42,7 @@ index 2760feb9f83b5..216417d4ebb68 100644
  	tristate "Corsair Commander Pro controller"
  	depends on HID
 diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 73b2abdcc6dd9..2f1e9db2d1cc5 100644
+index 73b2abdcc..2f1e9db2d 100644
 --- a/drivers/hwmon/Makefile
 +++ b/drivers/hwmon/Makefile
 @@ -61,6 +61,7 @@ obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
@@ -55,7 +55,7 @@ index 73b2abdcc6dd9..2f1e9db2d1cc5 100644
  obj-$(CONFIG_SENSORS_CORSAIR_PSU) += corsair-psu.o
 diff --git a/drivers/hwmon/cix-fan.c b/drivers/hwmon/cix-fan.c
 new file mode 100644
-index 0000000000000..3b6766f893b25
+index 000000000..3b6766f89
 --- /dev/null
 +++ b/drivers/hwmon/cix-fan.c
 @@ -0,0 +1,171 @@
@@ -230,3 +230,6 @@ index 0000000000000..3b6766f893b25
 +MODULE_AUTHOR("CIX Technology Group Co., Ltd.");
 +MODULE_DESCRIPTION("CIX Sky1 fan control driver");
 +MODULE_LICENSE("GPL");
+-- 
+2.56.1
+

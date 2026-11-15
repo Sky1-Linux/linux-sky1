@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 10721a6636647561c1c64d74ee5bcc4c1654bd21 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Sat, 28 Feb 2026 13:46:37 +1100
-Subject: [PATCH] ASoC: cix: skip HDMI audio links for missing I2S devices
+Subject: [PATCH 134/140] ASoC: cix: skip HDMI audio links for missing I2S
+ devices
 
 Not all Sky1 boards have all 5 HDMI audio I2S instances.  The Orange
 Pi 6 Plus lacks dptx_audio2, causing ASoC to defer probing
@@ -17,7 +18,7 @@ Based-on-patch-by: royka1 (GitHub issue #10)
  1 file changed, 31 insertions(+), 12 deletions(-)
 
 diff --git a/sound/soc/cix/card-utils.c b/sound/soc/cix/card-utils.c
-index 6cf278eb24195..15080dd9dbb94 100644
+index 6cf278eb2..15080dd9d 100644
 --- a/sound/soc/cix/card-utils.c
 +++ b/sound/soc/cix/card-utils.c
 @@ -5,6 +5,7 @@
@@ -97,3 +98,6 @@ index 6cf278eb24195..15080dd9dbb94 100644
  	card->suspend_post = cix_card_suspend_post;
  	card->resume_pre = cix_card_resume_pre;
  	priv->link_info = link_info;
+-- 
+2.56.1
+

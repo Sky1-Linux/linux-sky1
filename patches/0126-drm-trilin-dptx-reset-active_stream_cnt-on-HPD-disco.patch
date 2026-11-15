@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 540164493c42b743a68c087bd3d16d0ce18301b5 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Fri, 27 Feb 2026 19:06:43 +1100
-Subject: [PATCH] drm/trilin-dptx: reset active_stream_cnt on HPD disconnect
+Subject: [PATCH 126/140] drm/trilin-dptx: reset active_stream_cnt on HPD
+ disconnect
 
 When the DP cable is unplugged, trilin_dp_handle_disconnect() tears
 down the PHY via core_off but does not reset active_stream_cnt.  On
@@ -17,7 +18,7 @@ state flag cleanup.
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_dptx.c b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
-index f03762da0defe..2eba2a509d4c2 100644
+index f03762da0..2eba2a509 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_dptx.c
 @@ -2619,6 +2619,7 @@ int trilin_dp_handle_disconnect(struct trilin_dp *dp, bool send_notification)
@@ -28,3 +29,6 @@ index f03762da0defe..2eba2a509d4c2 100644
  
  	if (dp->mst.mst_active) {
  		/* user mode should active power off to disable encoder */
+-- 
+2.56.1
+

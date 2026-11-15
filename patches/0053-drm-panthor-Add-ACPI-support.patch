@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 1ae612ddfe6c0210d413e080e4317291cb81d439 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:12:39 +1100
-Subject: [PATCH] drm/panthor: Add ACPI support
+Subject: [PATCH 053/140] drm/panthor: Add ACPI support
 
 Add ACPI device table (CIXH5000) for Sky1 GPU and handle IRQ lookup
 differences between ACPI and DT modes:
@@ -19,7 +19,7 @@ with mainline device tree bindings.
  5 files changed, 40 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/panthor/panthor_device.h
-index 4483998323c98..d415ed49c73f5 100644
+index 448399832..d415ed49c 100644
 --- a/drivers/gpu/drm/panthor/panthor_device.h
 +++ b/drivers/gpu/drm/panthor/panthor_device.h
 @@ -6,6 +6,7 @@
@@ -31,7 +31,7 @@ index 4483998323c98..d415ed49c73f5 100644
  #include <linux/io-pgtable.h>
  #include <linux/regulator/consumer.h>
 diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/panthor/panthor_drv.c
-index ac62dc5285d32..6154df773d62d 100644
+index 47616b6be..2f1b27f02 100644
 --- a/drivers/gpu/drm/panthor/panthor_drv.c
 +++ b/drivers/gpu/drm/panthor/panthor_drv.c
 @@ -1690,6 +1690,14 @@ static const struct of_device_id dt_match[] = {
@@ -58,10 +58,10 @@ index ac62dc5285d32..6154df773d62d 100644
  	},
  };
 diff --git a/drivers/gpu/drm/panthor/panthor_fw.c b/drivers/gpu/drm/panthor/panthor_fw.c
-index 6b46e5b9f6c3a..603aa7722a447 100644
+index e347a30a5..a1e25aabc 100644
 --- a/drivers/gpu/drm/panthor/panthor_fw.c
 +++ b/drivers/gpu/drm/panthor/panthor_fw.c
-@@ -1354,13 +1354,17 @@ int panthor_fw_init(struct panthor_device *ptdev)
+@@ -1385,13 +1385,17 @@ int panthor_fw_init(struct panthor_device *ptdev)
  	INIT_LIST_HEAD(&fw->sections);
  	INIT_DELAYED_WORK(&fw->watchdog.ping_work, panthor_fw_ping_work);
  
@@ -86,7 +86,7 @@ index 6b46e5b9f6c3a..603aa7722a447 100644
  	ret = panthor_request_job_irq(ptdev, &fw->irq, irq, 0);
  	if (ret) {
 diff --git a/drivers/gpu/drm/panthor/panthor_gpu.c b/drivers/gpu/drm/panthor/panthor_gpu.c
-index 7221b6cfecdd6..247024991a418 100644
+index 7221b6cfe..247024991 100644
 --- a/drivers/gpu/drm/panthor/panthor_gpu.c
 +++ b/drivers/gpu/drm/panthor/panthor_gpu.c
 @@ -123,13 +123,17 @@ int panthor_gpu_init(struct panthor_device *ptdev)
@@ -114,10 +114,10 @@ index 7221b6cfecdd6..247024991a418 100644
  	ret = panthor_request_gpu_irq(ptdev, &ptdev->gpu->irq, irq, GPU_INTERRUPTS_MASK);
  	if (ret)
 diff --git a/drivers/gpu/drm/panthor/panthor_mmu.c b/drivers/gpu/drm/panthor/panthor_mmu.c
-index 99f2d11de0344..95ef5469628d2 100644
+index a75ecb59e..09756325c 100644
 --- a/drivers/gpu/drm/panthor/panthor_mmu.c
 +++ b/drivers/gpu/drm/panthor/panthor_mmu.c
-@@ -2801,13 +2801,17 @@ int panthor_mmu_init(struct panthor_device *ptdev)
+@@ -2807,13 +2807,17 @@ int panthor_mmu_init(struct panthor_device *ptdev)
  
  	ptdev->mmu = mmu;
  
@@ -141,3 +141,6 @@ index 99f2d11de0344..95ef5469628d2 100644
  
  	ret = panthor_request_mmu_irq(ptdev, &mmu->irq, irq,
  				      panthor_mmu_fault_mask(ptdev, ~0));
+-- 
+2.56.1
+

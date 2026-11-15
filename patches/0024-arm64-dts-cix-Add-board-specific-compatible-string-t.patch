@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 776cafb91f7423b393a74660468965b926caf453 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Tue, 3 Feb 2026 15:24:17 +1100
-Subject: [PATCH] arm64: dts: cix: Add board-specific compatible string to
- Orange Pi 6 Plus
+Subject: [PATCH 024/140] arm64: dts: cix: Add board-specific compatible string
+ to Orange Pi 6 Plus
 
 The OPi6+ DTS only had the generic "cix,sky1" compatible, making it
 impossible to distinguish from other Sky1 boards at runtime. Add
@@ -16,7 +16,7 @@ Also update sky1_lib.py board detection tables for OPi6+ support.
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts b/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
-index b059fce0f0010..970b533c7ebd0 100644
+index b059fce0f..970b533c7 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orangepi-6-plus.dts
 @@ -11,7 +11,7 @@
@@ -29,7 +29,7 @@ index b059fce0f0010..970b533c7ebd0 100644
  	chosen {
  		stdout-path = &uart2;
 diff --git a/scripts/sky1_lib.py b/scripts/sky1_lib.py
-index 9fc021ec97c7d..e1c48aae029fe 100755
+index 9fc021ec9..e1c48aae0 100755
 --- a/scripts/sky1_lib.py
 +++ b/scripts/sky1_lib.py
 @@ -16,11 +16,13 @@ from pathlib import Path
@@ -46,3 +46,6 @@ index 9fc021ec97c7d..e1c48aae029fe 100755
  }
  
  # Track configuration
+-- 
+2.56.1
+

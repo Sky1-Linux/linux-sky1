@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From fbf58b207e8343d704cbc45394d7a57a2c040139 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 23 Feb 2026 13:45:44 +1100
-Subject: [PATCH] iommu/arm-smmu-v3: Add ACPI boot-active bypass STEs for CIX
- Sky1 PCIe
+Subject: [PATCH 118/140] iommu/arm-smmu-v3: Add ACPI boot-active bypass STEs
+ for CIX Sky1 PCIe
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -32,10 +32,10 @@ Reference: https://github.com/ErcinDedeoglu/orangepi-6plus-cix-sky1-smmu-fix
  1 file changed, 71 insertions(+)
 
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 42a97ddfab42a..2fef1205884ab 100644
+index 62df5ea8d..57a74907e 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -4734,6 +4734,74 @@ static void arm_smmu_dt_install_bypass_ste(struct arm_smmu_device *smmu)
+@@ -4848,6 +4848,74 @@ static void arm_smmu_dt_install_bypass_ste(struct arm_smmu_device *smmu)
  	}
  }
  
@@ -110,7 +110,7 @@ index 42a97ddfab42a..2fef1205884ab 100644
  static void arm_smmu_rmr_install_bypass_ste(struct arm_smmu_device *smmu)
  {
  	struct list_head rmr_list;
-@@ -4903,6 +4971,9 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+@@ -5017,6 +5085,9 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
  	/* Install bypass STEs for boot-active devices from DT */
  	arm_smmu_dt_install_bypass_ste(smmu);
  
@@ -119,4 +119,7 @@ index 42a97ddfab42a..2fef1205884ab 100644
 +
  	/* Reset the device */
  	ret = arm_smmu_device_reset(smmu);
- 	if (ret)
+ 	if (ret) {
+-- 
+2.56.1
+

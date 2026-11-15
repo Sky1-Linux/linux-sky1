@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 4a8a2143d4e901ce17f3f57c20c3df70d09ba84d Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 5 Feb 2026 23:40:51 +1100
-Subject: [PATCH] arm64: dts: cix: Thermal zone improvements
+Subject: [PATCH 057/140] arm64: dts: cix: Thermal zone improvements
 
 - Rename thermal zones to tz-* pattern for clarity and <20 char limit
 - Add switch_on trip point (60C) to prevent IPA governor from
@@ -14,7 +14,7 @@ Subject: [PATCH] arm64: dts: cix: Thermal zone improvements
  3 files changed, 64 insertions(+), 19 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
-index 9773e1465a37f..1080bf59631b8 100644
+index 9773e1465..1080bf596 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6.dts
 @@ -2340,7 +2340,7 @@ &ddr_ctrl3 {
@@ -54,7 +54,7 @@ index 9773e1465a37f..1080bf59631b8 100644
  		polling-delay = <1000>;
  		thermal-sensors = <&scmi_sensor CPU_B0_TEMP_SENSOR_ID>;
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
-index 79a6e83844b44..99c92f0053d67 100644
+index 79a6e8384..99c92f005 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 @@ -2374,7 +2374,7 @@ &ddr_ctrl3 {
@@ -94,7 +94,7 @@ index 79a6e83844b44..99c92f0053d67 100644
  		polling-delay = <1000>;
  		thermal-sensors = <&scmi_sensor CPU_B0_TEMP_SENSOR_ID>;
 diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index 3c184d900be95..8872aa929150c 100644
+index 3c184d900..8872aa929 100644
 --- a/arch/arm64/boot/dts/cix/sky1.dtsi
 +++ b/arch/arm64/boot/dts/cix/sky1.dtsi
 @@ -3109,7 +3109,7 @@ power_model@0 {
@@ -295,3 +295,6 @@ index 3c184d900be95..8872aa929150c 100644
  			polling-delay-passive = <100>;
  			polling-delay = <1000>;
  			thermal-sensors = <&scmi_sensor GPU_AVERAGE_TEMP_SENSOR_ID>;
+-- 
+2.56.1
+

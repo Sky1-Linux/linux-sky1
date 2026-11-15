@@ -1,7 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From f47acf5005afa663b4f0a6cc6853201822d9b4fc Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 14:23:16 +1100
-Subject: [PATCH] drm/panthor: Add ACPI support for Sky1 GPU power-on and DVFS
+Subject: [PATCH 096/140] drm/panthor: Add ACPI support for Sky1 GPU power-on
+ and DVFS
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -40,7 +41,7 @@ devfreq governor scaling, and SCMI rate-limiting for firmware stability.
  3 files changed, 285 insertions(+), 116 deletions(-)
 
 diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-index 0a7c1d0bb22d1..0e7bba30b9f12 100644
+index 0a7c1d0bb..0e7bba30b 100644
 --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
 +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
 @@ -6,6 +6,7 @@
@@ -265,7 +266,7 @@ index 0a7c1d0bb22d1..0e7bba30b9f12 100644
  			}
  		}
 diff --git a/drivers/gpu/drm/panthor/panthor_device.c b/drivers/gpu/drm/panthor/panthor_device.c
-index b1cd4bf7a1c5b..d06c36569b278 100644
+index c94ebb25a..72145bda9 100644
 --- a/drivers/gpu/drm/panthor/panthor_device.c
 +++ b/drivers/gpu/drm/panthor/panthor_device.c
 @@ -9,7 +9,9 @@
@@ -512,7 +513,7 @@ index b1cd4bf7a1c5b..d06c36569b278 100644
  
  	init_completion(&ptdev->unplug.done);
  	ret = drmm_mutex_init(&ptdev->base, &ptdev->unplug.lock);
-@@ -344,7 +482,7 @@ int panthor_device_init(struct panthor_device *ptdev)
+@@ -347,7 +485,7 @@ int panthor_device_init(struct panthor_device *ptdev)
  	/* Sky1 uses resource 0 for RCSU, resource 1 for GPU registers.
  	 * Other platforms use resource 0 for GPU registers.
  	 */
@@ -521,7 +522,7 @@ index b1cd4bf7a1c5b..d06c36569b278 100644
  		ptdev->iomem = devm_platform_get_and_ioremap_resource(
  				to_platform_device(ptdev->base.dev), 1, &res);
  		if (IS_ERR(ptdev->iomem)) {
-@@ -373,15 +511,10 @@ int panthor_device_init(struct panthor_device *ptdev)
+@@ -376,15 +514,10 @@ int panthor_device_init(struct panthor_device *ptdev)
  	if (ret)
  		goto err_release_pm_domains;
  
@@ -537,7 +538,7 @@ index b1cd4bf7a1c5b..d06c36569b278 100644
  	/* If PM is disabled, we need to call panthor_device_resume() manually. */
  	if (!IS_ENABLED(CONFIG_PM)) {
  		ret = panthor_device_resume(ptdev->base.dev);
-@@ -390,61 +523,42 @@ int panthor_device_init(struct panthor_device *ptdev)
+@@ -393,61 +526,42 @@ int panthor_device_init(struct panthor_device *ptdev)
  	}
  
  	/*
@@ -628,7 +629,7 @@ index b1cd4bf7a1c5b..d06c36569b278 100644
  	if (ret)
  		goto err_rpm_put;
 diff --git a/drivers/gpu/drm/panthor/panthor_hw.c b/drivers/gpu/drm/panthor/panthor_hw.c
-index 791bcbe19df95..291673cd6e473 100644
+index 032bfd8bb..64ed98a86 100644
 --- a/drivers/gpu/drm/panthor/panthor_hw.c
 +++ b/drivers/gpu/drm/panthor/panthor_hw.c
 @@ -64,7 +64,6 @@ static void panthor_gpu_info_init(struct panthor_device *ptdev)
@@ -639,3 +640,6 @@ index 791bcbe19df95..291673cd6e473 100644
  	ptdev->gpu_info.gpu_id = gpu_read(ptdev, GPU_ID);
  	ptdev->gpu_info.csf_id = gpu_read(ptdev, GPU_CSF_ID);
  	ptdev->gpu_info.gpu_rev = gpu_read(ptdev, GPU_REVID);
+-- 
+2.56.1
+

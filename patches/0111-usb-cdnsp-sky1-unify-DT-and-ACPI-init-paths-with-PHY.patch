@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From fd78f2654c8a2d1c6265b6ae988d3b41f2ebdf3a Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Thu, 12 Feb 2026 12:45:40 +1100
-Subject: [PATCH] usb: cdnsp: sky1: unify DT and ACPI init paths with PHY probe
- ordering
+Subject: [PATCH 111/140] usb: cdnsp: sky1: unify DT and ACPI init paths with
+ PHY probe ordering
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -33,7 +33,7 @@ SuperSpeed Plus (10 Gbps), dd write throughput 687 MB/s with UAS.
  1 file changed, 78 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/usb/cdns3/cdnsp-sky1.c b/drivers/usb/cdns3/cdnsp-sky1.c
-index 85330fe524087..ed61e2a928b14 100644
+index 85330fe52..ed61e2a92 100644
 --- a/drivers/usb/cdns3/cdnsp-sky1.c
 +++ b/drivers/usb/cdns3/cdnsp-sky1.c
 @@ -23,6 +23,7 @@
@@ -182,3 +182,6 @@ index 85330fe524087..ed61e2a928b14 100644
  	data->oc_gpio = devm_gpiod_get_optional(data->dev, "oc", GPIOD_IN);
  	if (IS_ERR(data->oc_gpio)) {
  		dev_err(data->dev, "[%s:%d] can not get oc_gpio\n", __func__, __LINE__);
+-- 
+2.56.1
+

@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 7609e137e1d6892135c626efdc73542c11efa6ac Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Wed, 4 Feb 2026 16:51:55 +1100
-Subject: [PATCH] arm64: dts: cix: Fix O6N power tree, convert USB-C PD to
- TCPCI
+Subject: [PATCH 030/140] arm64: dts: cix: Fix O6N power tree, convert USB-C PD
+ to TCPCI
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -37,7 +37,7 @@ GPIO wiring:
  1 file changed, 35 insertions(+), 46 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
-index 6515de495200b..e1324230b1843 100644
+index 6515de495..e1324230b 100644
 --- a/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 +++ b/arch/arm64/boot/dts/cix/sky1-orion-o6n.dts
 @@ -268,19 +268,6 @@ vdd_3v3_wlan: regulator-vdd-3v3-wlan {
@@ -192,3 +192,6 @@ index 6515de495200b..e1324230b1843 100644
  	status = "okay";
  };
  
+-- 
+2.56.1
+

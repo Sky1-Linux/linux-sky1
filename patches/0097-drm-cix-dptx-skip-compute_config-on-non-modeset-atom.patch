@@ -1,8 +1,8 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From b01cf8cd7e8b5acb36a39e894750558eee819df1 Mon Sep 17 00:00:00 2001
 From: Entrpi <entrpi@proton.me>
 Date: Mon, 9 Feb 2026 15:59:01 +1100
-Subject: [PATCH] drm/cix/dptx: skip compute_config on non-modeset atomic
- commits
+Subject: [PATCH 097/140] drm/cix/dptx: skip compute_config on non-modeset
+ atomic commits
 
 DRM core's mode_fixup() calls encoder_atomic_check for every connector
 in the atomic state, including non-modeset commits like pan_display and
@@ -23,7 +23,7 @@ pattern for encoder atomic_check implementations.
  1 file changed, 12 insertions(+)
 
 diff --git a/drivers/gpu/drm/cix/dptx/trilin_drm.c b/drivers/gpu/drm/cix/dptx/trilin_drm.c
-index ba40774524ce3..d710b60014d56 100644
+index ba4077452..d710b6001 100644
 --- a/drivers/gpu/drm/cix/dptx/trilin_drm.c
 +++ b/drivers/gpu/drm/cix/dptx/trilin_drm.c
 @@ -1018,6 +1018,18 @@ static int trilin_dp_encoder_atomic_check(struct drm_encoder *encoder,
@@ -45,3 +45,6 @@ index ba40774524ce3..d710b60014d56 100644
  	trilin_dp_encoder_atomic_adjust_mode(dp, mode, adjusted_mode);
  
  	if (connector->connector_type == DRM_MODE_CONNECTOR_eDP) {
+-- 
+2.56.1
+
