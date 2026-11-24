@@ -41,3 +41,4 @@
 0041-drm-cix-dptx-properly-disable-audio-hardware-on-shut.patch
 0042-drm-cix-dptx-suppress-spurious-ELD-warnings-at-boot.patch
 0043-cix-remove-pre-silicon-EMU-FPGA-dead-code-from-vendo.patch
+0044-PCI-sky1-fix-AER-interrupt-storms.patch
